@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/password-reset.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/password-reset.css"/>" rel="stylesheet">
 <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -34,5 +34,5 @@
         </div>
 	</main>
 </body>
-<script src="../../../resources/js/password-reset.js"></script>
+<script src="<c:url value="/resources/js/password-reset.js"/>"></script>
 </html>

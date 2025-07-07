@@ -31,6 +31,6 @@
 	        </div>
         </div>
     </div>
-    
-<script src="../../../resources/js/chatPage1.js"></script>
-<div id="userId" data-userId="${sessionScope.userId}"></div>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
+<script src="<c:url value="/resources/js/chatPage1.js"/>"></script>

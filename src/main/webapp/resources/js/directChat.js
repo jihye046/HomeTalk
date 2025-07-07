@@ -1,6 +1,7 @@
 /* 전역 변수
 ================================================== */
 let chatList = document.querySelector("#chatList")
+const path = document.querySelector("#contextPath").getAttribute("data-context-path")
 
 /* 오늘 일자 표시
 ================================================== */
@@ -73,7 +74,7 @@ const printEmotion = (name, msg, side, state, time) => {
 			<div>
 				<div>${name}</div>
 				<div style="background-color:#fff; border:0;">
-					<img src="../../../resources/images/emoticon/${msg}.png">
+					<img src="${path}/resources/images/emoticon/${msg}.png">
 				</div>
 				<div>${time}</div>
 			</div>

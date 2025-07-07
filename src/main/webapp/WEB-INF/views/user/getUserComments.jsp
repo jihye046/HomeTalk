@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/getUserPosts.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/getUserPosts.css"/>" rel="stylesheet">
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
@@ -38,8 +37,7 @@
 									</td>
 									<td class="post-title-cell">
 										<a href="/board/detailBoard?bId=${dto.bId}&
-											bGroup=${dto.bGroup}&
-											userId=${sessionScope.userId}">
+											bGroup=${dto.bGroup}">
 											${dto.bContent}
 										</a>
 										<i class="fa-regular fa-comment-dots"></i> 
@@ -57,8 +55,8 @@
 	</main>
 	<%@ include file="/WEB-INF/views/include/footer.jsp" %>
 </body>
-<div id="createResult" data-create-result="${createResult}"></div>
-<div id="deleteResult" data-delete-result="${deleteResult}"></div>
-<div id="userId" data-userId="${sessionScope.userId}"></div>
-<div id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
+<div class="hidden-data" id="createResult" data-create-result="${createResult}"></div>
+<div class="hidden-data" id="deleteResult" data-delete-result="${deleteResult}"></div>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
 </html>

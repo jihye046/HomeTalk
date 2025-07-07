@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/list.css" rel="styleSheet">
-<link href="../../../resources/css/common.css" rel="styleSheet">
+
+<script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css"/>
+<link href="<c:url value="/resources/css/list.css"/>" rel="stylesheet">
+<link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
+
 <script>
 	var paging = ${paging.page}
 	var searchGubun = "${param.searchGubun}"
@@ -14,7 +17,8 @@
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
-	<!-- auto-popup -->
+	
+	<!-- 팝업창 -->
 	<div id="popup" class="popup-wrapper">
 		<div class="popup-content">
 			<button id="closePopup" class="popup-close-btn">&times;</button>
@@ -38,17 +42,18 @@
 	        </div>
 		</div>
 	</div>
+	<!-- 팝업창 end -->
 	
-	<!-- weather -->
+	<!-- 날씨 -->
 	<div class="weather-container">
 		<video id="weatherVideo" autoplay muted loop></video>
 	</div>
+	<!-- 날씨 end -->
+	
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
-<!-- 					<div class="col-md-7"></div> -->
-<!-- 					<div class="col-md-5 d-flex"> -->
 						<div class="form-and-buttons-container">
 							<div class="buttons-container">
 								<button class="styled-button" id="sort_latest" type="button" class="btn btn-sm btn-dark">최신순</button>
@@ -63,11 +68,9 @@
 										<option value="bName">작성자</option>
 									</select> 
 									<input class="styled-input" type="text" name="searchText" placeholder="검색">
-	<!-- 								<button type="submit" class="btn">검색</button> -->
 								</form>
 							</div>
 						</div>
-<!-- 					</div> -->
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -91,7 +94,7 @@
 										</div>
 									</footer>
 								</figcaption>
-								<a href="/board/detailBoard?bId=${dto.bId}&bGroup=${dto.bGroup}&page=${paging.page}&userId=${sessionScope.userId}"></a>
+								<a href="/board/detailBoard?bId=${dto.bId}&bGroup=${dto.bGroup}&page=${paging.page}"></a>
 							</figure>
 						</c:forEach>
 					</div>
@@ -163,11 +166,14 @@
 	</div>
 	<%@ include file="/WEB-INF/views/include/chatManage.jsp" %>
 	<%@ include file="/WEB-INF/views/include/footer.jsp" %>
+	
+	<div class="hidden-data" id="createResult" data-create-result="${createResult}"></div>
+	<div class="hidden-data" id="deleteResult" data-delete-result="${deleteResult}"></div>
+	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+	<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
+	<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
+	
+	<script src="<c:url value="/resources/js/pagingList.js"/>"></script>
+	<script src="<c:url value="/resources/js/common.js"/>"></script>
 </body>
-<div id="createResult" data-create-result="${createResult}"></div>
-<div id="deleteResult" data-delete-result="${deleteResult}"></div>
-<div id="userId" data-userId="${sessionScope.userId}"></div>
-<div id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
-<script src="../../../resources/js/pagingList.js"></script>
-<script src="../../../resources/js/common.js"></script>
 </html>

@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/updatePage.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/updatePage.css"/>" rel="stylesheet">
 
 <!-- tagify -->
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -43,11 +42,10 @@
             </div>
         </div>
     </main>
-<%-- 	<%@ include file="/WEB-INF/views/include/footer.jsp" %> --%>
 </body>
-<div id="tagJsonList" data-tagJsonList="${fn:escapeXml(tagJsonList)}"></div>
-<div id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
+<div class="hidden-data" id="tagJsonList" data-tagJsonList="${fn:escapeXml(tagJsonList)}"></div>
+<div class="hidden-data" id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
 
-<script src="../../../resources/js/uploadAdapter.js"></script>
-<script src="../../../resources/js/updatePage.js"></script>
+<script src="<c:url value="/resources/js/uploadAdapter.js"/>"></script>
+<script src="<c:url value="/resources/js/updatePage.js"/>"></script>
 </html>

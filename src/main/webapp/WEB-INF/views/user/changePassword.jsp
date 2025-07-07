@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/changePassword.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/changePassword.css"/>" rel="stylesheet">
 </head>
 <body>
 	<div class="row header-div" style="background-color: #EAEAEA">
 		<div class="col-md-12 header-logo">
 			<a href="/">
-				<img alt="logo" src="../../../resources/images/logo2.png">
+				<img alt="logo" src="<c:url value="/resources/images/logo2.png"/>">
 			</a>
 		</div>
 	</div>
@@ -48,5 +48,5 @@
 		</div>
 	</main>
 </body>
-<script src="../../../resources/js/changePassword.js"></script>
+<script src="<c:url value="/resources/js/changePassword.js"/>"></script>
 </html>

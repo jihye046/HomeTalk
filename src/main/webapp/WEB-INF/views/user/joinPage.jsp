@@ -1,14 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/joinPage.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/joinPage.css"/>" rel="stylesheet">
 
 <!-- axios -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <!-- lodach -->
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-
 </head>
 <body>
 	<main>
@@ -79,5 +78,5 @@
 	    </div>
 	</main>
 </body>
-<script src="../../../resources/js/joinPage.js"></script>
+<script src="<c:url value="/resources/js/joinPage.js"/>"></script>
 </html>

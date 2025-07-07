@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/updateProfile.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/updateProfile.css"/>" rel="stylesheet">
 <!-- FilePond -->
 <link href="https://unpkg.com/filepond/dist/filepond.min.css" rel="stylesheet">
 </head>
@@ -9,7 +9,7 @@
 	<div class="row header-div" style="background-color: #EAEAEA">
 		<div class="col-md-12 header-logo">
 			<a href="/">
-				<img alt="logo" src="../../../resources/images/logo2.png">
+				<img alt="logo" src="<c:url value="/resources/images/logo2.png"/>">
 			</a>
 		</div>
 	</div>
@@ -47,9 +47,9 @@
 		</div>
 	</main>
 </body>
-<%-- <div id="currentNickname" data-currentNickname="${currentNickname}"></div> --%>
-<div id="currentNickname" data-currentNickname="${sessionScope.userNickname}"></div>
+<div class="hidden-data" id="currentNickname" data-currentNickname="${sessionScope.userNickname}"></div>
+<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
 <!-- FilePond -->
 <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
-<script src="../../../resources/js/updateProfile.js"></script>
+<script src="<c:url value="/resources/js/updateProfile.js"/>"></script>
 </html>

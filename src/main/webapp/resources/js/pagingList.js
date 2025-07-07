@@ -99,11 +99,12 @@ const updateCurrentWeatherInfo = (currentWeatherDto) => {
 
 	// 날씨에 따라 메인 화면 변경
 const updateMainImageByWeather = (weather) => {
+	const path = document.querySelector("#contextPath").getAttribute("data-context-path")
 	const video = document.querySelector("#weatherVideo")
-	const basePath = '../../../resources/images/weather/'
+	const basePath = `${path}/resources/images/weather/`
 	const extension = '.mp4'
 	const updateSrc = basePath + weather + extension
-	
+
 	video.src = updateSrc
 }
 

@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/findIdResultPage.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/findIdResultPage.css"/>" rel="stylesheet">
 <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -29,5 +28,5 @@
         </div>
 	</main>
 </body>
-<script src="../../../resources/js/findIdResultPage.js"></script>
+<script src="<c:url value="/resources/js/findIdResultPage.js"/>"></script>
 </html>

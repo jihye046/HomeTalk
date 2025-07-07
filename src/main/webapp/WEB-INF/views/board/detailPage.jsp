@@ -1,56 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/detailPage.css" rel="styleSheet">
-<link href="../../../resources/css/fixedButton.css" rel="styleSheet">
+
+<link href="<c:url value="/resources/css/detailPage.css"/>" rel="stylesheet">
+<link href="<c:url value="/resources/css/fixedButton.css"/>" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.0/dist/jquery.fancybox.min.css">
+
 <!-- 지도 표시 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${jsKey}&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${jsKey}&libraries=services"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
+			
 				<!-- 포스트 상단 -->
 				<div class="post-header">
+					
+					<!-- 글 제목, 작성자 정보 -->
 					<div class="title-and-name">
+					
+						<!-- 글 제목 -->
 						<h2>${dto.bTitle}</h2>
+						
 						<div style="padding: 20px 0px 20px 0px;">
+							<!-- 작성자 프로필 이미지 -->
 							<img src="${imageUrl}" alt="image" class="user-avatar">
+							
+							<!-- 작성자명 -->
 							<span class=bName>${dto.bName}</span>
+							
+							<!-- 작성자 팔로우 버튼 -->
 							<button class="button-primary" type="button" id="followButton">팔로우</button>
+							
+							<!-- 채팅 보내기 버튼 -->
 							<button class="button-primary" type="button" id="chatButton" data-bName="${dto.bName}">
 								<i class="fa-regular fa-comment-dots"></i>
 							</button>
 						</div>
+						
 					</div>
+					<!-- 글 제목, 작성자 정보 end -->
+					
 					<!-- 드롭다운 버튼 -->
 					<div class="dropdown">
+					
+						<!-- 드롭다운 토글 버튼 -->
 						<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
 				    		<i class="fa-solid fa-ellipsis-vertical" style="margin-left: 10px; color: #808080;"></i>
 				    	</button>
+				    	
+				    	<!-- 드롭다운 옵션 (수정, 삭제) -->
 						<div class="dropdown-menu dropdown-menu-right">
 				    		<a class="dropdown-item" href="/board/updatePage?bId=${dto.bId}">수정</a>
-				    		<a class="dropdown-item" href="/board/deleteBoard?bId=${dto.bId}" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
-<!-- 				    		<a class="dropdown-item social-share-btn" href="javascript:shareNaver()">네이버 공유 -->
-<!-- 					    		<span> -->
-<!-- 									<script type="text/javascript" src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script> -->
-<!-- 									<script type="text/javascript">new ShareNaver.makeButton({"type": "b"});</script> -->
-<!-- 								</span> -->
-<!-- 							</a>	 -->
-<!-- 							<a id="kakaotalk-sharing-btn" class="dropdown-item social-share-btn" href="javascript:shareKakao()">카카오 공유 -->
-<!-- 								<img src="https://buly.kr/DPTKLrS" alt="kakao" style="width:42px; padding-left: 20px;"> -->
-<!-- 							</a> -->
+				    		<a class="dropdown-item" href="/board/deleteBoard?bId=${dto.bId}"
+				    			onclick="return confirm('삭제하시겠습니까?')"
+			    			>삭제
+			    			</a>
 			    		</div>
-			    	</div><!-- 드롭다운 end -->
-				</div> <!-- 포스트 상단 end -->
-				<hr>				
+			    		
+			    	</div>
+			    	<!-- 드롭다운 버튼 end -->
+			    	
+				</div>
+				<!-- 포스트 상단 end -->
+				
+				<hr>
+								
 				<!-- 포스트 중단 -->	
 				<div class="post">
 					${dto.bContent}
+					
 					<!-- 지도 표시 -->
 					<div id="mapContainer">
 						<div id="mapView" data-bAddress="${dto.bAddress}"></div>
@@ -63,21 +85,26 @@
 							<a href="#" class="tag-item"># ${tag.tagName}</a>
 						</c:forEach>
 					</div>
-
+					
+					<!-- 게시글 통계 정보 (작성일자, 좋아요, 스크랩, 조회수 등) -->
 					<div class="post-meta-div">
 					    <span class="post-meta-item">${dto.bDate}</span>
 					    <span class="separator"> | </span> <span class="post-meta-item">좋아요</span>
 					    <span class="post-meta-item" id="totalLikes">${dto.bLike}</span>
-					    <span class="separator"> | </span> <span class="post-meta-item">스크랩</span>
-					    <span class="post-meta-item">0</span>
+					    <span class="separator"> | </span> <span class="post-meta-item">북마크</span>
+					    <span class="post-meta-item">${dto.bBookmark}</span>
 					    <span class="separator"> | </span> <span class="post-meta-item">조회수</span>
 					    <span class="post-meta-item">${dto.bHit}</span>
 					</div>
+					
 					<hr id="postImageDivider" class="hidden-hr">
-				</div> 
-				<!-- 동적으로 이미지를  추가할 div -->
-				<div class="image-container"></div> <!-- 포스트 중단 end -->
-				<!-- 전체 이미지를 보여줄 모달 -->
+				</div>
+				<!-- 포스트 중단 end -->
+				
+				<!-- 미리보기 이미지 갤러리 -->
+				<div class="image-container"></div>
+				
+				<!-- 전체 이미지 보기 모달 -->
 				<div id="gallery-modal" class="gallery-modal">
 					<div class="gallery-modal-content">
 						<div class="modal-header">
@@ -85,64 +112,90 @@
 							<span class="close-button" id="closeModal">&times;</span>
 						</div>
 						
-						<div class="modal-image-container">
-							<!-- 이미지 영역 -->
-						</div>
+						<!-- 이미지 영역 -->
+						<div class="modal-image-container"></div>
 					</div>
-				</div> 
-				<!-- fixed button -->
+				</div>
+				<!-- 전체 이미지를 보여줄 모달 end -->
+				
+				<!-- 고정 버튼 -->
 				<div class="fixed-buttons">
+				
+					<!-- 좋아요 버튼 -->
 					<button class="icon-button like ">
 						<i class="fa-heart" style="color: #666666;"></i>
 						<span class="count">${dto.bLike}</span>
 					</button>			
-						
+					
+					<!-- 북마크 버튼 -->
 					<button class="icon-button bookmark">
 						<i class="fa-bookmark" style="color: #666666;"></i>
 						<span class="count">${dto.bBookmark}</span>
 					</button>
 					
+					<!-- 공유 버튼 -->
 					<div class="share">
 						<button class="icon-button share">
 							<i class="fa-regular fa-share-from-square" style="color: #666666;"></i>
 						</button>
 					
-					<!-- 공유 옵션 -->
+						<!-- 공유 옵션 -->
 						<div class="share-option-div">
+						
+							<!-- 네이버 -->
 							<button class="share-option naver" onclick="shareNaver()">
 					    		<span>
 									<script type="text/javascript" src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
 									<script type="text/javascript">new ShareNaver.makeButton({"type": "b"});</script>
 								</span>
 							</button>
+							
+							<!-- 카카오 -->
 							<button class="share-option kakaoTalk" onclick="shareKakao()">
 								<img src="https://buly.kr/DPTKLrS" alt="kakao" style="width:20px;">
 							</button>
+							
 						</div>
+						<!-- 공유 옵션 end -->
+						
 					</div>
-					<!-- 공유 옵션 end -->
-
+					<!-- 공유 버튼 end -->
+					
+					<!-- 링크 복사 버튼 -->
 					<button class="icon-button link">
 						<i class="fa-solid fa-link" style="color: #666666;"></i>
 					</button>
 					
+					<!-- 맨 위로 버튼 -->
 					<button class="icon-button back-to-top">
 						<i class="fa-solid fa-angle-up" style="color: #666666;"></i>
 					</button>
-				</div> <!-- fixed button end -->
-				<!-- 댓글 -->
+					
+				</div> 
+				<!-- 고정 버튼 end -->
+				
 				<hr>
+				
+				<!-- 댓글 div -->
 				<div class="reply-form">
+					
+					<!-- 댓글 수 -->
 					<div class="commentCount-div">
 						<span>댓글</span><span class="commentCount">${dto.commentCount}</span>
 					</div>
+					
+					<!-- 댓글 입력 창 -->
 					<div class="comment-input-container">
 						<input class="styled-input" type="text" id="comment-input" placeholder="댓글" required>
 						<button class="submit-comment button-filled-primary" type="button" id="commentBtn">댓글</button>
 					</div>
+					
+					<!-- 댓글 리스트 -->
 					<div class="comments">
 						<div>
 							<c:forEach items="${commentsPagingList}" var="comment"  varStatus="status">
+							
+								<!-- 댓글인 경우 -->
 								<c:if test="${comment.bIndent == 1}">
 									<article>
 										<c:choose>
@@ -156,23 +209,29 @@
 														<span class="author-name"><a href="#">${comment.bName}</a></span>
 													</div>
 													<c:if test="${comment.bName == sessionScope.userId}">
-														<button type="button" class="button-filled-primary comment-remove" data-comment-remove-bId="${comment.bId}" 
-																														   data-bGroup="${comment.bGroup}"
-																														   data-bStep="${comment.bStep}"
-																														   data-bIndent="${comment.bIndent}">
+														<button type="button" class="button-filled-primary comment-remove"
+															data-comment-remove-bId="${comment.bId}"
+															data-bGroup="${comment.bGroup}"
+															data-bStep="${comment.bStep}"
+															data-bIndent="${comment.bIndent}"
+														>
 															<i class="fa-regular fa-trash-can"></i>
 														</button>
 													</c:if>
 												</div>
 												<p class="post-content">${comment.bContent}</p>
 												<time class="post-time">${comment.bDate}</time>
-												<button type="button" class="button-filled-primary comment-child-btn" 
-																	  data-bGroup="${comment.bGroup}"
-																	  data-bStep="${comment.bStep}"
-																	  data-bIndent="${comment.bIndent}">
+												<button type="button" class="button-filled-primary comment-child-btn"
+													data-bGroup="${comment.bGroup}"
+													data-bStep="${comment.bStep}"
+													data-bIndent="${comment.bIndent}"
+												>
 													답글 달기
 												</button>
-												<button type="button" class="button-filled-primary" id="thumbupButton" data-recommend-bId="${comment.bId}">
+												<button type="button" class="button-filled-primary"
+													id="thumbupButton"
+													data-recommend-bId="${comment.bId}"
+												>
 													<i class="${comment.recommended ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up'}"></i>
 													<span class="total-Recommendation">${comment.bLike}</span>
 												</button>
@@ -180,35 +239,44 @@
 										</c:choose>
 								    </article>	
 								</c:if>
+								
+								<!-- 답글인 경우 -->
 								<c:if test="${comment.bIndent != 1}">
 									<article class="comment-child">
 										<div class="user-info">
 											<div class="left-info">
-<!-- 												<img id="profile-photo comment-child" src="https://25.media.tumblr.com/avatar_c5eeb4b2e95b_128.png" /> -->
 												<img id="profile-photo-${comment.bId} comment-child" src="${profileImageUrls[status.index]}" />
 												<span class="author-name comment-child"><a href="#">${comment.bName}</a></span>
 											</div>
 											<c:if test="${comment.bName == sessionScope.userId}">
-												<button type="button" class="button-filled-primary comment-child comment-remove" data-comment-remove-bId="${comment.bId}"
-																																 data-bGroup="${comment.bGroup}"
-																																 data-bStep="${comment.bStep}"
-																																 data-bIndent="${comment.bIndent}">
+												<button type="button" class="button-filled-primary comment-child comment-remove" 
+													data-comment-remove-bId="${comment.bId}"
+													data-bGroup="${comment.bGroup}"
+													data-bStep="${comment.bStep}"
+													data-bIndent="${comment.bIndent}"
+												>
 													<i class="fa-regular fa-trash-can"></i>
 												</button>
 											</c:if>
 										</div>
 									    <p class="post-content comment-child">${comment.bContent}</p>
 										<time class="post-time comment-child">${comment.bDate}</time>
-										<button type="button" class="button-filled-primary comment-child"  id="thumbupButton" data-recommend-bId="${comment.bId}">
+										<button type="button" class="button-filled-primary comment-child"
+											id="thumbupButton" 
+											data-recommend-bId="${comment.bId}"
+										>
 											<i class="${comment.recommended ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up'}"></i>
-									    	<span class="total-Recommendation">${comment.bLike}</span>
+								    		<span class="total-Recommendation">${comment.bLike}</span>
 							    		</button>
 								    </article>
 								</c:if>
+								
 						    </c:forEach>
-						    <!-- paging -->
+						    
+						    <!-- 댓글 페이징 블럭 -->
 							<nav>
 								<ul class="pagination justify-content-center">
+								
 									<!-- Previous 버튼 -->
 									<c:choose>
 										<c:when test="${commentsPaging.page <= 3}">
@@ -216,10 +284,17 @@
 										</c:when>
 										<c:otherwise>
 													<li class="page-item">
-														<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="${commentsPaging.page-3}" data-sortType=""> < </a>
+														<a class="page-link" href="#"
+															data-bGroup="${dto.bGroup}"
+															data-page="${commentsPaging.page-3}"
+															data-sortType=""
+														> < 
+														</a>
 													</li>
 										</c:otherwise>
 									</c:choose> 
+									
+									<!-- 개별 페이지 버튼 -->
 									<c:forEach begin="${commentsPaging.startPage}" end="${commentsPaging.endPage}"
 										var="i" step="1">
 										<c:choose>
@@ -230,53 +305,74 @@
 											</c:when>
 											<c:otherwise>
 												<li class="page-item">
-													<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="${i}" data-sortType="">${i}</a>
+													<a class="page-link" href="#"
+														data-bGroup="${dto.bGroup}"
+														data-page="${i}"
+														data-sortType=""
+													> ${i}
+													</a>
 												</li>
 											</c:otherwise>
 										</c:choose>
 									</c:forEach> 
+									
+									<!-- Next 버튼 -->
 									<c:choose>
 										<c:when test="${commentsPaging.maxPage <= (commentsPaging.page+3) || commentsPaging.page >= commentsPaging.maxPage}">
 											<li class="page-item"></li>
 										</c:when>
 										<c:otherwise>
 													<li class="page-item">
-														<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="${commentsPaging.page + 3}" data-sortType=""> > </a>
+														<a class="page-link" href="#"
+															data-bGroup="${dto.bGroup}"
+															data-page="${commentsPaging.page + 3}"
+															data-sortType=""
+														> > 
+														</a>
 													</li>
 										</c:otherwise>
 									</c:choose>
 								</ul>
 							</nav>
-							<!-- paging end -->
+							<!-- 댓글 페이징 블럭 end -->
+							
 						</div>
 					</div>
-				 </div> <!-- 댓글 end -->
+					<!-- 댓글 리스트 end -->
+				 
+				 </div>
+				 <!-- 댓글 div end -->
+				 
+				 <!-- 링크 복사 알림 메시지 div  -->
 				 <div class="copy-message" id="copyMessage">링크가 복사되었습니다.</div>
-			</div> <!-- col-md-12 end -->
-		</div> <!-- row end -->
-	</div> <!-- container-fluid end -->
+				 
+			</div> 
+		</div>
+	</div> 
+	
 	<!-- 채팅아이콘 -->
 	<%@ include file="/WEB-INF/views/include/chatManage.jsp" %>
 	
 	<!-- 카카오톡 공유 임시 DOM -->
 	<div id="tempDiv"style="display: none;" ></div>
+	
 	<!-- fancybox 이미지 갤러리 -->
 	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.0/dist/jquery.fancybox.min.js"></script>	
+<div class="hidden-data" id="updateResult" data-update-result="${updateResult}"></div>
+<div class="hidden-data" id="bId" data-bId="${dto.bId}"></div>
+<div class="hidden-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
+<div class="hidden-data" id="bContent" data-bContent='${dto.bContent}'></div>
+<div class="hidden-data" id="isLiked" data-isLiked="${isLiked}"></div>
+<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
+<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+
+<script src="<c:url value="/resources/js/common.js"/>"></script>
+<script src="<c:url value="/resources/js/fixedButton.js"/>"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> <!-- 카카오 공유 -->
+<script src="<c:url value="/resources/js/detailPage.js"/>"></script>
 </body>
 
-<div class="hideen-data" id="updateResult" data-update-result="${updateResult}"></div>
-<div class="hideen-data" id="bId" data-bId="${dto.bId}"></div>
-<div class="hideen-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
-<div class="hideen-data" id="bContent" data-bContent='${dto.bContent}'></div>
-<div class="hideen-data" id="isLiked" data-isLiked="${isLiked}"></div>
-<div class="hideen-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
-<div class="hideen-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
-<div class="hideen-data" id="userId" data-userId="${sessionScope.userId}"></div>
-
-<script src="../../../resources/js/common.js"></script>
-<script src="../../../resources/js/fixedButton.js"></script>
-<script src="../../../resources/js/detailPage.js"></script>
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> <!-- 카카오 공유 -->
 
 <script>
 const userId = document.querySelector("#userId").getAttribute("data-userId")
@@ -330,24 +426,29 @@ const editCommentTable = (replyList, profileImageUrls) => {
 								</div>`
 								if(replyList[i].bName == userId){
 									output += `
-										<button type="button" class="button-filled-primary comment-remove" data-comment-remove-bId="\${replyList[i].bId}"
-																									   data-bGroup="\${replyList[i].bGroup}"
-																									   data-bStep="\${replyList[i].bStep}"
-																									   data-bIndent="\${replyList[i].bIndent}">
+										<button type="button" class="button-filled-primary comment-remove"
+											data-comment-remove-bId="\${replyList[i].bId}"
+											data-bGroup="\${replyList[i].bGroup}"
+											data-bStep="\${replyList[i].bStep}"
+											data-bIndent="\${replyList[i].bIndent}"
+										>
 											<i class="fa-regular fa-trash-can"></i>
-										</button>
-									`
+										</button>`
 								}
 					output += `</div>
 					    	<p class="post-content">\${replyList[i].bContent}</p>
 					    	<time class="post-time">\${replyList[i].bDate}</time>
 					    	<button type="button" class="button-filled-primary comment-child-btn" 
-					    						  data-bGroup="\${replyList[i].bGroup}"
-					    						  data-bStep="\${replyList[i].bStep}"
-					    						  data-bIndent="\${replyList[i].bIndent}">
+					    		data-bGroup="\${replyList[i].bGroup}"
+					    		data-bStep="\${replyList[i].bStep}"
+					    		data-bIndent="\${replyList[i].bIndent}"
+				    		> 
 					    		답글 달기
 					    	</button>
-				    		<button type="button" class="button-filled-primary"  id="thumbupButton" data-recommend-bId="\${replyList[i].bId}">
+				    		<button type="button" class="button-filled-primary" 
+				    			id="thumbupButton"
+				    			data-recommend-bId="\${replyList[i].bId}"
+			    			>
 						    	<i class="\${replyList[i].recommended ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up'}" ></i>
 						    	<span class="total-Recommendation">\${replyList[i].bLike}</span>
 					    	</button> `
@@ -362,10 +463,12 @@ const editCommentTable = (replyList, profileImageUrls) => {
 									</div>`
 								if(replyList[i].bName == userId){
 									output += `
-										<button type="button" class="button-filled-primary comment-child comment-remove" data-comment-remove-bId="\${replyList[i].bId}"
-																												 	 data-bGroup="\${replyList[i].bGroup}"
-																												 	 data-bStep="\${replyList[i].bStep}"
-																											 		 data-bIndent="\${replyList[i].bIndent}">
+										<button type="button" class="button-filled-primary comment-child comment-remove"
+											data-comment-remove-bId="\${replyList[i].bId}"
+											data-bGroup="\${replyList[i].bGroup}"
+											data-bStep="\${replyList[i].bStep}"
+											data-bIndent="\${replyList[i].bIndent}"
+										>
 											<i class="fa-regular fa-trash-can"></i>
 										</button>
 									`
@@ -374,7 +477,10 @@ const editCommentTable = (replyList, profileImageUrls) => {
 					output += `</div>
 							    <p class="post-content comment-child">\${replyList[i].bContent}</p>
 							    <time class="post-time comment-child">\${replyList[i].bDate}</time>
-							    <button type="button" class="button-filled-primary comment-child"  id="thumbupButton" data-recommend-bId="\${replyList[i].bId}">
+							    <button type="button" class="button-filled-primary comment-child"
+							    	id="thumbupButton"
+							    	data-recommend-bId="\${replyList[i].bId}"
+						    	>
 							    	<i class="\${replyList[i].recommended ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up'}"></i>
 							    	<span class="total-Recommendation">\${replyList[i].bLike}</span>
 					    		</button>
@@ -402,7 +508,12 @@ const updatePagingBlock = (dto, commentsPaging) => {
 	if(commentsPaging.page <= COMMENTS_BLOCK_LIMIT) {
 		output += `<li class="page-item"></li>`
 	} else {
-		let previousPageLink = `<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="\${commentsPaging.page - COMMENTS_BLOCK_LIMIT}" data-sortType=""> < </a>`
+		let previousPageLink = `<a class="page-link" href="#"
+									data-bGroup="${dto.bGroup}"
+									data-page="\${commentsPaging.page - COMMENTS_BLOCK_LIMIT}"
+									data-sortType=""
+								> <
+								</a>`
 		output += `<li class="page-item">\${previousPageLink}</li>`
 	}
 	
@@ -410,7 +521,12 @@ const updatePagingBlock = (dto, commentsPaging) => {
 	for(let i = commentsPaging.startPage; i <= commentsPaging.endPage; i++){
 	    let pagingLink = (i == commentsPaging.page) ? 
 	    	`<span class="page-link" style="pointer-events: none;">\${i}</span>` :
-	    	`<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="\${i}" data-sortType="">\${i}</a>`
+	    	`<a class="page-link" href="#"
+	    	 	data-bGroup="${dto.bGroup}"
+	    	 	data-page="\${i}"
+	    	 	data-sortType=""
+    	 	 >\${i}
+    	 	 </a>`
 		        
 		    output += `<li class="page-item">\${pagingLink}</li>`
 	}
@@ -420,8 +536,18 @@ const updatePagingBlock = (dto, commentsPaging) => {
 		output += `<li class="page-item"></li>`
 	} else {
 		let nextPageLink = (commentsPaging.page + COMMENTS_BLOCK_LIMIT >= commentsPaging.maxPage) ? 
-			`<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="\${commentsPaging.maxPage}" data-sortType=""> > </a>` :
-			`<a class="page-link" href="#" data-bGroup="${dto.bGroup}" data-page="\${commentsPaging.page + COMMENTS_BLOCK_LIMIT}" data-sortType=""> > </a>`
+			`<a class="page-link" href="#"
+				data-bGroup="${dto.bGroup}"
+				data-page="\${commentsPaging.maxPage}"
+				data-sortType=""
+			 > >
+			 </a>` :
+			`<a class="page-link" href="#" 
+			 	data-bGroup="${dto.bGroup}"
+			 	data-page="\${commentsPaging.page + COMMENTS_BLOCK_LIMIT}"
+			 	data-sortType=""
+		 	 > >
+		 	 </a>`
 		output += `<li class="page-item">\${nextPageLink}</li>`
 	} 
 	
@@ -707,7 +833,6 @@ const commentChildRemove = (bId, bGroup, bStep) => {
 		}
 	})
 }
-
 
 /* 페이지 로드 시 실행될 함수
 ================================================== */

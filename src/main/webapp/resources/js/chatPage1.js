@@ -4,13 +4,14 @@ let chatList = document.querySelector("#chatList")
 let roomList = document.querySelector("#roomList")
 let chatRecords = document.querySelector(".chat-records")
 const searchTextInput = document.querySelector("#searchTextInput")
+const path = document.querySelector("#contextPath").getAttribute("data-context-path")
 
 /* 채팅 아이콘 - 안읽은 메시지 총 개수
 ================================================== */
 const getUnreadMessageTotalCount = () => {
 	const userId = document.querySelector("#userId").getAttribute("data-userId")
 	
-	fetch(`/chat/getUnreadMessageTotalCount?receiver=${userId}`)
+	fetch(`${path}/chat/getUnreadMessageTotalCount?receiver=${userId}`)
 	.then(response => response.json())
 	.then(data => {
 		const badge = document.querySelector(".badge")
@@ -449,7 +450,7 @@ const printEmotion = (name, msg, side, state, time) => {
 			<div>
 				<div>${name}</div>
 				<div style="background-color:#fff; border:0;">
-					<img src="../../../resources/images/emoticon/${msg}.png">
+					<img src="${path}/resources/images/emoticon/${msg}.png">
 				</div>
 				<div>${time}</div>
 			</div>

@@ -1,3 +1,7 @@
+/* 전역 변수
+================================================== */
+const path = document.querySelector("#contextPath").getAttribute("data-context-path")
+
 /* 수정 완료 메시지
 ================================================== */
 const showProfileMessage = (msg) => {
@@ -42,7 +46,7 @@ let event = false
 const setDefaultImage = () => {
     const defaultImage = document.querySelector("#defaultImage")
     defaultImage.addEventListener('click', function() {
-        profileImage.src = '../../../resources/images/profile_default.png'
+        profileImage.src = `${path}/resources/images/profile_default.png`
         event = true
         closeDropdownMenu()
         showProfileMessage('기본 프로필 이미지가 선택되었습니다.')

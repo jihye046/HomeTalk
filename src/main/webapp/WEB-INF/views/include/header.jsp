@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,4 +15,4 @@
 	<!-- 폰트어썸CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
 	<!-- common.css -->
-	<link href="../../../resources/css/common.css" rel="styleSheet">
+	<link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">

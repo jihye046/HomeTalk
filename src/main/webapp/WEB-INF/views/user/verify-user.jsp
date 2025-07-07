@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/verify-user.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/verify-user.css"/>" rel="stylesheet">
 <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -94,7 +94,7 @@
 		</div>
 	</main>
 </body>
-<script src="../../../resources/js/verify-user.js"></script>
-<div class="hideen-data" id="mode" data-mode="${mode}"></div>
-<div class="hideen-data" id="verifyUserId" data-verifyUserId="${verifyUserId}"></div>
+<script src="<c:url value="/resources/js/verify-user.js"/>"></script>
+<div class="hidden-data" id="mode" data-mode="${mode}"></div>
+<div class="hidden-data" id="verifyUserId" data-verifyUserId="${verifyUserId}"></div>
 </html>

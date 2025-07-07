@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/searchedAddMap.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/searchedAddMap.css"/>" rel="stylesheet">
+
 <!-- ckeditor -->
-<script src="${pageContext.request.contextPath}/resources/static/ckeditor/build/ckeditor.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/resources/static/ckeditor/build/ckeditor.js"></script> --%>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${jsKey}&libraries=services"></script>
 </head>
@@ -23,6 +24,6 @@
 		</div>
 	</main>
 </body>
-<script src="../../../resources/js/common.js"></script>
-<script src="../../../resources/js/searchedAdd.js"></script>
+<script src="<c:url value="/resources/js/common.js"/>"></script>
+<script src="<c:url value="/resources/js/searchedAdd.js"/>"></script>
 </html>

@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/specificAddMap.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/specificAddMap.css"/>" rel="stylesheet">
+
 <!-- ckeditor -->
-<script src="${pageContext.request.contextPath}/resources/static/ckeditor/build/ckeditor.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/resources/static/ckeditor/build/ckeditor.js"></script> --%>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${jsKey}&libraries=services"></script>
 </head>
@@ -26,8 +27,9 @@
 		</div>
 	</main>
 </body>
-<div id="naverMap_ClientId" data-client-id="${naverMap_ClientId}"></div>
-<div id="naverMap_ClientSecret" data-client-secret="${naverMap_ClientSecret}"></div>
-<script src="../../../resources/js/common.js"></script>
-<script src="../../../resources/js/findRoute.js"></script>
+<div class="hidden-data" id="naverMap_ClientId" data-client-id="${naverMap_ClientId}"></div>
+<div class="hidden-data" id="naverMap_ClientSecret" data-client-secret="${naverMap_ClientSecret}"></div>
+
+<script src="<c:url value="/resources/js/common.js"/>"></script>
+<script src="<c:url value="/resources/js/findRoute.js"/>"></script>
 </html>

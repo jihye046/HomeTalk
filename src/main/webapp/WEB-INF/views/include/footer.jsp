@@ -1,15 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <footer>
-	<!-- <div class="footer">
-        <div class="contact-info">
-            <i class="fa-solid fa-phone"></i>&nbsp;1234-5678
-        </div>
-        <div class="contact-info">
-            <i class="fa-solid fa-envelope"></i>&nbsp;abc@gmail.com
-        </div>
-    </div> -->
-
     <div class="container">
             <div class="footer-cta pt-5 pb-5">
                 <div class="row">
@@ -47,14 +38,15 @@
                     <div class="col-xl-4 col-lg-4 mb-50">
                         <div class="footer-widget">
                             <div class="footer-logo">
-                                <a href="/"><img src="../../../resources/images/logo2.png" class="img-fluid" alt="logo"></a>
+                                <a href="/">
+                                	<img alt="logo" class="img-fluid" src="<c:url value="/resources/images/logo2.png"/>">
+                               	</a>
                             </div>
                             <div class="footer-text">
                                 <p>• 평일: 전체 문의 상담 09:00-18:00</p>
                                 <p>• 토요일: 배송 주문건 상담 09:00-13:00</p>
                                 <p>• 일요일: 휴무</p>
                             </div>
-                            
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
@@ -65,7 +57,7 @@
                             <div class="footer-social-icon">
                                 <a class="notion-wrapper" href="https://buly.kr/AlkbZZR">
                                 	<i>
-                               			<img src="../../../resources/images/notion.png" alt="Notion logo" class="notion-icon">
+                                		<img alt="Notion logo" class="notion-icon" src="<c:url value="/resources/images/notion.png"/>">
                                		</i>
                                	</a>
                                 <a href="mailto:contact@hometalk.com?subject=문의사항&body=안녕하세요, 문의드립니다."><i class="fab fa-google-plus-g google-bg"></i></a>
@@ -87,4 +79,4 @@
             </div>
         </div>
 </footer>
-<script src="../../../resources/js/common.js"></script>
+<script src="<c:url value="/resources/js/common.js"/>"></script>

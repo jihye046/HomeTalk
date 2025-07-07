@@ -6,7 +6,9 @@
 			<div class="row">
 				<div class="col-12">
 					<nav class="navbar navbar-expand-md navbar-light">
-						<a class="navbar-brand" href="/"><img src="../../../resources/images/logo2.png" alt=""></a>	
+						<a class="navbar-brand" href="/">
+							<img alt="logo-image" src="<c:url value="/resources/images/logo2.png"/>">
+						</a>	
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul class="navbar-nav ml-auto py-4 py-md-0">
 								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
@@ -35,11 +37,16 @@
 						</div>
 						<div class="col-md-6 header-welcomeText">
 							<h5 id="welcomeText"></h5>
-							<a class="menubar-button-primary" id="loginLogoutLink" href="${empty sessionScope.userId ?
-														  '/user/loginPage' : 
-														  '/user/logout'}" 
-														  style="padding: 10px; font-size: 14px;">
-														  ${empty sessionScope.userId ? 'LOGIN' : 'Logout'}</a>
+<%-- 							<a class="menubar-button-primary" id="loginLogoutLink" href="${empty sessionScope.userId ? --%>
+<%-- 														  '/user/loginPage' :  --%>
+<%-- 														  '/user/logout'}"  --%>
+<!-- 														  style="padding: 10px; font-size: 14px;"> -->
+<%-- 														  ${empty sessionScope.userId ? 'LOGIN' : 'Logout'}</a> --%>
+							<a class="menubar-button-primary" id="loginLogoutLink"
+							   href="<c:url value="${empty sessionScope.userId ? '/user/loginPage' : '/user/logout'}" />"
+							   style="padding: 10px; font-size: 14px;">
+							   ${empty sessionScope.userId ? 'LOGIN' : 'Logout'}
+							</a>
 							<a class="menubar-button-primary write" href="/board/createPage" style="font-size: 14px;"> 
 								글쓰기
 							</a>
@@ -51,4 +58,4 @@
 	</div>
 	<div class="ee5">
 	</div>
-<script src="../../../resources/js/loginInfo.js"></script>
+<script src="<c:url value="/resources/js/loginInfo.js"/>"></script>

@@ -95,6 +95,7 @@ public class BoardController {
 		// 태그 생성
 		ObjectMapper mapper = new ObjectMapper();
 		if(dto.getTags() != null && dto.getTags() != "") {
+			// JSON 형태의 태그 문자열을 객체 리스트로 변환하여 저장
 			List<TagDto> tags = mapper.readValue(dto.getTags(), new TypeReference<List<TagDto>>() {});
 			service.createTag(dto.getbId(), tags);
 		}
@@ -107,18 +108,25 @@ public class BoardController {
 	@RequestMapping("/detailBoard")
 	public String detailBoard(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
 							  @RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
-							  HttpServletRequest request, Model model, HttpSession session) {
-		int bId = Integer.parseInt(request.getParameter("bId"));
+							  HttpServletRequest request, Model model, HttpSession session, @RequestParam int bId, @RequestParam int bGroup) {
+//		int bId = Integer.parseInt(request.getParameter("bId"));
+//		int bGroup = Integer.parseInt(request.getParameter("bGroup"));
 		String userId = (String)session.getAttribute("userId"); 
 		
+		// 게시글 조회
 		BoardDto dto = service.detailBoard(bId);
-		int bGroup = Integer.parseInt(request.getParameter("bGroup"));
+		// 해당 게시글에 사용자가 좋아요를 눌렀는지 확인
 		boolean isLiked = likeService.isLiked(bId, userId);
+		// 해당 게시글에 사용자가 북마크를 눌렀는지 확인
 		boolean isBookmarked = bookmarkService.isBookmarked(bId, userId);
+		// 댓글 페이징 정보
 		commentsPaging(page, sortType, bGroup, model, userId);
+		// 좋아요 수 업데이트
 		updateHitCount(bId);
+		// 프로필 이미지 url 반환
 		String filename = userService.getProfileFilename(userId);
 		String imageUrl = "/user/getProfileImage/" + filename;
+		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);
 		
 		model.addAttribute("dto", dto);

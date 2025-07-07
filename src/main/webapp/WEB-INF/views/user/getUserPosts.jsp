@@ -2,13 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<link href="../../../resources/css/getUserPosts.css" rel="styleSheet">
-<!-- <script>
-	var paging = ${paging.page}
-	var searchGubun = "${param.searchGubun}"
-	var searchText = "${param.searchText}"
-    var sortType = ("${param.sortType}" == "") ? "latest" : "${param.sortType}"
-</script> -->
+<link href="<c:url value="/resources/css/getUserPosts.css"/>" rel="stylesheet">
 <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -55,8 +49,7 @@
 									</td>
 									<td class="post-title-cell">
 										<a href="/board/detailBoard?bId=${dto.bId}&
-											bGroup=${dto.bGroup}&
-											userId=${sessionScope.userId}">
+											bGroup=${dto.bGroup}">
 											${dto.bTitle}
 										</a>
 										<i class="fa-regular fa-comment-dots"></i> 
@@ -74,11 +67,10 @@
 	</main>
 	<%@ include file="/WEB-INF/views/include/footer.jsp" %>
 </body>
+<div class="hidden-data" id="createResult" data-create-result="${createResult}"></div>
+<div class="hidden-data" id="deleteResult" data-delete-result="${deleteResult}"></div>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
 
-<div id="createResult" data-create-result="${createResult}"></div>
-<div id="deleteResult" data-delete-result="${deleteResult}"></div>
-<div id="userId" data-userId="${sessionScope.userId}"></div>
-<div id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
-<script src="../../../resources/js/getUserPosts.js"></script>
-
+<script src="<c:url value="/resources/js/getUserPosts.js"/>"></script>
 </html>

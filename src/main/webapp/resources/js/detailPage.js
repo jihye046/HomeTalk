@@ -183,7 +183,6 @@ chatButton.addEventListener('click', () => {
 
 /* 작성자가 등록한 지도가 있다면 표시
 ================================================== */
-
 const mapContainer = document.querySelector("#mapContainer")
 const mapView = mapContainer.querySelector("#mapView")
 const address = mapView.getAttribute("data-bAddress")
@@ -197,10 +196,12 @@ if(address) {
 		center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
 		level: 5 // 지도의 확대, 축소 레벨
 	}
+	
 	// 지도를 미리 생성
 	const map = new daum.maps.Map(mapView, mapOption)
-	// 주소-좌표 변환 객체를 생성
+	// 주소-좌표 변환 객체 생성
 	const geocoder = new daum.maps.services.Geocoder()
+	alert(111)
 	// 마커를 미리 생성
 	const marker = new daum.maps.Marker({
 		position: new daum.maps.LatLng(37.537187, 127.005476),

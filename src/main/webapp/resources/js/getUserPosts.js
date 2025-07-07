@@ -18,8 +18,7 @@ const updatePostList = (list) => {
                 </td>
                 <td class="post-title-cell">
                     <a href="/board/detailBoard?bId=${dto.bId}&
-                        bGroup=${dto.bGroup}&
-                        userId=${userId}">
+                        bGroup=${dto.bGroup}">
                         ${dto.bTitle}
                     </a>
                     <i class="fa-regular fa-comment-dots"></i> 

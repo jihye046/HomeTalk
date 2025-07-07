@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
-<!-- <link href="../../../resources/css/detailPage.css" rel="styleSheet"> -->
-<link href="../../../resources/css/myPage.css" rel="styleSheet">
+<link href="<c:url value="/resources/css/myPage.css"/>" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -43,7 +42,6 @@
 						<a href="/user/updateProfileForm">프로필 수정</a>
 					</div>
 					<div class="mypage-link">
-<!-- 						<a href="/user/changePasswordForm">비밀번호 변경</a> -->
 						<a href="/user/verify-user?mode=password&userId=${sessionScope.userId}">비밀번호 변경</a>
 					</div>
 				</div>
@@ -54,8 +52,6 @@
 	<!-- 채팅아이콘 -->
 	<%@ include file="/WEB-INF/views/include/chatManage.jsp" %>
 </body>
-<%-- <div id="userId" data-userId="${sessionScope.userId}"></div> --%>
-<!-- <script src="../../../resources/js/chatPage.js" defer></script> -->
-<script src="../../../resources/js/myPage.js"></script>
-<script src="../../../resources/js/common.js"></script>
+<script src="<c:url value="/resources/js/myPage.js"/>"></script>
+<script src="<c:url value="/resources/js/common.js"/>"></script>
 </html>
