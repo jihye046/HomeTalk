@@ -16,6 +16,12 @@ local.properties
 .target/
 
 # ignore properties file
+# Node.js
+node_modules/
+npm-debug.log
+.npm/
+
+# 일반적인 항목
 /**/spring/
 config/
 web.xml

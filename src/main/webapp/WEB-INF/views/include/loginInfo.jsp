@@ -14,7 +14,7 @@
 								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
 									<a class="nav-link" href="/">Community</a>
 								</li>
-								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4 weather-nav-item">
 									<a class="nav-link" href="/weather/weatherPage">Weather</a>
 								</li>
 								<!-- Map 삭제 -->

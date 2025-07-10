@@ -3,8 +3,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 
+<!-- driver.js -->
 <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css"/>
+
 <link href="<c:url value="/resources/css/list.css"/>" rel="stylesheet">
 <link href="<c:url value="/resources/css/common.css"/>" rel="stylesheet">
 
@@ -53,7 +55,13 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="row">
+				<div class="row-inner">
+						
+						<!-- 가이드 버튼 -->
+						<button id="start-guide-button" class="guide-start-button-with-icon">
+						    <i class="fas fa-compass"></i> 가이드 시작하기
+						</button>
+						
 						<div class="form-and-buttons-container">
 							<div class="buttons-container">
 								<button class="styled-button" id="sort_latest" type="button" class="btn btn-sm btn-dark">최신순</button>
