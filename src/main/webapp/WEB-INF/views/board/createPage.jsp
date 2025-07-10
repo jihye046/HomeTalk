@@ -44,6 +44,8 @@
 	</main>
 <%-- 	<%@ include file="/WEB-INF/views/include/footer.jsp" %> --%>
 	<div id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
+	<div class="hidden-data" id="initRequestUrl" data-initRequestUrl="${initRequestUrl}"></div>
+	
 	<script src="<c:url value="/resources/js/createPage.js"/>"></script>
 	<script src="<c:url value="/resources/js/uploadAdapter.js"/>"></script>
 </body>

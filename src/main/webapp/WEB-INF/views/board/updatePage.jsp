@@ -45,6 +45,7 @@
 </body>
 <div class="hidden-data" id="tagJsonList" data-tagJsonList="${fn:escapeXml(tagJsonList)}"></div>
 <div class="hidden-data" id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
+<div class="hidden-data" id="initRequestUrl" data-initRequestUrl="${initRequestUrl}"></div>
 
 <script src="<c:url value="/resources/js/uploadAdapter.js"/>"></script>
 <script src="<c:url value="/resources/js/updatePage.js"/>"></script>
