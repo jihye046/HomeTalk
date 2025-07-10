@@ -43,10 +43,10 @@ const getRoomList = () => {
 	fetch(`/chat/getRoomList?userId=${userId}`)
 	.then(response => response.json())
 	.then(data => {
-		data.forEach(chatRoomDto => {
+		data.rooms.forEach(chatRoomDto => {
 			printRoomList(chatRoomDto)
 		})
-		openChatRoom()
+		openChatRoom(data.serverUrl)
 	})
 	.catch(error => {
 		console.error('Error:', error)
@@ -64,10 +64,10 @@ const searchUser = () => {
 		fetch(`/chat/getRoomList?userId=${userId}&searchText=${searchText}`)
 		.then(response => response.json())
 		.then(data => {
-			data.forEach(chatRoomDto => {
+			data.rooms.forEach(chatRoomDto => {
 				printRoomList(chatRoomDto)
 			})
-			openChatRoom()
+			openChatRoom(data.serverUrl)
 		})
 		.catch(error => {
 			console.error('Error:', error)
@@ -89,7 +89,7 @@ const handleSearchOnEnter = () => {
 
 /* 채팅 목록 클릭시 채팅방 열기
 ================================================== */
-const openChatRoom = () => {
+const openChatRoom = (serverUrl) => {
 	document.querySelectorAll(".chat-room").forEach(room => {
 		room.addEventListener('click', function() {
 			const roomId = this.getAttribute('data-room-id')
@@ -100,18 +100,19 @@ const openChatRoom = () => {
 
 			hideUnreadBadge(unreadBadge, roomId, userId)
 			getChatHistory(roomId, imageUrl, otherUserId, userId)
-			connect2(roomId, otherUserId, userId)
+			// connect2(roomId, otherUserId, userId)
+			connect2(serverUrl, roomId, otherUserId, userId)
 		})
 	})
 }
 
 let ws = ''
-const connect2 = (roomId, otherUserId, userId) => {
+const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
 	window.name = userId
 
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
-		ws = new WebSocket('ws://localhost/chatServer')
+		ws = new WebSocket(serverUrl)
 
 		// 웹소캣 연결
 		ws.onopen = () => {
