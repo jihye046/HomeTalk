@@ -898,6 +898,8 @@ body.dark .logo img {
     height: 20px;
     font-size: 12px;
     display: inline-block;
+    z-index: 1;
+    white-space: nowrap; /* 숫자가 길어져도 줄바꿈 방지 */
     text-align: center;
     line-height: 20px;
 }

@@ -138,7 +138,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 	window.name = userId
 	
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
-		ws = new WebSocket('ws://localhost/chatServer')
+		ws = new WebSocket('ws://localhost:8080/chatServer')
 
 		// 웹소캣 연결
 		ws.onopen = () => {
@@ -221,5 +221,6 @@ window.connect2 = (roomId, otherUserId, userId) => {
 				}
 			}
 		}
+		msg.addEventListener('keydown', window.handleKeyDown)
 	}
 }
