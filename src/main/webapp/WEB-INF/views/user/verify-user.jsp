@@ -93,8 +93,11 @@
 			</div>
 		</div>
 	</main>
+	
+	<div class="hidden-data" id="mode" data-mode="${mode}"></div>
+	<div class="hidden-data" id="verifyUserId" data-verifyUserId="${verifyUserId}"></div>
+	
+	<script src="<c:url value="/resources/js/verify-user.js"/>"></script>
 </body>
-<script src="<c:url value="/resources/js/verify-user.js"/>"></script>
-<div class="hidden-data" id="mode" data-mode="${mode}"></div>
 <div class="hidden-data" id="verifyUserId" data-verifyUserId="${verifyUserId}"></div>
 </html>

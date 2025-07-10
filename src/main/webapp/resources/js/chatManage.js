@@ -1,5 +1,6 @@
 /* 웹소캣 1:1 채팅
 ================================================== */
+/*
 const openChatRoom = () => {
 
 	const bName = chatButton.getAttribute("data-bName") // receiver
@@ -11,3 +12,4 @@ const openChatRoom = () => {
 		chatWindow.connect()
     })
 }
+*/

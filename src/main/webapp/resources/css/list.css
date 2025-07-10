@@ -193,6 +193,53 @@
 	margin-bottom: 0;
 }
 
+/* 가이드 시작하기 버튼 + 게시글 정렬 버튼 div */
+.row-inner {
+	margin: 20px 20px;
+	gap: 8px;
+}
+
+/* 가이드 버튼
+=========================================== */
+/* 가이드 시작하기 버튼 */
+.guide-start-button-with-icon {
+    background-color: #ad9f94;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* 아이콘과 텍스트 사이 간격 */
+    margin-bottom: 15px;
+}
+
+/* 가이드 시작하기 버튼 hover 시 */
+.guide-start-button-with-icon:hover {
+    background-color: #9a8b7e;
+    transform: translateY(-2px);
+}
+
+/* 가이드 팝오버 스타일 */
+.driver-popover.driverjs-theme {
+    background-color: #ffffff;
+    color: #4c4c4c;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    font-family: 'Noto Sans KR', sans-serif, 'Apple SD Gothic Neo';
+    line-height: 1.5;
+    font-size: 13px;
+	line-height: 1.6;
+    width: auto;
+    max-width: 350px;
+}
+
 /* pagination 
 =========================================== */
 .pagination {
@@ -352,8 +399,6 @@ span.page-link {
     justify-content: space-between; 
     align-items: center; 
     width: 100%; 
-    margin-bottom: 10px;
-    padding: 0 30px; /* 양쪽에 padding 추가하여 안쪽으로 배치 */
 }
 
 /* 버튼을 왼쪽에 배치 */

@@ -20,6 +20,96 @@ if(userId) {
 	//document.querySelector("#welcomeText").innerHTML = "로그인"		
 }
 
+/* 가이드
+================================================== */
+const driver = window.driver.js.driver
+
+const tourSteps = [
+	{
+		element: ".weather-container",
+		popover: {
+			title: "🌦️ 실시간 날씨 정보 (위치 권한 필요)",
+			description: 
+			`
+				이 곳에서는 현재 위치의 실시간 날씨 상황을 반영한 영상을 볼 수 있습니다.<br>
+				만약 이 공간이 비어있다면 브라우저에서 위치 권한이 <strong>거부</strong>된 상태일 수 있습니다.<br><br>
+				실시간 날씨 정보를 확인하려면, 아래 방법을 따라 위치 권한을 <strong>허용</strong>으로 변경해 주세요.
+			`,
+			showButtons: ['next', 'close']
+		}
+	},
+	{
+		element: ".weather-container",
+		popover: {
+			title: "위치 권한 변경 방법",
+		    description: 
+	    	`
+	    		• <strong>Chrome / Edge</strong>: 주소창 왼쪽 아이콘 → 사이트 설정 → 위치 허용<br>
+	    		• <strong>Safari</strong>: 메뉴 → 설정 → 웹사이트 → 위치 권한<br><br>
+	    		🔄 변경 후 페이지를 새로고침해주세요.	
+	    	 `,
+			showButtons: ['previous', 'next', 'close']
+		}
+	},
+	{
+		element: ".card-container",
+		popover: {
+			title: "회원들의 게시글 둘러보기",
+			description:
+			`
+				이곳은 회원님들이 작성한 다양한 게시글을 한눈에 확인하는 공간입니다. <br>
+				궁금한 점이 있다면 검색 기능을 활용하거나, <br>
+				직접 새로운 게시글을 작성하여 소통해보세요!✨
+			` ,
+			showButtons: ['previous', 'next', 'close']
+		}
+	},
+	{
+		element: ".weather-nav-item",
+		popover: {
+			title: "☀️ 날씨 페이지 바로가기",
+			description: 
+			`
+				이곳을 클릭하여 현재 위치 기반의 <strong>상세한 날씨 정보</strong>와 <br>
+				주간, 시간별 예보를 확인해보세요.
+			`,
+			showButtons: ['previous', 'next', 'close']
+		}
+	},
+	{
+		element: "#chatIconWrapper",
+		popover: {
+			title: "💬 실시간 채팅으로 소통하기",
+			description: 
+			`
+				이곳을 클릭하면 다른 사용자들과 나눴던 <strong>이전 대화 내용을 불러오고</strong>,
+				<strong>실시간 대화</strong>도 이어갈 수 있어요.<br><br>
+				궁금한 점을 물어보거나 의견을 나누고 싶을 때 언제든지 이용해보세요. 😊 <br><br>
+				<strong>※ 이 기능은 로그인 후에만 사용 가능합니다.</strong>
+			`,
+			showButtons: ['previous', 'next', 'close']
+		}
+	}
+]
+
+const driverObj = driver({
+	popoverClass: 'driverjs-theme',
+	showProgress: true,
+	steps: tourSteps,
+	allowClose: true,
+	side: "bottom",
+	align: "start",
+	nextBtnText: '다음',
+	prevBtnText: '이전',
+	doneBtnText: '완료',
+	closeBtnText: '닫기'
+})
+
+const guideButton = document.querySelector("#start-guide-button")
+guideButton.addEventListener('click', () => {
+	driverObj.drive()	
+})
+
 /* 자동 팝업
 ================================================== */
 	// 로컬스토리지에 팝업 숨김 만료 시간 저장 또는 삭제
@@ -67,7 +157,6 @@ const showAutoPopup = () => {
 		})
 	}
 }
-
 
 /* 주요 날씨에 따라 메인 설정
 ================================================== */
