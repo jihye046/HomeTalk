@@ -102,7 +102,13 @@
 										</div>
 									</footer>
 								</figcaption>
-								<a href="/board/detailBoard?bId=${dto.bId}&bGroup=${dto.bGroup}&page=${paging.page}"></a>
+								<a href="/board/detailBoard?
+									bId=${dto.bId}&
+									bGroup=${dto.bGroup}&
+									page=${paging.page}&
+									bName=${dto.bName}"
+								>
+								</a>
 							</figure>
 						</c:forEach>
 					</div>

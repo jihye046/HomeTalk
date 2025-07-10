@@ -201,7 +201,6 @@ if(address) {
 	const map = new daum.maps.Map(mapView, mapOption)
 	// 주소-좌표 변환 객체 생성
 	const geocoder = new daum.maps.services.Geocoder()
-	alert(111)
 	// 마커를 미리 생성
 	const marker = new daum.maps.Marker({
 		position: new daum.maps.LatLng(37.537187, 127.005476),

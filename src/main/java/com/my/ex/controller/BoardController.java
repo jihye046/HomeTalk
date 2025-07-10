@@ -107,8 +107,14 @@ public class BoardController {
 	// 게시글 상세보기
 	@RequestMapping("/detailBoard")
 	public String detailBoard(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-							  @RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
-							  HttpServletRequest request, Model model, HttpSession session, @RequestParam int bId, @RequestParam int bGroup) {
+		@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
+		HttpServletRequest request,
+		Model model, 
+		HttpSession session, 
+		@RequestParam int bId, 
+		@RequestParam int bGroup,
+		@RequestParam String bName) {
+		
 //		int bId = Integer.parseInt(request.getParameter("bId"));
 //		int bGroup = Integer.parseInt(request.getParameter("bGroup"));
 		String userId = (String)session.getAttribute("userId"); 
@@ -124,7 +130,7 @@ public class BoardController {
 		// 좋아요 수 업데이트
 		updateHitCount(bId);
 		// 프로필 이미지 url 반환
-		String filename = userService.getProfileFilename(userId);
+		String filename = userService.getProfileFilename(bName);
 		String imageUrl = "/user/getProfileImage/" + filename;
 		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);
