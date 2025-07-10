@@ -135,10 +135,11 @@ const print = (name, msg, side, state, time) => {
 let ws = ''
 window.connect2 = (roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
+	const serverUrl = document.querySelector("#serverUrl").getAttribute("data-serverUrl")
 	window.name = userId
 	
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
-		ws = new WebSocket('ws://localhost:8080/chatServer')
+		ws = new WebSocket(serverUrl)
 
 		// 웹소캣 연결
 		ws.onopen = () => {

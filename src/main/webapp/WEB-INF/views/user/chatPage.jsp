@@ -15,8 +15,9 @@
 	
 	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 	<div class="hidden-data" id="bName" data-bName="${receiver}"></div>
-	
 	<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
+	<div class="hidden-data" id="serverUrl" data-serverUrl="${serverUrl}"></div>
+	
 	<script src="<c:url value="/resources/js/directChat.js"/>"></script>
 </body>
 </html>
