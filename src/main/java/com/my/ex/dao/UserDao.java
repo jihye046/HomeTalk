@@ -146,5 +146,11 @@ public class UserDao implements IUserDao {
 	public int checkNicknameDuplicate(String checkNickanme) {
 		return session.selectOne(NAMESPACE + "checkNicknameDuplicate", checkNickanme);
 	}
+	
+	// 소셜 아이디 존재 여부 확인
+	@Override
+	public int isSocialUserExists(HashMap<String, String> map) {
+		return session.selectOne(NAMESPACE + "isSocialUserExists", map);
+	}
 
 }

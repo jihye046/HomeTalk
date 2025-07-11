@@ -20,8 +20,11 @@ public class UserService implements IUserService {
 	// 회원가입
 	@Override
 	public boolean join(UserDto dto) {
-		int result = dao.join(dto);
-		return (result > 0) ? true : false;
+		if(dto.getUserPw() == null || dto.getUserPw() == ""){
+			dto.setUserPw(null); // oauth 인증을 통한 회원가입 시 비밀번호 값이 없음. 확실하게 null로 지정
+		}
+		
+		return dao.join(dto) > 0;
 	}
 
 	// 로그인
@@ -149,6 +152,15 @@ public class UserService implements IUserService {
 	@Override
 	public boolean checkNicknameDuplicate(String checkNickanme) {
 		return dao.checkNicknameDuplicate(checkNickanme) > 0;
+	}
+
+	// 소셜 아이디 존재 여부 확인
+	@Override
+	public boolean isSocialUserExists(String sns_id, String sns_type) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("userId", sns_id);
+		map.put("user_type", sns_type);
+		return dao.isSocialUserExists(map) > 0;
 	}
 
 }

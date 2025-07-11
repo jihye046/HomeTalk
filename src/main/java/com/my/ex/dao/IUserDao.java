@@ -42,4 +42,7 @@ public interface IUserDao {
 	// 인증 단계: 아이디 존재여부 확인
 	int checkUserIdMatch(String userId);
 	int resetPassword(Map<String, String> map);
+	
+	// oauth 인증 관련
+	int isSocialUserExists(HashMap<String, String> map);
 }

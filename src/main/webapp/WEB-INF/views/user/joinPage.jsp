@@ -17,6 +17,7 @@
 	            <p class="join-subtitle">새로운 계정을 만들고 서비스를 이용해보세요.</p>
 	
 	            <form id="join-form" action="/user/join" method="post" class="join-form">
+	            	<input type="hidden" name="user_type" value="NORMAL">
 	                <div class="input-group">
 	                    <label for="username">이름</label>
 	                    <input type="text" id="username" name="username" placeholder="이름을 입력해주세요" required>
