@@ -40,5 +40,7 @@ public interface IUserService {
 	// 인증 단계: 아이디 존재여부 확인
 	boolean checkUserIdMatch(String userId);
 	boolean resetPassword(String userId, String password);
-	
+
+	// oauth 인증 관련
+	boolean isSocialUserExists(String sns_id, String sns_type);
 }

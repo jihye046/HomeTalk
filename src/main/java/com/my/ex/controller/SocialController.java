@@ -13,9 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.ex.dto.SocialDto;
+import com.my.ex.dto.UserDto;
 import com.my.ex.dto.google.GoogleCallbackDto;
 import com.my.ex.dto.google.GoogleProfileApi;
 import com.my.ex.dto.google.GoogleToken;
@@ -23,6 +25,7 @@ import com.my.ex.dto.naver.NaverCallbackDto;
 import com.my.ex.dto.naver.NaverProfileApi;
 import com.my.ex.dto.naver.NaverToken;
 import com.my.ex.service.SocialService;
+import com.my.ex.service.UserService;
 
 @Controller
 @RequestMapping("/social")
@@ -36,6 +39,9 @@ public class SocialController {
 	
 	@Autowired
 	private SocialService service;
+	
+	@Autowired
+	private UserService userService;
 	
 	GoogleToken token;
 	
@@ -57,7 +63,7 @@ public class SocialController {
 	
 	// callback 성공 시 받은 code를 이용하여 accessToken을 발급 받고 이를 이용하여 사용자 정보 얻기 
 	@RequestMapping("naverGetUserInfo")
-	public String naverGetUserInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws URISyntaxException, Exception {
+	public String naverGetUserInfo(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) throws URISyntaxException, Exception {
 		if(naverCallbackDto.getCallbackError() == null || naverCallbackDto.getCallbackError() == "") {
 			ObjectMapper mapper = new ObjectMapper();
 			// 응답받은 json 데이터를 해당 클래스 객체로 변환, JSON 데이터의 '키'와 클래스의 멤버 변수 이름이 일치하는 경우 자동으로 매핑
@@ -68,19 +74,26 @@ public class SocialController {
 			// Accesstoken 주고 userInfo 받기
 			String responseUser = service.getNaverUserByToken(token);
 			NaverProfileApi naverUser = mapper.readValue(responseUser, NaverProfileApi.class); // userInfo 매핑
-
-			SocialDto dto = new SocialDto();
-			dto.setSns_id(naverUser.getResponse().getId());
-			dto.setSns_nickName(naverUser.getResponse().getNickname());
-			dto.setSns_email(naverUser.getResponse().getEmail());;
-			dto.setSns_name(naverUser.getResponse().getName());
-			dto.setSns_mobile(naverUser.getResponse().getMobile());
-			dto.setSns_type("naver");
-			dto.setSns_profile(naverUser.getResponse().getProfile_image());
 			
-			boolean result = service.checkSocialIdExist(dto.getSns_id());
-			if(!result) service.socialJoin(dto); 
-			return targetLocation(session, dto);
+			boolean result = userService.isSocialUserExists(naverUser.getResponse().getId(), "NAVER");
+			if(result) {
+				// 소셜 회원가입이 되어있다면
+				UserDto dto = userService.getCurrentProfile(naverUser.getResponse().getId()); // 정보 가져오기
+				return targetLocation(session, dto);
+			} else {
+				UserDto dto = new UserDto();
+				
+				dto.setUsername(naverUser.getResponse().getName());
+				dto.setUser_type("NAVER");
+				dto.setUemail(naverUser.getResponse().getEmail());;
+				dto.setUserId(naverUser.getResponse().getId());
+				dto.setUnickName(naverUser.getResponse().getNickname());
+				dto.setUmobile(naverUser.getResponse().getMobile());
+				
+				model.addAttribute("socialDto", dto);
+				return "/user/socialJoinPage";
+			}
+			
 		} else {
 			System.out.println(naverCallbackDto.getCallbackError_Description());
 			return "/user/loginPage";
@@ -115,23 +128,27 @@ public class SocialController {
 			// Accesstoken 주고 userInfo 받기
 			String responseUser = service.getGoogleUserByToken("tokeninfo", token);
 			GoogleProfileApi googleUser = mapper.readValue(responseUser, GoogleProfileApi.class);
+			boolean result = userService.isSocialUserExists(googleUser.getSub(), "GOOGLE");
 			
-			SocialDto dto = new SocialDto();
-			dto.setSns_id(googleUser.getSub());
-			dto.setSns_email(googleUser.getEmail());
-			dto.setSns_profile(googleUser.getPicture());
-			dto.setSns_type("google");
-			String name = googleUser.getName();
-			String family_name = googleUser.getFamily_name();
-			dto.setSns_name((name == null ? "" : name) + (family_name == null ? "" : family_name));
-			
-			boolean result = service.checkSocialIdExist(dto.getSns_id());
 			if(result) {
+				// 소셜 회원가입이 되어있다면
+				UserDto dto = userService.getCurrentProfile(googleUser.getSub()); // 정보 가져오기
 				return targetLocation(session, dto);
 			} else {
+				// 소셜 회원가입이 되어있지 않다면 구글로부터 받은 정보를 담아 회원가입 페이지로 이동
+				UserDto dto = new UserDto();
+				
+				String name = googleUser.getName(); 
+				String family_name = googleUser.getFamily_name();
+				dto.setUsername((name == null ? "" : name) + (family_name == null ? "" : family_name)); // 이름
+				dto.setUser_type("GOOGLE"); // 타입
+				dto.setUemail(googleUser.getEmail());
+				dto.setUserId(googleUser.getSub());
+				
 				model.addAttribute("socialDto", dto);
 				return "/user/socialJoinPage";
 			}
+			
 		} else {
 			System.out.println(googleCallbackDto.getCallbackError_Description());
 			return "/user/loginPage";
@@ -139,14 +156,15 @@ public class SocialController {
 	}
 	
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String checkSocialIdExist(HttpSession session, SocialDto dto) {
-		service.socialJoin(dto); 
+	public String checkSocialIdExist(HttpSession session, UserDto dto) {
+		userService.join(dto);
+		
 		return targetLocation(session, dto);
 	}
 	
-	public String targetLocation(HttpSession session, SocialDto dto) {
-		session.setAttribute("userId", dto.getSns_id());
-		session.setAttribute("userNickname", dto.getSns_nickName());
+	public String targetLocation(HttpSession session, UserDto dto) {
+		session.setAttribute("userId", dto.getUserId());
+		session.setAttribute("userNickname", dto.getUnickName());
 		String targetLocation = (String)session.getAttribute("targetLocation");
 		String redirectLocation = (targetLocation != null) ? "redirect:" + targetLocation : "redirect:/board/paging";
 		return redirectLocation;

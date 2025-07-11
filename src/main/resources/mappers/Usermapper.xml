@@ -11,7 +11,8 @@
   			unickName,
   			uemail,
   			username,
-  			umobile
+  			umobile,
+  			user_type
   			)
 		VALUES
     		(
@@ -20,7 +21,8 @@
     		#{unickName},
     		#{uemail},
     		#{username},
-    		#{umobile}
+    		#{umobile},
+    		#{user_type}
     		)
 	</insert>
 	
@@ -100,7 +102,7 @@
 	</update>
 	
 	<select id="getCurrentProfile" resultType="UserDto">
-		SELECT unickname, uprofile_image 
+		SELECT unickname, uprofile_image, userId 
 		  FROM mvc_login6
 	 	 WHERE userId = #{userId}
 	</select>
@@ -181,5 +183,13 @@
 		SELECT COUNT(*)
 		  FROM mvc_login6
 		 WHERE unickname = #{checkNickanme}
+	</select>
+	
+	<!-- 소셜 아이디 존재 여부 확인 -->
+	<select id="isSocialUserExists" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM mvc_login6
+		 WHERE userId = #{userId}
+		   AND user_type = #{user_type}
 	</select>
 </mapper>

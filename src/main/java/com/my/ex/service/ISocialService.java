@@ -16,8 +16,7 @@ public interface ISocialService {
 	String getNaverAuthorizeUrl(String type) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException;
 	String getNaverTokenUrl(String type, String grant_type, NaverCallbackDto naverCallbackDto) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException;
 	String getNaverUserByToken(NaverToken token);
-	boolean checkSocialIdExist(String sns_id);
-	void socialJoin(SocialDto dto);
+	
 	String getGoogleAuthorizeUrl() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException;
 	String getGoogleTokenUrl(String type, String grant_type, GoogleCallbackDto googleCallbackDto) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException;
 	String getGoogleUserByToken(String type, GoogleToken token);
