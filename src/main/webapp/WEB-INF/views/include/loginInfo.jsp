@@ -28,10 +28,10 @@
 <!-- 									</div> -->
 <!-- 								</li> -->
 								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-									<a class="nav-link" href="#">Contact</a>
+									<a class="nav-link" href="/user/myPage">Mypage</a>
 								</li>
 								<li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-									<a class="nav-link" href="/user/myPage">Mypage</a>
+									<a class="nav-link" href="/board/contact">Contact</a>
 								</li>
 							</ul>
 						</div>

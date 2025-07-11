@@ -392,9 +392,6 @@ const printDate = (regdate) => {
 /* 채팅창 출력
 ================================================== */
 const print = (name, msg, side, state, time) => {
-	
-	console.log(`side: ${side}`)
-
 	let temp = 
 	`
 		<div class="item ${state} ${side}">

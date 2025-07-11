@@ -629,4 +629,9 @@ public class BoardController {
 		return new ResponseEntity<>(kakao.getJsKey(), HttpStatus.OK);
 	}
 	
+	@RequestMapping("/contact")
+	public String contactPage() {
+		return "/category/contact";
+	}
+	
 }
