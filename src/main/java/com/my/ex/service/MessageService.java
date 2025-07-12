@@ -43,4 +43,9 @@ public class MessageService implements IMessageService {
 		return dao.getPastMessages(roomId);
 	}
 
+	@Override
+	public String getNicknameByUserId(String userId) {
+		return dao.getNicknameByUserId(userId);
+	}
+
 }

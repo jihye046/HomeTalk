@@ -47,20 +47,21 @@ public class ChatController {
 	@RequestMapping("/getRoomList")
 	public Map<String, Object> getRoomList(@RequestParam String userId,
 										 @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText) {
-		List<String> roomIdList = service.getRoomId(userId); // hong1_hong3, hong1_hong2 2개
+		List<String> roomIdList = service.getRoomId(userId); // roomId만 가져오기
 		
-		List<ChatRoomDto> lastMessageList = new ArrayList<>();
-		for(String roomId : roomIdList) {
-			MessageDto messageDto = service.getLastMessage(roomId, searchText);
-			if(messageDto != null) {
+		List<ChatRoomDto> lastMessageList = new ArrayList<>(); // 마지막 메시지들만 담을 List<>
+		for(String roomId : roomIdList) { // roomId 한개씩 꺼내기
+			MessageDto messageDto = service.getLastMessage(roomId, searchText); // roomId, 검색어 주고 마지막 메시지 가져오기
+			if(messageDto != null) { // 대화내용이 있다면
 				messageDto.setRoomId(roomId);
 				String receiver = service.getReceiver(roomId, userId, messageDto.getSender());
+				String receiverNickname = messageService.getNicknameByUserId(receiver);
 				int unreadMessageCount = service.getUnreadMessageCount(roomId, userId);
 				String filename = userService.getProfileFilename(receiver);
 				String imageUrl = "/user/getProfileImage/" + filename;
 				
 				// 목록에 보여줄 정보
-				ChatRoomDto dto = new ChatRoomDto(messageDto, receiver, imageUrl, unreadMessageCount);
+				ChatRoomDto dto = new ChatRoomDto(messageDto, receiver, receiverNickname, imageUrl, unreadMessageCount);
 				lastMessageList.add(dto);
 			}
 		}

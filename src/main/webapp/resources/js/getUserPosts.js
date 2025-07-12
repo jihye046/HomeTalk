@@ -14,7 +14,7 @@ const updatePostList = (list) => {
             <tr>
                 <td>${index + 1}</td>
                 <td>
-                    ${dto.bName}
+                    ${dto.unickName}
                 </td>
                 <td class="post-title-cell">
                     <a href="/board/detailBoard?bId=${dto.bId}&

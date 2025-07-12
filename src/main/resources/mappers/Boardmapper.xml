@@ -96,8 +96,11 @@
 	</select>
 	
 	<select id="detailBoard" resultType="BoardDto">
-		SELECT *
-		  FROM mvc_board6
+		SELECT 
+			b.*,
+			u.unickName
+		  FROM mvc_board6 b
+		  JOIN mvc_login6 u ON b.bName = u.userId
 		 WHERE bId = #{bId}
 	</select>
 	
@@ -186,12 +189,15 @@
 	</update>
 	
 	<select id="replyList" resultType="BoardDto">
-		SELECT *
-		  FROM mvc_board6
-		 WHERE bGroup = #{bGroup} 
-		   AND bStep > 0 
-		   AND bIndent > 0
-	  ORDER BY bStep ASC
+		SELECT 
+			b.*,
+			u.unickName
+		  FROM mvc_board6 b 
+		  JOIN mvc_login6 u ON b.bName = u.userId
+		 WHERE b.bGroup = #{bGroup} 
+		   AND b.bStep > 0 
+		   AND b.bIndent > 0
+	  ORDER BY b.bStep ASC
 	</select>
 	
 	<insert id="replyChildInsert" parameterType="BoardDto">
@@ -272,22 +278,39 @@
         		  t.*,
         		  ROWNUM AS rnum
     		   FROM (
-    		   		SELECT * 
-    		   		  FROM mvc_board6 
-    		   		 WHERE bStep = 0 
-    		   		   AND bIndent = 0 
+    		   		SELECT 
+    		   			b.*, 
+    		   			u.unickName
+    		   		  FROM mvc_board6 b
+    		   		  JOIN mvc_login6 u ON b.bName = u.userId
+    		   		 WHERE b.bStep = 0 
+    		   		   AND b.bIndent = 0 
+    		   		   
     		   		   <if test="searchText != null and searchText != ''">
-    		   		   	   AND ${searchGubun} LIKE '%' || #{searchText} ||'%'
+		   		   		   <choose>
+		   		   		   		<when test="searchGubun == 'bTitle'">
+		   		   		   			AND b.bTitle LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   		<when test="searchGubun == 'bContent'">
+		   		   		   			AND b.bContent LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   		<when test="searchGubun == 'unickName'">
+		   		   		   			AND u.unickName LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   </choose>
     		   		   </if>
-    		   	  <if test="sortType.equals('latest')">   
-    		      	 ORDER BY bId DESC
-    		      </if>
-    		      <if test="sortType.equals('hit')">
-    		      	 ORDER BY bHit DESC, bId DESC
-    		      </if>
+    		   		   
+	    		   	  <if test="sortType.equals('latest')">   
+    		      	  	  ORDER BY b.bId DESC
+    		      	  </if>
+    		      	  <if test="sortType.equals('hit')">
+    		      	      ORDER BY b.bHit DESC, b.bId DESC
+    		          </if>
+    		      
    		   		) t
+   		   		
 		)
-	 	 WHERE rnum BETWEEN #{pagingStart} AND #{pagingEnd}
+	 	WHERE rnum BETWEEN #{pagingStart} AND #{pagingEnd}
 	</select>
 	
 	<select id="commentsPagingList" parameterType="java.util.HashMap" resultType="BoardDto">
@@ -296,20 +319,25 @@
         		  t.*,
         		  ROWNUM AS rnum
     		   FROM (
-    		   		SELECT * 
-    		   		  FROM mvc_board6 
+    		   		SELECT 
+    		   			b.*,
+    		   			u.unickName 
+    		   		  FROM mvc_board6 b
+    		   		  JOIN mvc_login6 u ON b.bName = u.userId 
     		   		 WHERE bGroup = #{bGroup}
                        AND bStep > 0 
     		   		   AND bIndent > 0
-    		   	  <if test="commentsSortType.equals('latest')">     
-                 	 ORDER BY bStep ASC
-                  </if>
-                  <if test="commentsSortType.equals('like')">
-                     ORDER BY bStep ASC
-                 </if>
-   		   		) t
+    		   	  	   <if test="commentsSortType.equals('latest')">     
+                 	       ORDER BY bStep ASC
+                       </if>
+                       
+                  	   <if test="commentsSortType.equals('like')">
+                           ORDER BY bStep ASC
+                       </if>
+   		   	  ) t
+   		   		
 		)
-	 	 WHERE rnum BETWEEN #{commentsPagingStart} AND #{commentsPagingEnd}
+	 	WHERE rnum BETWEEN #{commentsPagingStart} AND #{commentsPagingEnd}
 	</select>
 	
 	<select id="commentsCount" resultType="Integer">
@@ -358,14 +386,29 @@
         		  t.*,
         		  ROWNUM AS rnum
     		   FROM (
-    		   		SELECT * 
-    		   		  FROM mvc_board6 
-    		   		 WHERE bStep = 0 
-    		   		   AND bIndent = 0 
+    		   		SELECT 
+    		   			b.*,
+    		   			u.unickName 
+    		   		  FROM mvc_board6 b
+    		   		  JOIN mvc_login6 u ON b.bName = u.userId 
+    		   		 WHERE b.bStep = 0 
+    		   		   AND b.bIndent = 0
+    		   		   
     		   		   <if test="searchText != null and searchText != ''">
-    		   		   	   AND ${searchGubun} LIKE '%' || #{searchText} ||'%'
+		   		   		   <choose>
+		   		   		   		<when test="searchGubun == 'bTitle'">
+		   		   		   			AND b.bTitle LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   		<when test="searchGubun == 'bContent'">
+		   		   		   			AND b.bContent LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   		<when test="searchGubun == 'unickName'">
+		   		   		   			AND u.unickName LIKE '%' || #{searchText} || '%'
+		   		   		   		</when>
+		   		   		   </choose>
     		   		   </if>
-    		         ORDER BY bHit DESC, bId DESC
+    		   		   
+    		         ORDER BY b.bHit DESC, b.bId DESC
    		   		) t
 		)
 	 	 WHERE rnum BETWEEN #{pagingStart} AND #{pagingEnd}

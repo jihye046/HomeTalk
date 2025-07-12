@@ -23,12 +23,13 @@ public class BoardDto {
 	private String isDeleted;
 	private String bAddress;
 	private String tags;
+	private String unickName;
 	
 	public BoardDto() {}
 
 	public BoardDto(int bId, String bName, String bTitle, String bContent, Date bDate, int bHit, int bGroup, int bStep,
 			int bIndent, String bLike, int bBookmark, int commentCount, String searchGubun, String searchText,
-			String sortType, boolean recommended, String isDeleted, String bAddress, String tags) {
+			String sortType, boolean recommended, String isDeleted, String bAddress, String tags, String unickName) {
 		this.bId = bId;
 		this.bName = bName;
 		this.bTitle = bTitle;
@@ -48,6 +49,7 @@ public class BoardDto {
 		this.isDeleted = isDeleted;
 		this.bAddress = bAddress;
 		this.tags = tags;
+		this.unickName = unickName;
 	}
 
 	public int getbId() {
@@ -202,6 +204,14 @@ public class BoardDto {
 		this.tags = tags;
 	}
 
+	public String getUnickName() {
+		return unickName;
+	}
+
+	public void setUnickName(String unickName) {
+		this.unickName = unickName;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardDto [bId=" + bId + ", bName=" + bName + ", bTitle=" + bTitle + ", bContent=" + bContent
@@ -209,7 +219,7 @@ public class BoardDto {
 				+ bIndent + ", bLike=" + bLike + ", bBookmark=" + bBookmark + ", commentCount=" + commentCount
 				+ ", searchGubun=" + searchGubun + ", searchText=" + searchText + ", sortType=" + sortType
 				+ ", recommended=" + recommended + ", isDeleted=" + isDeleted + ", bAddress=" + bAddress + ", tags="
-				+ tags + "]";
+				+ tags + ", unickName=" + unickName + "]";
 	}
 
 }

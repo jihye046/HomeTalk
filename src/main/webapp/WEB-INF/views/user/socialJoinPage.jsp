@@ -2,41 +2,62 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 <link href="<c:url value="/resources/css/joinPage.css"/>" rel="stylesheet">
+
+<!-- axios -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- lodach -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 <body>
-	<div class="row header-div" style="background-color: #EAEAEA">
-		<div class="col-md-6 header-logo">
-			<a href="/">
-				<img alt="logo" src="<c:url value="/resources/images/home.png"/>">
-			</a>
-		</div>
-	</div>
 	<main>
 		<div class="join-background">
-			<div class="join-form">
-				<form action="/social/join" method="post">
-					<input type="hidden" name="sns_email" value="${socialDto.sns_email}">
-					<input type="hidden" name="sns_id" value="${socialDto.sns_id}">
-					<input type="hidden" name="sns_profile" value="${socialDto.sns_profile}">
-					<input type="hidden" name="sns_name" value="${socialDto.sns_name}">
-					<input type="hidden" name="sns_type" value="${socialDto.sns_type}">
-					<div>
-						<img style="width: 60px;" id="googleLogin" alt="googleLogin" src="<c:url value="/resources/images/btn_googleLogo.png"/>">
-					</div>
-					<p>추가정보 입력창</p>
-					<input type="text" name="sns_name" value="${socialDto.sns_name == '' ? '' : socialDto.sns_name}" 
-					 placeholder="${socialDto.sns_name == '' ? 'username' : 'ss'}" required><br>
-					<input type="text" name="sns_mobile" placeholder="010-xxxx-xxxx" required><br>
-					<input type="text" name="sns_nickName" placeholder="Nickname" required><br>
+			<div class="join-card">
+				<h2 class="join-title">추가정보 입력창</h2>
+				<form id="join-form" action="/social/join" method="post" class="join-form">
+					<input type="hidden" name="uemail" value="${socialDto.uemail}">
+					<input type="hidden" name="userId" value="${socialDto.userId}">
+<%-- 					<input type="text" name="sns_profile" value="${socialDto.sns_profile}"> --%>
+					<input type="hidden" name="username" value="${socialDto.username}">
+					<input type="hidden" name="user_type" value="${socialDto.user_type}">
 					
-					<button id="joinBtn" class="btn btn-block btn-outline-secondary" type="submit">Join</button>
-					<div class="join-form-links">
+					<div class="input-group">
+						<label for="username">이름</label>	
+						<input type="text" 
+							id="username" 
+							name="username" 
+							value="${socialDto.username == '' ? '' : socialDto.username}" 
+							placeholder="이름을 입력해주세요" required><br>
+					</div>
+					<div class="input-group">
+						<label for="umobile">휴대폰 번호</label>
+						<input type="text" 
+							id="umobile" 
+							name="umobile" 
+							placeholder="숫자만 입력해주세요" required><br>
+					</div>
+					<div class="input-group">
+						<label for="unickName">닉네임</label>					
+						<input type="text" 
+							id="unickName" 
+							name="unickName" 
+							maxlength="8" 
+							placeholder="닉네임을 입력해주세요" required><br>
+						<p id="nicknameRequirement" class="requirement-message"></p>
+					</div>
+					
+					<button id="joinBtn" 
+						class="btn-submit" 
+						type="submit" disabled="disabled">회원가입</button>
+					
+					<div class="form-links">
 						<a href="/user/loginPage">돌아가기</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</main>
+	
+	<script src="<c:url value="/resources/js/socialJoinPage.js"/>"></script>
 </body>
-<script src="<c:url value="/resources/js/joinPage.js"/>"></script>
 </html>

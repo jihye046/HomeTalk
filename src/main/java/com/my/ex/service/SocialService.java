@@ -9,13 +9,13 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.my.ex.dao.SocialDao;
 import com.my.ex.dto.SocialDto;
 import com.my.ex.dto.google.GoogleCallbackDto;
 import com.my.ex.dto.google.GoogleLoginRequestDto;
@@ -26,9 +26,6 @@ import com.my.ex.dto.naver.NaverToken;
 
 @Service
 public class SocialService implements ISocialService {
-	
-	@Autowired
-	private SocialDao dao;
 	
 	@Autowired
 	private NaverLoginRequestDto naverLoginRequestDto;
@@ -86,17 +83,6 @@ public class SocialService implements ISocialService {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	@Override
-	public boolean checkSocialIdExist(String sns_id) {
-		int result = dao.checkSocialIdExist(sns_id);
-		return (result > 0) ? true : false;
-	}
-
-	@Override
-	public void socialJoin(SocialDto dto) {
-		dao.socialJoin(dto);
 	}
 
 	// 구글 로그인 연동 URL 생성
@@ -181,5 +167,5 @@ public class SocialService implements ISocialService {
 		br.close();
 		return bf.toString();
 	}
-	
+
 }

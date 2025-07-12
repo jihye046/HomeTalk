@@ -342,7 +342,7 @@ const updateSortedByHits = (pagingList, paging) => {
 					<div class="image" data-content="${dto.bContent}">
 					</div>
 					<figcaption>
-						<div class="post-bName">${dto.bName}</div>
+						<div class="post-bName">${dto.unickName}</div>
 						<div class="post-bTitle">${dto.bTitle}</div>
 						<footer>
 							<div class="create-date">${dto.bDate}</div>

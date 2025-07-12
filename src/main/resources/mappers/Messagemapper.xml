@@ -105,11 +105,31 @@
 	</insert>
 	
 	<!-- 과거 대화내용 불러오기 -->
-	<select id="getPastMessages" resultType="MessageDto">
+	<select id="getPastMessages1" resultType="MessageDto">
 		SELECT *
 		  FROM mvc_chat6
 		 WHERE room_id = #{roomId}
 	  ORDER BY message_id  
+	</select>
+	
+	<!-- 과거 대화내용 불러오기 -->
+	<select id="getPastMessages" resultType="MessageDto">
+		SELECT 
+			c.*,
+			sender_user.unickname AS senderUnickname,
+			receiver_user.unickname AS receiverUnickname
+		  FROM mvc_chat6 c
+		  JOIN mvc_login6 sender_user ON c.sender = sender_user.userId
+		  JOIN mvc_login6 receiver_user ON c.receiver = receiver_user.userId		  
+		 WHERE room_id = #{roomId}
+	  ORDER BY message_id  
+	</select>
+	
+	<!-- userId로 닉네임 조회 -->
+	<select id="getNicknameByUserId" resultType="String">
+		SELECT unickname
+		  FROM MVC_LOGIN6
+		 WHERE userId = #{userId}
 	</select>
 	
 </mapper>

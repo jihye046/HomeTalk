@@ -45,7 +45,7 @@
 								<tr>
 									<td>${status.count}</td>
 									<td>
-										${dto.bName}
+										${dto.unickName}
 									</td>
 									<td class="post-title-cell">
 										<a href="/board/detailBoard?bId=${dto.bId}&
