@@ -32,4 +32,9 @@ public class MessageDao implements IMessageDao {
 		return session.selectList(NAMESPACE + "getPastMessages", roomId);
 	}
 
+	@Override
+	public String getNicknameByUserId(String userId) {
+		return session.selectOne(NAMESPACE + "getNicknameByUserId", userId);
+	}
+
 }

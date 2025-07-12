@@ -30,7 +30,7 @@
 							<img src="${imageUrl}" alt="image" class="user-avatar">
 							
 							<!-- 작성자명 -->
-							<span class=bName>${dto.bName}</span>
+							<span class=bName>${dto.unickName}</span>
 							
 							<!-- 작성자 팔로우 버튼 -->
 							<button class="button-primary" type="button" id="followButton">팔로우</button>
@@ -206,7 +206,7 @@
 												<div class="user-info">
 													<div class="left-info">
 															<img id="profile-photo-${comment.bId}" src="${profileImageUrls[status.index]}" />
-														<span class="author-name"><a href="#">${comment.bName}</a></span>
+														<span class="author-name"><a href="#">${comment.unickName}</a></span>
 													</div>
 													<c:if test="${comment.bName == sessionScope.userId}">
 														<button type="button" class="button-filled-primary comment-remove"
@@ -246,7 +246,7 @@
 										<div class="user-info">
 											<div class="left-info">
 												<img id="profile-photo-${comment.bId} comment-child" src="${profileImageUrls[status.index]}" />
-												<span class="author-name comment-child"><a href="#">${comment.bName}</a></span>
+												<span class="author-name comment-child"><a href="#">${comment.unickName}</a></span>
 											</div>
 											<c:if test="${comment.bName == sessionScope.userId}">
 												<button type="button" class="button-filled-primary comment-child comment-remove" 
@@ -412,8 +412,21 @@ const editCommentCount = (commentCount) => {
 	// 댓글UI 업데이트
 const removeMessage = '작성자가 삭제한 댓글입니다.'
 const editCommentTable = (replyList, profileImageUrls) => {
+	
+	const formatDate = (timestamp) => {
+		const year = timestamp.getFullYear()
+		const month = String(timestamp.getMonth() + 1).padStart(2, '0')
+		const day = String(timestamp.getDate()).padStart(2, '0')
+		//const hours = String(timestamp.getHours()).padStart(2, '0')
+		//const minutes = String(timestamp.getMinutes()).padStart(2, '0')
+		
+		return `\${year}-\${month}-\${day}`
+	}
+	
 	let output = `<div>`
 		for(let i in replyList){
+			const formattedDate = formatDate(new Date(replyList[i].bDate))
+			
 			if(replyList[i].bIndent == 1){ // 댓글
 			output += `<article>`
 				if(replyList[i].bContent == removeMessage) {
@@ -422,7 +435,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 					output += `<div class="user-info">
 								<div class="left-info">
 									<img id="profile-photo-\${replyList[i].bId}" src="\${profileImageUrls[i]}" />
-									<span class="author-name"><a href="#">\${replyList[i].bName}</a></span>
+									<span class="author-name"><a href="#">\${replyList[i].unickName}</a></span>
 								</div>`
 								if(replyList[i].bName == userId){
 									output += `
@@ -437,7 +450,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 								}
 					output += `</div>
 					    	<p class="post-content">\${replyList[i].bContent}</p>
-					    	<time class="post-time">\${replyList[i].bDate}</time>
+					    	<time class="post-time">\${formattedDate}</time>
 					    	<button type="button" class="button-filled-primary comment-child-btn" 
 					    		data-bGroup="\${replyList[i].bGroup}"
 					    		data-bStep="\${replyList[i].bStep}"
@@ -459,7 +472,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 								<div class="user-info">
 									<div class="left-info">
 										<img id="profile-photo-\${replyList[i].bId} comment-child" src="\${profileImageUrls[i]}" />
-										<span class="author-name comment-child"><a href="#">\${replyList[i].bName}</a></h4>
+										<span class="author-name comment-child"><a href="#">\${replyList[i].unickName}</a></h4>
 									</div>`
 								if(replyList[i].bName == userId){
 									output += `
@@ -476,7 +489,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 									
 					output += `</div>
 							    <p class="post-content comment-child">\${replyList[i].bContent}</p>
-							    <time class="post-time comment-child">\${replyList[i].bDate}</time>
+							    <time class="post-time comment-child">\${formattedDate}</time>
 							    <button type="button" class="button-filled-primary comment-child"
 							    	id="thumbupButton"
 							    	data-recommend-bId="\${replyList[i].bId}"

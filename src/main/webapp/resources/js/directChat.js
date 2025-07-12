@@ -30,9 +30,11 @@ window.getChatHistory = (roomId, userId) => {
 
             data.forEach(messageDto => {
                 if(messageDto.sender == userId) {
-                    print(messageDto.sender, messageDto.content, 'me', 'msg', messageDto.regTime)	
+                    // print(messageDto.sender, messageDto.content, 'me', 'msg', messageDto.regTime)	
+                    print(messageDto.senderUnickname, messageDto.content, 'me', 'msg', messageDto.regTime)	
                 } else {
-                    print(messageDto.sender, messageDto.content, 'other', 'msg', messageDto.regTime)
+                    // print(messageDto.sender, messageDto.content, 'other', 'msg', messageDto.regTime)
+                    print(messageDto.senderUnickname, messageDto.content, 'other', 'msg', messageDto.regTime)
                 }
             })
 
@@ -135,6 +137,7 @@ const print = (name, msg, side, state, time) => {
 let ws = ''
 window.connect2 = (roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
+	const unickName = document.querySelector("#userNickname").getAttribute("data-userNickname") // 로그인 사용자 닉네임
 	window.name = userId
 	
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
@@ -157,9 +160,9 @@ window.connect2 = (roomId, otherUserId, userId) => {
 			msg.focus()
 		}
 
-		// 서버에서 클라이언트에게 전달한 메시지(상대방 대화창)
-		ws.onmessage = (msg) => {
-			let message = JSON.parse(msg.data)
+		// 서버에서 클라이언트에게 전달한 메시지
+		ws.onmessage = (serverMsg) => {
+			let message = JSON.parse(serverMsg.data)
 			
 			if(message.code == '1') {
 				/*
@@ -173,14 +176,16 @@ window.connect2 = (roomId, otherUserId, userId) => {
 				displayDate()
 			} else if (message.code == '2') {
 				print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
-				msg.disabled = true
-				msg.placeholder = '대화상대가 없습니다.'
-				msg.style.backgroundColor = '#f0f0f0'
+
+				/* 입력창 비활성화 */
+				// msg.disabled = true
+				// msg.placeholder = '대화상대가 없습니다.'
+				// msg.style.backgroundColor = '#f0f0f0'
 			} else if (message.code == '3') {
 				if(message.sender == window.name) {
-					print(message.sender, message.content, 'me', 'msg', message.regTime)
+					print(message.senderUnickname, message.content, 'me', 'msg', message.regTime)
 				} else {
-					print(message.sender, message.content, 'other', 'msg', message.regTime)	
+					print(message.senderUnickname, message.content, 'other', 'msg', message.regTime)	
 				}
 			} else if (message.code == '4') {
 				printEmotion(message.sender, message.content, 'other', 'msg', message.regTime)
@@ -215,9 +220,9 @@ window.connect2 = (roomId, otherUserId, userId) => {
 				msg.focus()
 
 				if(message.code == '3') {
-					print(window.name, message.content, 'me', 'msg', message.regTime)	
+					print(unickName, message.content, 'me', 'msg', message.regTime)	
 				} else if(message.code == '4') {
-					printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
+					printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
 				}
 			}
 		}

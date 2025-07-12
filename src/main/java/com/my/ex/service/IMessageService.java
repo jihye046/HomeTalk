@@ -10,4 +10,5 @@ public interface IMessageService {
 	String generateRoomId(Map<String, String> map);
 	void saveMessage(MessageDto dto);
 	List<MessageDto> getPastMessages(String roomId);
+	String getNicknameByUserId(String userId);
 }

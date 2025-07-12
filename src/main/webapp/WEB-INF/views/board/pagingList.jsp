@@ -73,7 +73,7 @@
 									<select class="styled-select" name="searchGubun">
 										<option value="bTitle">제목</option>
 										<option value="bContent">내용</option>
-										<option value="bName">작성자</option>
+										<option value="unickName">작성자</option>
 									</select> 
 									<input class="styled-input" type="text" name="searchText" placeholder="검색">
 								</form>
@@ -91,7 +91,7 @@
 									<!-- 이미지가 없는 게시글이면 흰색 배경 기본 -->
 								</div>
 								<figcaption>
-									<div class="post-bName">${dto.bName}</div>
+									<div class="post-bName">${dto.unickName}</div>
 									<div class="post-bTitle">${dto.bTitle}</div>
 									<footer>
 										<div class="create-date">${dto.bDate}</div>

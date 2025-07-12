@@ -300,6 +300,7 @@ public class UserController {
 	// 1:1 채팅
 	@RequestMapping("/chat/{receiver}")
 	public String chatForm(@PathVariable String receiver, Model model) {
+		model.addAttribute("unickName", service.getUserNickname(receiver));
 		model.addAttribute("receiver", receiver);
 		return "/user/chatPage";
 	}

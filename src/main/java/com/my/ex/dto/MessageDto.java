@@ -15,4 +15,7 @@ public class MessageDto {
 	private String regTime;
 	private String isRead;
 	private String searchText;
+	
+	private String senderUnickname;
+	private String receiverUnickname;
 }

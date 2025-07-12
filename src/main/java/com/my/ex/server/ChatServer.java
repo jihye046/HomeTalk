@@ -69,10 +69,16 @@ public class ChatServer {
 			}
 		}
 		// 2: 기존 유저가 나감
-		else if(message.getCode().equals("2")) { 
+		else if(message.getCode().equals("2")) {
+			String senderUnickname = service.getNicknameByUserId(message.getSender());
+			message.setSenderUnickname(senderUnickname);
+			
+			Gson updateGson = new Gson();
+			String updateMsg = updateGson.toJson(message);
+			
 			sessionList.remove(session);
 			for(Session s : sessionList) {
-				sendMessageToSession(s, msg);
+				sendMessageToSession(s, updateMsg);
 			}
 		}
 		// 3: 메시지 전송
@@ -80,11 +86,23 @@ public class ChatServer {
 			String roomId = (String)session.getUserProperties().get("roomId");
 			message.setRoomId(roomId);
 			
+			// 닉네임 조회 후 dto에 추가
+			String senderUnickname = service.getNicknameByUserId(message.getSender());
+			String receiverUnickname = service.getNicknameByUserId(message.getReceiver());
+			message.setSenderUnickname(senderUnickname);
+			message.setReceiverUnickname(receiverUnickname);
+			
+			// 메시지 저장
 			service.saveMessage(message);
+			
+			// 클라이언트로 보낼 json 재생성
+			Gson updateGson = new Gson();
+			String updateMsg = updateGson.toJson(message);
 			
 			for(Session s : sessionList) {
 				if(s != session) {
-					sendMessageToSession(s, msg);
+//					sendMessageToSession(s, msg);
+					sendMessageToSession(s, updateMsg);
 				}
 			}
 		} 

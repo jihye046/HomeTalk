@@ -93,25 +93,37 @@ const openChatRoom = () => {
 	document.querySelectorAll(".chat-room").forEach(room => {
 		room.addEventListener('click', function() {
 			const roomId = this.getAttribute('data-room-id')
-			const otherUserId = this.querySelector(".userNickname").textContent
-			const imageUrl = this.querySelector("img").src
+			const otherUserId = this.querySelector(".userNickname").textContent // 상대방 닉네임
+
+			const otherUser = this.querySelector(".otherUserId").getAttribute("data-otherUserId") // 상대방 id
+
+			// console.log(`otherUserId: ${otherUserId}`)
+			const imageUrl = this.querySelector("img").src // 상대방 프로필 이미지URL
 			const unreadBadge = this.querySelector(".message-badge")
-			const userId = document.querySelector("#userId").getAttribute("data-userId")
+			const userId = document.querySelector("#userId").getAttribute("data-userId") // 본인 ID
 
 			hideUnreadBadge(unreadBadge, roomId, userId)
 			getChatHistory(roomId, imageUrl, otherUserId, userId)
-			connect2(roomId, otherUserId, userId)
+			// connect2(roomId, otherUserId, userId)
+			connect2(roomId, otherUser, userId)
 		})
 	})
 }
 
+/* 웹소캣
+================================================== */
 let ws = ''
 const connect2 = (roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
+	const unickName = document.querySelector("#userNickname").getAttribute("data-userNickname") // 로그인 사용자 닉네임
+
 	window.name = userId
 
+	console.log(`window.name:${window.name}`) // 로그인한 사용자 id
+	console.log(`connect2 > otherUserId: ${otherUserId}`) // 상대방 id
+	
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
-		ws = new WebSocket('ws://localhost/chatServer')
+		ws = new WebSocket('ws://localhost:8080/chatServer')
 
 		// 웹소캣 연결
 		ws.onopen = () => {
@@ -130,9 +142,9 @@ const connect2 = (roomId, otherUserId, userId) => {
 			msg.focus()
 		}
 
-		// 서버로부터 수신한 메시지(상대방 대화창)
-		ws.onmessage = (msg) => {
-			let message = JSON.parse(msg.data)
+		// 서버로부터 수신한 메시지
+		ws.onmessage = (serverMsg) => {
+			let message = JSON.parse(serverMsg.data)
 			
 			if(message.code == '1') {
 				/*
@@ -145,15 +157,20 @@ const connect2 = (roomId, otherUserId, userId) => {
 
 				displayDate()
 			} else if (message.code == '2') {
-				print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
-				msg.disabled = true
-				msg.placeholder = '대화상대가 없습니다.'
-				msg.style.backgroundColor = '#f0f0f0'
+				// print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
+				print('', `[${message.senderUnickname}]님이 나갔습니다.`, 'other', 'state', message.regTime)
+
+				/* 입력창 비활성화 */
+				//msg.disabled = true
+				//msg.placeholder = '대화상대가 없습니다.'
+				//msg.style.backgroundColor = '#f0f0f0'
 			} else if (message.code == '3') {
 				if(message.sender == window.name) {
-					print(message.sender, message.content, 'me', 'msg', message.regTime)
+					// print(message.sender, message.content, 'me', 'msg', message.regTime)
+					print(message.senderUnickname, message.content, 'me', 'msg', message.regTime)
 				} else {
-					print(message.sender, message.content, 'other', 'msg', message.regTime)	
+					// print(message.sender, message.content, 'other', 'msg', message.regTime)	
+					print(message.senderUnickname, message.content, 'other', 'msg', message.regTime)	
 				}
 			} else if (message.code == '4') {
 				printEmotion(message.sender, message.content, 'other', 'msg', message.regTime)
@@ -162,39 +179,46 @@ const connect2 = (roomId, otherUserId, userId) => {
 
 		// 웹소캣 종료
 		window.addEventListener('beforeunload', function(event){
+			event.preventDefault()
 			disconnect()
 		})
 
 		// 메시지 전송
 		window.handleKeyDown = (event) => {
 			if(event.key === 'Enter') {
-				let message = {
-					code: '3',
-					roomId: roomId,
-					sender: window.name,
-					receiver: otherUserId,
-					content: msg.value,
-					regdate: displayDate(),
-					regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
-				}
+				if(msg.value != null || msg.value != ""){
 
-				if(msg.value.startsWith('/')) {
-					message.code = '4'
-				}
+					let message = {
+						code: '3',
+						roomId: roomId,
+						sender: window.name,
+						receiver: otherUserId,
+						content: msg.value,
+						regdate: displayDate(),
+						regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
+					}
 
-				ws.send(JSON.stringify(message))
-				msg.value = ''
-				msg.focus()
+					if(msg.value.startsWith('/')) {
+						message.code = '4'
+					}
 
-				if(message.code == '3') {
-					print(window.name, message.content, 'me', 'msg', message.regTime)	
-				} else if(message.code == '4') {
-					printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
+					ws.send(JSON.stringify(message))
+					msg.value = ''
+					msg.focus()
+
+					if(message.code == '3') {
+						// print(window.name, message.content, 'me', 'msg', message.regTime)	
+						print(unickName, message.content, 'me', 'msg', message.regTime)	
+					} else if(message.code == '4') {
+						// printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
+						printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+					}
+
 				}
 			}
 		}
+		msg.addEventListener('keydown', window.handleKeyDown)
 	}
-
 }
 
 /* 채팅방을 나가는 경우
@@ -247,8 +271,6 @@ const hideUnreadBadge = (unreadBadge, roomId, userId) => {
 /* 채팅방 내용 불러오기
 ================================================== */
 const getChatHistory = (roomId, imageUrl, otherUserId, userId) => {
-	
-
 	fetch(`/chat/getChatHistory?roomId=${roomId}`)
 	.then(response => response.json())
 	.then(data => {
@@ -256,9 +278,11 @@ const getChatHistory = (roomId, imageUrl, otherUserId, userId) => {
 
 		data.forEach(messageDto => {
 			if(messageDto.sender == userId) {
-				print(messageDto.sender, messageDto.content, 'me', 'msg', messageDto.regTime)	
+				//print(messageDto.sender, messageDto.content, 'me', 'msg', messageDto.regTime)	
+				print(messageDto.senderUnickname, messageDto.content, 'me', 'msg', messageDto.regTime)	
 			} else {
-				print(messageDto.sender, messageDto.content, 'other', 'msg', messageDto.regTime)
+				// print(messageDto.sender, messageDto.content, 'other', 'msg', messageDto.regTime)
+				print(messageDto.senderUnickname, messageDto.content, 'other', 'msg', messageDto.regTime)
 			}
 		})
 
@@ -296,6 +320,7 @@ window.onclick = function(event) {
     if (event.target == galleryModal) {
         galleryModal.style.display = 'none'
     } else if (event.target == chatModal) {
+		disconnect()
     	chatModal.style.display = 'none'
     }
 	
@@ -332,6 +357,7 @@ const printHeader = (uprofile_image, otherUserId) => {
 const printRoomList = (chatRoomDto) => {
 	const messageDto = chatRoomDto["messageDto"]
 	const otherUserId = chatRoomDto["otherUserId"]
+	const otherUserNickname = chatRoomDto["otherUserNickname"]
 	const uprofile_image = chatRoomDto["uprofile_image"]
 	const unreadMessageCount = chatRoomDto["unreadMessageCount"]
 	const today = displayDate()
@@ -342,7 +368,10 @@ const printRoomList = (chatRoomDto) => {
 		<div class="chat-room" data-room-id=${messageDto.roomId}>
 			<img src="${uprofile_image}" alt="image" class="user-avatar"/>
 			<div class="chat-room-info">
-            	<span class="userNickname">${otherUserId}</span>
+
+            	<span class="otherUserId" data-otherUserId="${otherUserId}"></span>
+
+            	<span class="userNickname">${otherUserNickname}</span>
             	<span class="last-message">${messageDto.content}</span>
 				<span class="chat-time">${messageTime}</span>	
         	</div>
