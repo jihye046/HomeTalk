@@ -52,6 +52,7 @@ import com.my.ex.dto.map.KakaoMapRequestDto;
 import com.my.ex.service.BoardService;
 import com.my.ex.service.BookmarkService;
 import com.my.ex.service.LikeService;
+import com.my.ex.service.SocialService;
 import com.my.ex.service.UserService;
 
 @Controller
@@ -69,6 +70,9 @@ public class BoardController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private SocialService socialuserService;
 	
 	@Autowired
 	private KakaoMapRequestDto kakao;
@@ -137,6 +141,7 @@ public class BoardController {
 		updateHitCount(bId);
 		// 프로필 이미지 url 반환
 		String filename = userService.getProfileFilename(bName);
+				
 		String imageUrl = "/user/getProfileImage/" + filename;
 		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);

@@ -13,9 +13,17 @@ class UploadAdapter {
 	
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         const initRequestUrl = document.querySelector("#initRequestUrl").getAttribute("data-initRequestUrl")
         
         xhr.open('POST', initRequestUrl, true);
+=======
+        xhr.open('POST', 'http://localhost:8080/board/imgUpload', true);
+>>>>>>> Stashed changes
+=======
+        xhr.open('POST', 'http://localhost:8080/board/imgUpload', true);
+>>>>>>> Stashed changes
         xhr.responseType = 'json';
     }
 
