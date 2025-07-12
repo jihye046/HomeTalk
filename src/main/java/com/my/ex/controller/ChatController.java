@@ -47,7 +47,7 @@ public class ChatController {
 		
 		List<ChatRoomDto> lastMessageList = new ArrayList<>(); // 마지막 메시지들만 담을 List<>
 		for(String roomId : roomIdList) { // roomId 한개씩 꺼내기
-			MessageDto messageDto = service.getLastMessage(roomId, searchText); // roomId랑 검색어 주고 마지막 메시지 가져오기
+			MessageDto messageDto = service.getLastMessage(roomId, searchText); // roomId, 검색어 주고 마지막 메시지 가져오기
 			if(messageDto != null) { // 대화내용이 있다면
 				messageDto.setRoomId(roomId);
 				String receiver = service.getReceiver(roomId, userId, messageDto.getSender());
