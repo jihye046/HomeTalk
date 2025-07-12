@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.my.ex.EnvironmentService;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.UserDto;
 import com.my.ex.service.UserService;
@@ -34,6 +35,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private EnvironmentService environmentService;
 	
 	// 세션에 저장된 userId 가져오기
 	public static String getUserIdFromSession(HttpSession session) {
@@ -302,6 +306,7 @@ public class UserController {
 	public String chatForm(@PathVariable String receiver, Model model) {
 		model.addAttribute("unickName", service.getUserNickname(receiver));
 		model.addAttribute("receiver", receiver);
+		model.addAttribute("serverUrl", environmentService.getWebSocketServer());
 		return "/user/chatPage";
 	}
 	
@@ -314,7 +319,6 @@ public class UserController {
 			model.addAttribute("verifyUserId", userId);
 		}
 		model.addAttribute("mode", mode);
-		
 		return "/user/verify-user";
 	}
 	

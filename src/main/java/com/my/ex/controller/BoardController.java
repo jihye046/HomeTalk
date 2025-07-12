@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.ex.CommentsListResponse;
+import com.my.ex.EnvironmentService;
 import com.my.ex.SortResponse;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.BoardPagingDto;
@@ -50,6 +52,7 @@ import com.my.ex.dto.map.KakaoMapRequestDto;
 import com.my.ex.service.BoardService;
 import com.my.ex.service.BookmarkService;
 import com.my.ex.service.LikeService;
+import com.my.ex.service.SocialService;
 import com.my.ex.service.UserService;
 
 @Controller
@@ -69,7 +72,13 @@ public class BoardController {
 	private UserService userService;
 	
 	@Autowired
+	private SocialService socialuserService;
+	
+	@Autowired
 	private KakaoMapRequestDto kakao;
+	
+	@Autowired
+	private EnvironmentService environmentService;
 	
 	// 게시글 등록 페이지
 	@RequestMapping("/createPage")
@@ -81,6 +90,9 @@ public class BoardController {
 		ObjectMapper mapper = new ObjectMapper();
 		String allTagJsonList = mapper.writeValueAsString(allTagList);
 		model.addAttribute("allTagJsonList", allTagJsonList);
+		
+		// 파일 업로드 요청 url
+		model.addAttribute("initRequestUrl", environmentService.getInitRequest());
 		
 		return "/board/createPage";
 	}
@@ -115,8 +127,6 @@ public class BoardController {
 		@RequestParam int bGroup,
 		@RequestParam String bName) {
 		
-//		int bId = Integer.parseInt(request.getParameter("bId"));
-//		int bGroup = Integer.parseInt(request.getParameter("bGroup"));
 		String userId = (String)session.getAttribute("userId"); 
 		
 		// 게시글 조회
@@ -131,6 +141,7 @@ public class BoardController {
 		updateHitCount(bId);
 		// 프로필 이미지 url 반환
 		String filename = userService.getProfileFilename(bName);
+				
 		String imageUrl = "/user/getProfileImage/" + filename;
 		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);
@@ -163,6 +174,9 @@ public class BoardController {
 		String allTagJsonList = mapper.writeValueAsString(allTagList);
 		model.addAttribute("allTagJsonList", allTagJsonList);
 		
+		// 파일 업로드 요청 url
+		model.addAttribute("initRequestUrl", environmentService.getInitRequest());
+		
 		return "/board/updatePage";
 	}
 	
@@ -180,7 +194,7 @@ public class BoardController {
 			service.updateTag(dto.getbId(), tags);
 		}
 		
-		return "redirect:detailBoard?bId=" + dto.getbId() + "&bGroup=" + dto.getbGroup();
+		return "redirect:detailBoard?bId=" + dto.getbId() + "&bGroup=" + dto.getbGroup() + "&bName=" + dto.getbName();
 	}
 	
 	// 게시글 삭제
@@ -541,8 +555,8 @@ public class BoardController {
 						  HttpServletRequest request,
 						  HttpServletResponse response) {
 		try {
-			final String real_save_path = "C:\\server_program\\imgUploadTest\\";
-
+			String real_save_path = environmentService.getUploadPath();
+			
             // 폴더가 없을 경우 생성
             File saveFolder = new File(real_save_path);
             if (!saveFolder.exists() || saveFolder.isFile()) {
@@ -565,11 +579,13 @@ public class BoardController {
             // 폴더 경로 설정
             String newfilename = real_save_path + fileName;
             fileload.transferTo(new File(newfilename)); // 파일 저장 실행
-
+            
+            String imageUrl = environmentService.getAccessPath() + fileName;
+            
             // getImageForContents() 메서드 실행
             JSONObject outData = new JSONObject();
             outData.put("uploaded", true);
-            outData.put("url", request.getScheme() + "://" + request.getServerName() + "/board/getImageForContents?fileNm=" + fileName);
+            outData.put("url", imageUrl);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().print(outData.toString());
@@ -577,13 +593,15 @@ public class BoardController {
         	System.out.println("*error: " + e.getMessage());
             e.printStackTrace();
         }
+		
 	}
 	
 	// 이미지업로드(2) - 로컬에 저장된 이미지를 사용자에게 제공(텍스트창)
 	@RequestMapping(value = "/getImageForContents")
     public void getImageForContents(@RequestParam("fileNm") String fileNm, HttpServletResponse response) throws Exception {
-        String fileStr = "C:\\server_program\\imgUploadTest\\"; 
-
+//        String fileStr = "C:\\server_program\\imgUploadTest\\"; 
+        String fileStr = environmentService.getUploadPath();
+        
         FileInputStream fis = null;
         BufferedInputStream in = null;
         ByteArrayOutputStream bStream = null;
@@ -591,9 +609,6 @@ public class BoardController {
         try {
             File file = new File(fileStr, fileNm);
             if (!file.exists()) { 
-            	System.out.println("fileStr: " + fileStr);
-            	System.out.println("fileNm: " + fileNm);
-            	System.out.println("file not exists");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND); // 파일이 없으면 404 오류 응답
                 return;
             }
@@ -610,6 +625,7 @@ public class BoardController {
             String type = "";
             String ext = fileNm.substring(fileNm.lastIndexOf(".") + 1).toLowerCase();
             type = "jpg".equals(ext) ? "image/jpeg" : "image/" + ext;
+            System.out.println(type);
             response.setHeader("Content-Type", type);
             response.setContentLength(bStream.size());
             bStream.writeTo(response.getOutputStream());

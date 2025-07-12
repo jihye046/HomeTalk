@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.my.ex.EnvironmentService;
 import com.my.ex.dto.ChatRoomDto;
 import com.my.ex.dto.MessageDto;
 import com.my.ex.service.ChatService;
@@ -33,6 +34,9 @@ public class ChatController {
 	@Autowired
 	private MessageService messageService;
 	
+	@Autowired
+	private EnvironmentService environmentService;
+	
 	// 안읽은 메시지 총 개수
 	@RequestMapping("/getUnreadMessageTotalCount")
 	public int getUnreadMessageTotalCount(@RequestParam String receiver) {
@@ -41,7 +45,7 @@ public class ChatController {
 	
 	// 채팅방 목록
 	@RequestMapping("/getRoomList")
-	public List<ChatRoomDto> getRoomList(@RequestParam String userId,
+	public Map<String, Object> getRoomList(@RequestParam String userId,
 										 @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText) {
 		List<String> roomIdList = service.getRoomId(userId); // roomId만 가져오기
 		
@@ -62,7 +66,13 @@ public class ChatController {
 			}
 		}
 		
-		return lastMessageList;
+		// 웹소캣 연결 할 서버 주소
+		String webSocketServer = environmentService.getWebSocketServer();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("rooms", lastMessageList);
+		map.put("serverUrl", webSocketServer);
+		return map;
 	}
 	
 	// 특정 채팅방 내역

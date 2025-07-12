@@ -10,10 +10,12 @@ class UploadAdapter {
             this._sendRequest( file );
         })))
     }
-
+	
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost/board/imgUpload', true);
+        const initRequestUrl = document.querySelector("#initRequestUrl").getAttribute("data-initRequestUrl")
+        
+        xhr.open('POST', initRequestUrl, true);
         xhr.responseType = 'json';
     }
 
