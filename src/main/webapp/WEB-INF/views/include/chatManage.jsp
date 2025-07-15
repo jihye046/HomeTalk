@@ -19,7 +19,7 @@
 			    	<input id="searchTextInput" placeholder="검색" type="text">
 			    </div>
 				<!-- 채팅방 목록 -->
-				<div class="roomList" id="roomList"></div>
+				<div class="roomList" id="roomList">등록된 채팅이 없습니다.</div>
 	        </div> 
 	        
 	        <!-- 채팅 내용 -->
@@ -35,4 +35,4 @@
 <div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 <div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
 <div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
-<script src="<c:url value="/resources/js/chatPage1.js"/>"></script>
+<script src="<c:url value="/resources/js/chatPage1.js"/>" ></script>
