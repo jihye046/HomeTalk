@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.my.ex.EnvironmentService;
 import com.my.ex.dto.SocialDto;
 import com.my.ex.dto.google.GoogleCallbackDto;
 import com.my.ex.dto.google.GoogleLoginRequestDto;
@@ -33,6 +34,25 @@ public class SocialService implements ISocialService {
 	@Autowired
 	private GoogleLoginRequestDto googleLoginRequestDto;
 	
+	@Autowired
+	private EnvironmentService environmentService;
+	
+	// google redirect_uri
+	public String getGoogleRedirectURI() {
+		if(environmentService.getActiveProfile().equals("prod")) {
+			return googleLoginRequestDto.getRedirect_prod_uri();
+		}
+		return googleLoginRequestDto.getRedirect_uri();
+	}
+	
+	// naver redirect_uri
+	public String getNaverRedirectURI() {
+		if(environmentService.getActiveProfile().equals("prod")) {
+			return naverLoginRequestDto.getRedirect_prod_uri();
+		}
+		return naverLoginRequestDto.getRedirect_uri();
+	}
+	
 	// 네이버 로그인 연동 URL 생성
 	@Override
 	public String getNaverAuthorizeUrl(String type) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
@@ -41,7 +61,8 @@ public class SocialService implements ISocialService {
 				.queryParam("response_type", naverLoginRequestDto.getResponse_type())
 				.queryParam("client_id", naverLoginRequestDto.getClient_id())
 				.queryParam("state", URLEncoder.encode(naverLoginRequestDto.getState(), "UTF-8"))
-				.queryParam("redirect_uri", URLEncoder.encode(naverLoginRequestDto.getRedirect_uri(), "UTF-8"))
+//				.queryParam("redirect_uri", URLEncoder.encode(naverLoginRequestDto.getRedirect_uri(), "UTF-8"))
+				.queryParam("redirect_uri", URLEncoder.encode(getNaverRedirectURI(), "UTF-8"))
 				.build();
 		return uriComponents.toString();
 	}
@@ -95,7 +116,8 @@ public class SocialService implements ISocialService {
 				.queryParam("scope", googleLoginRequestDto.getScope()) // 구글 api에서 선택한 범위
 				.queryParam("state", URLEncoder.encode(googleLoginRequestDto.getState(), "UTF-8"))
 				.queryParam("access_type", googleLoginRequestDto.getAccess_type())
-				.queryParam("redirect_uri", URLEncoder.encode(googleLoginRequestDto.getRedirect_uri(), "UTF-8"))
+//				.queryParam("redirect_uri", URLEncoder.encode(googleLoginRequestDto.getRedirect_uri(), "UTF-8"))
+				.queryParam("redirect_uri", URLEncoder.encode(getGoogleRedirectURI(), "UTF-8"))
 				.build();
 		return uriComponents.toString();
 	}
@@ -112,7 +134,8 @@ public class SocialService implements ISocialService {
 				.queryParam("client_secret", googleLoginRequestDto.getClient_secret())
 				.queryParam("code", googleCallbackDto.getCallbackCode())
 				.queryParam("state", googleCallbackDto.getCallbackState())
-				.queryParam("redirect_uri", URLEncoder.encode(googleLoginRequestDto.getRedirect_uri(), "UTF-8"))
+//				.queryParam("redirect_uri", URLEncoder.encode(googleLoginRequestDto.getRedirect_uri(), "UTF-8"))
+				.queryParam("redirect_uri", URLEncoder.encode(getGoogleRedirectURI(), "UTF-8"))
 				.build();
 		
 		// POST 요청에 필요한 본문 데이터 구성

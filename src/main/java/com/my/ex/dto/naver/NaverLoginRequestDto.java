@@ -21,17 +21,21 @@ public class NaverLoginRequestDto {
 
 	@Value("${naver.redirect_uri}")
 	private String redirect_uri;
+	
+	@Value("${naver.redirect_prod_uri}")
+	private String redirect_prod_uri;
 
 	public NaverLoginRequestDto() {}
 
-	public NaverLoginRequestDto(String baseurl, String response_type, String client_id, String client_secret, String state,
-			String redirect_uri) {
+	public NaverLoginRequestDto(String baseurl, String response_type, String client_id, String client_secret,
+			String state, String redirect_uri, String redirect_prod_uri) {
 		this.baseurl = baseurl;
 		this.response_type = response_type;
 		this.client_id = client_id;
 		this.client_secret = client_secret;
 		this.state = state;
 		this.redirect_uri = redirect_uri;
+		this.redirect_prod_uri = redirect_prod_uri;
 	}
 
 	public String getBaseurl() {
@@ -82,10 +86,19 @@ public class NaverLoginRequestDto {
 		this.redirect_uri = redirect_uri;
 	}
 
+	public String getRedirect_prod_uri() {
+		return redirect_prod_uri;
+	}
+
+	public void setRedirect_prod_uri(String redirect_prod_uri) {
+		this.redirect_prod_uri = redirect_prod_uri;
+	}
+
 	@Override
 	public String toString() {
-		return "SocialDto [baseurl=" + baseurl + ", response_type=" + response_type + ", client_id=" + client_id
-				+ ", client_secret=" + client_secret + ", state=" + state + ", redirect_uri=" + redirect_uri + "]";
+		return "NaverLoginRequestDto [baseurl=" + baseurl + ", response_type=" + response_type + ", client_id="
+				+ client_id + ", client_secret=" + client_secret + ", state=" + state + ", redirect_uri=" + redirect_uri
+				+ ", redirect_prod_uri=" + redirect_prod_uri + "]";
 	}
 
 }
