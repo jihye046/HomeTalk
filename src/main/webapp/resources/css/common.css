@@ -1232,6 +1232,13 @@ body.dark .logo img {
 	height: 100px;
 }
 
+	/* 채팅방이 없을 때 보여줄 메시지 */
+.chat-rooms .no-chat-message { 
+	text-align: center;
+	padding: 20px;
+	color: #888;
+}
+
 /* 데이터 전달용 <div> 숨기기
 ================================================== */
 .hidden-data {

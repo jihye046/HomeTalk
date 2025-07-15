@@ -19,7 +19,7 @@
 			    	<input id="searchTextInput" placeholder="검색" type="text">
 			    </div>
 				<!-- 채팅방 목록 -->
-				<div class="roomList" id="roomList">등록된 채팅이 없습니다.</div>
+				<div class="roomList" id="roomList"></div>
 	        </div> 
 	        
 	        <!-- 채팅 내용 -->

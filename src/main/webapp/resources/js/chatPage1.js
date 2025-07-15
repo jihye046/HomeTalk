@@ -44,10 +44,19 @@ const getRoomList = () => {
 	fetch(`/chat/getRoomList?userId=${userId}`)
 	.then(response => response.json())
 	.then(data => {
-		data.rooms.forEach(chatRoomDto => {
-			printRoomList(chatRoomDto)
-		})
-		openChatRoom(data.serverUrl)
+		roomList.innerHTML = ''
+		
+		if(data.rooms.length > 0){
+			// 채팅방이 있는 경우
+			data.rooms.forEach(chatRoomDto => {
+				printRoomList(chatRoomDto)
+			})
+			openChatRoom(data.serverUrl)
+		} else {
+			// 채팅방이 없는 경우
+			roomList.innerHTML = `<div class="no-chat-message">등록된 채팅이 없습니다.</div>`
+		}
+
 	})
 	.catch(error => {
 		console.error('Error:', error)
