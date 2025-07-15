@@ -1,6 +1,9 @@
 package com.my.ex.dto.google;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.my.ex.EnvironmentService;
 
 import lombok.Builder;
 
@@ -33,11 +36,15 @@ public class GoogleLoginRequestDto {
 	
 	@Value("${google.oauthBaseUri}")
 	private String oauthBaseUri;
+	
+	@Value("${google.redirect_prod_uri}")
+	private String redirect_prod_uri;
 
 	public GoogleLoginRequestDto() {}
 
 	public GoogleLoginRequestDto(String baseurl, String response_type, String client_id, String client_secret,
-			String state, String redirect_uri, String scope, String access_type, String oauthBaseUri) {
+			String state, String redirect_uri, String scope, String access_type, String oauthBaseUri,
+			String redirect_prod_uri) {
 		this.baseurl = baseurl;
 		this.response_type = response_type;
 		this.client_id = client_id;
@@ -47,6 +54,7 @@ public class GoogleLoginRequestDto {
 		this.scope = scope;
 		this.access_type = access_type;
 		this.oauthBaseUri = oauthBaseUri;
+		this.redirect_prod_uri = redirect_prod_uri;
 	}
 
 	public String getBaseurl() {
@@ -121,11 +129,20 @@ public class GoogleLoginRequestDto {
 		this.oauthBaseUri = oauthBaseUri;
 	}
 
+	public String getRedirect_prod_uri() {
+		return redirect_prod_uri;
+	}
+
+	public void setRedirect_prod_uri(String redirect_prod_uri) {
+		this.redirect_prod_uri = redirect_prod_uri;
+	}
+
 	@Override
 	public String toString() {
 		return "GoogleLoginRequestDto [baseurl=" + baseurl + ", response_type=" + response_type + ", client_id="
 				+ client_id + ", client_secret=" + client_secret + ", state=" + state + ", redirect_uri=" + redirect_uri
-				+ ", scope=" + scope + ", access_type=" + access_type + ", oauthBaseUri=" + oauthBaseUri + "]";
+				+ ", scope=" + scope + ", access_type=" + access_type + ", oauthBaseUri=" + oauthBaseUri
+				+ ", redirect_prod_uri=" + redirect_prod_uri + "]";
 	}
-
+	
 }

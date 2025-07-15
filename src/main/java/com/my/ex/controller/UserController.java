@@ -81,7 +81,7 @@ public class UserController {
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate(); // 세션 자체를 삭제
-		return "redirect:loginPage";
+		return "redirect:/board/paging";
 	}
 	
 	// 회원가입 페이지
