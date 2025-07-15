@@ -5,6 +5,7 @@ let roomList = document.querySelector("#roomList")
 let chatRecords = document.querySelector(".chat-records")
 const searchTextInput = document.querySelector("#searchTextInput")
 const path = document.querySelector("#contextPath").getAttribute("data-context-path")
+let ws = ''
 
 /* 채팅 아이콘 - 안읽은 메시지 총 개수
 ================================================== */
@@ -93,42 +94,58 @@ const openChatRoom = (serverUrl) => {
 	document.querySelectorAll(".chat-room").forEach(room => {
 		room.addEventListener('click', function() {
 			const roomId = this.getAttribute('data-room-id')
-			const otherUserId = this.querySelector(".userNickname").textContent // 상대방 닉네임
-
-			const otherUser = this.querySelector(".otherUserId").getAttribute("data-otherUserId") // 상대방 id
-
-			// console.log(`otherUserId: ${otherUserId}`)
-			const imageUrl = this.querySelector("img").src // 상대방 프로필 이미지URL
+			const otherUserId = this.querySelector(".userNickname").textContent 					// 상대방 닉네임
+			const otherUser = this.querySelector(".otherUserId").getAttribute("data-otherUserId")   // 상대방 id
+			const imageUrl = this.querySelector("img").src 											// 상대방 프로필 이미지URL
 			const unreadBadge = this.querySelector(".message-badge")
-			const userId = document.querySelector("#userId").getAttribute("data-userId") // 본인 ID
+			const userId = document.querySelector("#userId").getAttribute("data-userId") 			// 본인 ID
 
 			hideUnreadBadge(unreadBadge, roomId, userId)
 			getChatHistory(roomId, imageUrl, otherUserId, userId)
 			// connect2(roomId, otherUserId, userId)
-			connect2(serverUrl, roomId, otherUserId, userId)
+			connect2(serverUrl, roomId, otherUser, userId)
 		})
 	})
 }
 
+/* 웹소켓 종료
+================================================== */
+const disconnect = () => {
+	if(ws && (ws.readyState == WebSocket.OPEN || ws.readyState == WebSocket.CONNECTING)) {
+		let message = {
+			code: '2',
+			sender: window.name,
+			receiver: '',
+			content: '',
+			regdate: displayDate(),
+			regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
+		}
+
+		ws.send(JSON.stringify(message))
+		ws.close()
+		ws = ''
+		log('웹소캣 연결 종료')
+	}
+}
+
 /* 웹소캣
 ================================================== */
-let ws = ''
 const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
 	const unickName = document.querySelector("#userNickname").getAttribute("data-userNickname") // 로그인 사용자 닉네임
 
 	window.name = userId
 
-	console.log(`window.name:${window.name}`) // 로그인한 사용자 id
-	console.log(`connect2 > otherUserId: ${otherUserId}`) // 상대방 id
-	
+	if(ws && (ws.readyState == WebSocket.CONNECTING || ws.readyState == WebSocket.OPEN)){
+		disconnect()
+	}
+
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
 		ws = new WebSocket(serverUrl)
 
-
 		// 웹소캣 연결
 		ws.onopen = () => {
-			log('서버 연결 성공')
+			log('웹소캣 연결 성공')
 
 			let message = {
 				code: '1', 
@@ -159,7 +176,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 				displayDate()
 			} else if (message.code == '2') {
 				// print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
-				print('', `[${message.senderUnickname}]님이 나갔습니다.`, 'other', 'state', message.regTime)
+				//print('', `[${message.senderUnickname}]님이 나갔습니다.`, 'other', 'state', message.regTime)
 
 				/* 입력창 비활성화 */
 				//msg.disabled = true
@@ -184,7 +201,10 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 			disconnect()
 		})
 
-		// 메시지 전송
+		// 기존 웹소캣에 연결된 리스너를 지움
+		msg.removeEventListener('keydown', window.handleKeyDown)
+
+		// 메시지 전송 이벤트 핸들러
 		window.handleKeyDown = (event) => {
 			if(event.key === 'Enter') {
 				if(msg.value != null || msg.value != ""){
@@ -218,26 +238,8 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 				}
 			}
 		}
+		// 새로운 리스너 연결
 		msg.addEventListener('keydown', window.handleKeyDown)
-	}
-}
-
-/* 채팅방을 나가는 경우
-================================================== */
-const disconnect = () => {
-	if(ws && ws.readyState == WebSocket.OPEN) {
-		let message = {
-			code: '2',
-			sender: window.name,
-			receiver: '',
-			content: '',
-			regdate: displayDate(),
-			regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
-		}
-
-		ws.send(JSON.stringify(message))
-		ws.close()
-		log('웹소캣 연결 종료')
 	}
 }
 
@@ -276,6 +278,8 @@ const getChatHistory = (roomId, imageUrl, otherUserId, userId) => {
 	.then(response => response.json())
 	.then(data => {
 		chatList.innerHTML = ''
+		document.querySelector('.chat-rooms').classList.add('shrink')
+		document.querySelector('.chat-records').classList.add('show')
 
 		data.forEach(messageDto => {
 			if(messageDto.sender == userId) {
@@ -286,10 +290,7 @@ const getChatHistory = (roomId, imageUrl, otherUserId, userId) => {
 				print(messageDto.senderUnickname, messageDto.content, 'other', 'msg', messageDto.regTime)
 			}
 		})
-
 		printHeader(imageUrl, otherUserId)
-		document.querySelector('.chat-rooms').classList.add('shrink')
-		document.querySelector('.chat-records').classList.add('show')
 	})
 	.catch(error => {
 		console.error('error: ', error)
@@ -307,8 +308,6 @@ function sendMessage() {
         newMessage.textContent = message
         document.querySelector('.chat-records').appendChild(newMessage)
         input.value = ""
-
-
     }
 }
 
@@ -318,15 +317,25 @@ window.onclick = function(event) {
 	const galleryModal = document.querySelector('.gallery-modal')
 	const chatModal = document.querySelector('#chatModal')
     
+	// 사진 갤러리 모달 닫기
     if (event.target == galleryModal) {
         galleryModal.style.display = 'none'
-    } else if (event.target == chatModal) {
+    } 
+	// 채팅 모달 닫기
+	else if (event.target == chatModal) {
 		disconnect()
-    	chatModal.style.display = 'none'
-    }
+		chatModal.style.display = 'none'
+    } 
+	// 채팅 목록 영역 클릭 시 웹소캣 연결 해제
+	else if(event.target == document.querySelector(".chat-rooms")){
+		disconnect()
+	} 
 	
-	document.querySelector('.chat-rooms').classList.remove('shrink')
-	document.querySelector('.chat-records').classList.remove('show')
+	// 공통) chat-room 스타일 복구
+	if (event.target == chatModal || event.target == document.querySelector(".chat-rooms")){
+		document.querySelector('.chat-rooms').classList.remove('shrink')
+		document.querySelector('.chat-records').classList.remove('show')
+	}
 }
 
 /* 새로운 내용이 추가되면 가장 아래로 스크롤
