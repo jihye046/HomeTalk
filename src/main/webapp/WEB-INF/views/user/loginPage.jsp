@@ -13,7 +13,7 @@
 					</a>
 					<input type="text" value="${empty userId ? '' : userId}" name="userId" placeholder="아이디"><br>
 					<input type="password" name="userPw" placeholder="비밀번호"><br>
-					<button class="btn btn-block btn-outline-secondary" type="submit">Sign In</button>
+					<button class="btn btn-block btn-outline-secondary" type="submit">로그인</button>
 					<div class="login-form-links">
 							<a href="/user/joinPage">회원가입</a>
 							<a href="/user/verify-user?mode=id">아이디찾기</a>

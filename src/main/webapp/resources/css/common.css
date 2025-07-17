@@ -22,6 +22,12 @@ ul {
     margin: 0px;
     padding: 0px;
 }
+
+.post ul {
+    margin-left: 20px;
+    font-size:  14px;
+}
+
 .footer-section {
   background: #151414;
   position: relative;
@@ -1099,6 +1105,7 @@ body.dark .logo img {
 
 	/* 메시지 입력창 */
 #msg {
+    margin-bottom: 1rem;
 	width: 100%;
 	border-radius: 20px;
 	border: 1px solid #EAEDEF;

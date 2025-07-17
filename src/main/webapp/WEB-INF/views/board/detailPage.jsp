@@ -41,6 +41,13 @@
 							</button>
 						</div>
 						
+						<!-- 태그 표시 -->
+						<div class="tag-list">
+							<c:forEach items="${tagList}" var="tag">
+								<a href="#" class="tag-item"># ${tag.tagName}</a>
+							</c:forEach>
+						</div>
+						
 					</div>
 					<!-- 글 제목, 작성자 정보 end -->
 					
@@ -80,11 +87,11 @@
 					</div>
 					
 					<!-- 태그 표시 -->
-					<div class="tag-list">
-						<c:forEach items="${tagList}" var="tag">
-							<a href="#" class="tag-item"># ${tag.tagName}</a>
-						</c:forEach>
-					</div>
+<!-- 					<div class="tag-list"> -->
+<%-- 						<c:forEach items="${tagList}" var="tag"> --%>
+<%-- 							<a href="#" class="tag-item"># ${tag.tagName}</a> --%>
+<%-- 						</c:forEach> --%>
+<!-- 					</div> -->
 					
 					<!-- 게시글 통계 정보 (작성일자, 좋아요, 스크랩, 조회수 등) -->
 					<div class="post-meta-div">

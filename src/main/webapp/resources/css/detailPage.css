@@ -3,6 +3,12 @@ body {
 	background-color: rgb(245, 238, 232);
 }
 
+@font-face {
+    font-family: 'Pretendard-Light';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
 
 /* 포스트 상단 */
 .container-fluid {
@@ -57,6 +63,7 @@ body {
 }
 
 .post-meta-div {
+    padding-top: 2rem;
     display: flex;
     align-items: center;
 }
@@ -65,6 +72,11 @@ body {
     color: #666;
     font-size: 13px;
     margin-right: 5px;
+}
+
+    /* 테이블 */
+.post .table td, .table th {
+    font-size: 14px;
 }
 
 .separator {
@@ -151,7 +163,9 @@ body {
 }
 
 .post p {
-	line-height: 2;
+	font-size: 15px;
+	line-height: 1.6;
+	font-family: 'Pretendard-Light';
 	color: rgb(47, 52, 56);
 }
 
