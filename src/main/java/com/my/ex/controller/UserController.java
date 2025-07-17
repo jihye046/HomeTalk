@@ -279,7 +279,8 @@ public class UserController {
 	@RequestMapping("/getProfileImage/{filename:.+}")
 	@ResponseBody
 	public Resource getProfileImage(@PathVariable String filename) {
-		String uploadDir = "C:\\server_program\\profileImgTest\\";
+//		String uploadDir = "C:\\server_program\\profileImgTest\\";
+		String uploadDir = environmentService.getProfileUploadPath();
 		File file = new File(uploadDir, filename);
 		
 		if (file.exists()) {
@@ -292,7 +293,8 @@ public class UserController {
 	// 파일 저장
 	private String saveProfileImage(MultipartFile profileImage, String userId) throws IOException {
 		// 파일 저장 경로 설정
-		String uploadDir = "C:\\server_program\\profileImgTest\\";
+//		String uploadDir = "C:\\server_program\\profileImgTest\\";
+		String uploadDir = environmentService.getProfileUploadPath();
 		String filename = userId + "_" + profileImage.getOriginalFilename();
 		File fileToSave = new File(uploadDir, filename);
 		
