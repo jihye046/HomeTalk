@@ -48,8 +48,11 @@
 										${dto.unickName}
 									</td>
 									<td class="post-title-cell">
-										<a href="/board/detailBoard?bId=${dto.bId}&
-											bGroup=${dto.bGroup}">
+										<a href="/board/detailBoard?
+											bId=${dto.bId}&
+											bGroup=${dto.bGroup}&
+											bName=${dto.bName}"
+										>
 											${dto.bTitle}
 										</a>
 										<i class="fa-regular fa-comment-dots"></i> 

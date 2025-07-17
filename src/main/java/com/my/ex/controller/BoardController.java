@@ -468,6 +468,8 @@ public class BoardController {
 		}
 		model.addAttribute("boardList", pagingList);
 		model.addAttribute("paging", pageDto);
+		model.addAttribute("searchGubun", searchGubun);
+		model.addAttribute("searchText", searchText);
 		return "/board/pagingList";
 	}
 	

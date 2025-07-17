@@ -253,6 +253,8 @@ document.addEventListener("DOMContentLoaded", function() {
             startVerificationTimer(5 * 60) // 5분
           } else {
             alert('이메일을 확인해 주신 후 본인인증 버튼을 다시 눌러주세요.')
+            uemailInput.readOnly = false
+            uemailInput.focus()
           }
           
         },

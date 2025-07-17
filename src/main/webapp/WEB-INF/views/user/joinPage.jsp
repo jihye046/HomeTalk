@@ -46,7 +46,7 @@
 	                </div>
 	                <div class="input-group">
 	                    <label for="unickName">닉네임</label>
-	                    <input type="text" id="unickName" name="unickName" maxlength="8" placeholder="닉네임을 입력해주세요" required>
+	                    <input type="text" id="unickName" name="unickName" maxlength="13" placeholder="닉네임을 입력해주세요" required>
 						<p id="nicknameRequirement" class="requirement-message"></p>
 	                </div>
 	                <div class="input-group email-verification-group">

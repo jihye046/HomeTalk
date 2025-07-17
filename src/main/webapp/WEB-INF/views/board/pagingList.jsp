@@ -71,11 +71,11 @@
 								<form action="/board/paging">
 									<input type="hidden" name="sortType" id="sortTypeInput">
 									<select class="styled-select" name="searchGubun">
-										<option value="bTitle">제목</option>
-										<option value="bContent">내용</option>
-										<option value="unickName">작성자</option>
+										<option value="bTitle" ${searchGubun == 'bTitle' ? 'selected' : ''}>제목</option>
+										<option value="bContent" ${searchGubun == 'bContent' ? 'selected' : ''}>내용</option>
+										<option value="unickName" ${searchGubun == 'unickName' ? 'selected' : ''}>작성자</option>
 									</select> 
-									<input class="styled-input" type="text" name="searchText" placeholder="검색">
+									<input class="styled-input" type="text" name="searchText" value="${searchText}" placeholder="검색">
 								</form>
 							</div>
 						</div>

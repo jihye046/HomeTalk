@@ -35,7 +35,7 @@
 							</div>
 						</div>
 						<!-- 닉네임 변경 -->
-						<input type="text" id="nickname" value="${sessionScope.userNickname}"><br>
+						<input type="text" id="nickname" maxlength="13" value="${sessionScope.userNickname}"><br>
 					</div>
 					<!-- 변경 버튼 -->
 					<div class="form-footer">
