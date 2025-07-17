@@ -99,7 +99,35 @@ public class BoardController {
 	
 	// 게시글 등록
 	@RequestMapping(value = "/createBoard", method = RequestMethod.POST )
-	public String createBoard(BoardDto dto, RedirectAttributes rttr) throws JsonParseException, JsonMappingException, IOException {
+	public String createBoard(BoardDto dto, Model model, RedirectAttributes rttr) throws JsonParseException, JsonMappingException, IOException {
+		String bContent = dto.getbContent();
+		if(bContent.getBytes().length > 4000) {
+			System.out.println("4000바이트 초과");
+			
+			// 에러 메시지
+			model.addAttribute("error", "입력하신 내용이 너무 깁니다. 4000바이트를 초과했습니다.");
+			
+			/* 게시글 등록 페이지로 이동 */
+			// 사용자가 작성했던 내용 다시 전달
+			ObjectMapper mapper = new ObjectMapper();
+			
+			model.addAttribute("bContent", bContent);
+			model.addAttribute("bTitle", dto.getbTitle());
+			model.addAttribute("bAddress", dto.getbAddress());
+			model.addAttribute("tagJsonList", dto.getTags());
+			model.addAttribute("jsKey", kakao.getJsKey());
+			
+			// 자동완성 태그 목록
+			List<TagDto> allTagList = service.getAllTags();
+			String allTagJsonList = mapper.writeValueAsString(allTagList);
+			model.addAttribute("allTagJsonList", allTagJsonList);
+			
+			// 파일 업로드 요청 url
+			model.addAttribute("initRequestUrl", environmentService.getInitRequest());
+			
+			return "/board/createPage";
+		} 
+		
 		// 게시글 생성
 		boolean create = service.createBoard(dto);
 		rttr.addFlashAttribute("createResult", create ? "true" : "false");
@@ -114,7 +142,6 @@ public class BoardController {
 		
 		return "redirect:paging";
 	}
-	
 	
 	// 게시글 상세보기
 	@RequestMapping("/detailBoard")
