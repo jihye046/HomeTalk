@@ -45,6 +45,11 @@
 <%-- 	<%@ include file="/WEB-INF/views/include/footer.jsp" %> --%>
 	<div id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
 	<div class="hidden-data" id="initRequestUrl" data-initRequestUrl="${initRequestUrl}"></div>
+	<div class="hidden-data" id="errorMessage" data-errorMessage="${error}"></div>
+	<div class="hidden-data" id="errorbContent" data-errorbContent="${bContent}"></div>
+	<div class="hidden-data" id="errorbTitle" data-errorbTitle="${bTitle}"></div>
+	<div class="hidden-data" id="errorbAddress" data-errorbAddress="${bAddress}"></div>
+	<div class="hidden-data" id="errorTags" data-errortagJsonList="${fn:escapeXml(tagJsonList)}"></div>
 	
 	<script src="<c:url value="/resources/js/createPage.js"/>"></script>
 	<script src="<c:url value="/resources/js/uploadAdapter.js"/>"></script>
