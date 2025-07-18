@@ -158,14 +158,23 @@ function shareNaver() {
 	// 카카오 공유
 function shareKakao() {
 	const imgUrl = getThumbnailUrl()
-	const currentURL = window.location.href
+	const currentURL = window.location.href // 쿼리 포함한 전체 URL
+	const origin = window.location.origin // 현재 도메인 + 프로토콜만 추출 (예: https://yourdomain.com)
 	getKakaoKey()
 		.then(kakaoKey => {
-			Kakao.init(kakaoKey)
+			// 초기화가 안되었을 때만 초기화
+			if(!Kakao.isInitialized()) {
+				Kakao.init(kakaoKey) 
+			}
+			
 			Kakao.Link.sendDefault({
 				objectType: 'feed',
+				itemContent: {
+					profileText: 'HomeTalk',
+					profileImageUrl: `${origin}/resources/images/logo2.png`
+				},
 				content: {
-					title: 'test20',
+					title: '',
 					description: bTitle,
 					imageUrl: imgUrl,
 					link: {
