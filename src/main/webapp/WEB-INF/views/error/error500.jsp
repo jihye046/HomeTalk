@@ -9,7 +9,7 @@
 <title>error500.jsp</title>
 <style>
 	body {
-		pdding: 0;
+		padding: 0;
 		margin: 0;
 	}
 
@@ -24,18 +24,18 @@
 	.error500 h2 {
 		color: #333;
 		line-height: 1.5;
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 	}	
 	
 	.error500 p {
 		color: #666;
 		line-height: 1.2;
-	    font-size: 1.2rem;
+	    font-size: 1.0rem;
 	    margin-bottom: 20px;
 	}
 	
 	.error500 img {
-		width: 700px;
+		width: 600px;
  		height: auto; 
 	}
 </style>

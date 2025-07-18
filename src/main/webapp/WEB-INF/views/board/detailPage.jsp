@@ -364,20 +364,21 @@
 	<div id="tempDiv"style="display: none;" ></div>
 	
 	<!-- fancybox 이미지 갤러리 -->
-	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.0/dist/jquery.fancybox.min.js"></script>	
-<div class="hidden-data" id="updateResult" data-update-result="${updateResult}"></div>
-<div class="hidden-data" id="bId" data-bId="${dto.bId}"></div>
-<div class="hidden-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
-<div class="hidden-data" id="bContent" data-bContent='${dto.bContent}'></div>
-<div class="hidden-data" id="isLiked" data-isLiked="${isLiked}"></div>
-<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
-<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
-<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
-
-<script src="<c:url value="/resources/js/common.js"/>"></script>
-<script src="<c:url value="/resources/js/fixedButton.js"/>"></script>
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> <!-- 카카오 공유 -->
-<script src="<c:url value="/resources/js/detailPage.js"/>"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.0/dist/jquery.fancybox.min.js"></script>
+		
+	<div class="hidden-data" id="updateResult" data-update-result="${updateResult}"></div>
+	<div class="hidden-data" id="bId" data-bId="${dto.bId}"></div>
+	<div class="hidden-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
+	<div class="hidden-data" id="bContent" data-bContent='${dto.bContent}'></div>
+	<div class="hidden-data" id="isLiked" data-isLiked="${isLiked}"></div>
+	<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
+	<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
+	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+	
+	<script src="<c:url value="/resources/js/common.js"/>"></script>
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> <!-- 카카오 공유 -->
+	<script src="<c:url value="/resources/js/fixedButton.js"/>"></script>
+	<script src="<c:url value="/resources/js/detailPage.js"/>"></script>
 </body>
 
 
