@@ -46,8 +46,11 @@
 	</select>
 	
 	<select id="getUserPosts" parameterType="java.util.HashMap" resultType="BoardDto">
-		SELECT * 
-		  FROM mvc_board6
+		SELECT 
+			b.*,
+			u.unickName 
+		  FROM mvc_board6 b
+		  JOIN mvc_login6 u ON b.bName = u.userId
 		 WHERE bName = #{userId}
 		   AND bStep = 0
 		   AND bIndent = 0
@@ -68,18 +71,26 @@
 	</select>
 	
 	<select id="getUserComments" resultType="BoardDto">
-		SELECT * 
-		  FROM mvc_board6
-		 WHERE bName = #{userId} 
-		   AND bStep >= 1
-		  ORDER BY bId DESC 
+		SELECT 
+			b.*,
+			u.unickname 
+		  FROM mvc_board6 b
+		  JOIN mvc_board6 o ON b.bGroup = o.bId AND o.bStep = 0
+		  JOIN mvc_login6 u ON o.bName = u.userId
+		 WHERE b.bName = #{userId}
+		   AND b.bStep >= 1
+		 ORDER BY b.bId DESC 
 	</select>
 	
 	<select id="getUserLikedPosts" resultType="BoardDto">
-		SELECT b.*
+		SELECT 
+			b.*,
+			u.unickname
 		  FROM mvc_board6 b
 		  JOIN mvc_like6 l ON b.bId = l.bId
+		  JOIN mvc_login6 u ON b.bName = u.userId
 		 WHERE l.userId = #{userId}
+		 ORDER BY b.bId DESC
 	</select>
 	
 	<select id="isOldPasswordCorrect" parameterType="java.util.HashMap" resultType="Integer">

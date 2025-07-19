@@ -23,7 +23,7 @@
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>작성자</th>
+								<th>게시글 작성자</th>
 								<th>댓글</th>
 								<th>작성일</th>
 							</tr>
