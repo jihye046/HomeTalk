@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -116,6 +118,21 @@ public class ChatServer {
 				}
 			}
 		}
+	}
+	
+	@OnClose
+	public void handleClose(Session session) {
+		System.out.println("웹소켓 세션 닫힘: " + session.getId());
+		sessionList.remove(session);
+		checkSessionList();
+	}
+	
+	@OnError
+	public void handleError(Throwable throwable, Session session) {
+		System.out.println("웹소켓 에러 발생: " + session.getId());
+		throwable.printStackTrace();
+		sessionList.remove(session);
+		checkSessionList();
 	}
 	
 	// 접속자를 확인하는 메서드

@@ -134,7 +134,8 @@ const print = (name, msg, side, state, time) => {
 
 /* 웹소캣
 ================================================== */
-let ws = ''
+// let ws = ''
+let ws = null
 window.connect2 = (roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
 	const serverUrl = document.querySelector("#serverUrl").getAttribute("data-serverUrl")
@@ -195,10 +196,13 @@ window.connect2 = (roomId, otherUserId, userId) => {
 		}
 
 		// 웹소캣 종료
-		window.addEventListener('beforeunload', function(event){
-			event.preventDefault()
-			disconnect()
-		})
+		ws.onclose = (event) => {
+			log(`웹소켓 연결 종료. 코드: ${event.code}, 이유: ${event.reason}`)
+			// 재연결 시도 로직 (3초 후 재연결)
+			setTimeout(() => {
+				window.connect2(roomId, otherUserId, userId)
+			}, 3000)
+		}
 
 		// 메시지 전송
 		window.handleKeyDown = (event) => {
@@ -217,14 +221,18 @@ window.connect2 = (roomId, otherUserId, userId) => {
 					message.code = '4'
 				}
 
-				ws.send(JSON.stringify(message))
-				msg.value = ''
-				msg.focus()
+				if(ws && ws.readyState == WebSocket.OPEN){
+					ws.send(JSON.stringify(message))
+					msg.value = ''
+					msg.focus()
 
-				if(message.code == '3') {
-					print(unickName, message.content, 'me', 'msg', message.regTime)	
-				} else if(message.code == '4') {
-					printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+					if(message.code == '3') {
+						print(unickName, message.content, 'me', 'msg', message.regTime)	
+					} else if(message.code == '4') {
+						printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+					}
+				} else {
+					log("메시지를 보낼 수 없습니다. 웹소캣이 열려있지 않습니다.")
 				}
 			}
 		}
