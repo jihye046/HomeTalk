@@ -39,8 +39,8 @@
 	        	</div>
 	        </div>
 	        <div class="popup-options">
-	        	<input type="checkbox" id=hideForDay>
-	        	<p class="popup-hide-for-day">하루 동안 보지 않기</p>
+	        	<input type="checkbox" id="hideForDay">
+	        	<label class="popup-hide-for-day" for="hideForDay">하루 동안 보지 않기</label>
 	        </div>
 		</div>
 	</div>
