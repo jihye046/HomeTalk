@@ -1,3 +1,5 @@
+/* 게시글 등록 결과 알림
+================================================== */
 const createElement = document.querySelector("#createResult") 
 let createResult = createElement ? createElement.getAttribute("data-create-result") : null
 
@@ -5,22 +7,29 @@ if(createResult == "true") {
 	alert("게시글이 등록되었습니다.")
 }
 
+/* 게시글 삭제 결과 알림
+================================================== */
 const deleteResult = document.querySelector("#deleteResult").getAttribute("data-delete-result")
 
 if(deleteResult == "true"){
 	alert("게시글이 삭제되었습니다.")
 }
 
+
+/* 로그인 환영 메시지 표시
+================================================== */
+	// 로그인 사용자 정보 가져오기
 const userId = document.querySelector("#userId").getAttribute("data-userId")
 const userNickname = document.querySelector("#userNickname").getAttribute("data-userNickname")
 
 if(userId) {
 	document.querySelector("#welcomeText").innerHTML = `<a class="menubar-button-primary" href="/user/myPage">${userNickname}</a><span style="font-size: 16px;">님 환영합니다.<span>`
 } else {
+	// 로그인 안 된 경우 기본 메시지(필요 시 활성화)
 	//document.querySelector("#welcomeText").innerHTML = "로그인"		
 }
 
-/* 가이드
+/* 가이드 투어 설정 및 실행
 ================================================== */
 const driver = window.driver.js.driver
 
@@ -112,7 +121,7 @@ guideButton.addEventListener('click', () => {
 
 /* 자동 팝업
 ================================================== */
-	// 로컬스토리지에 팝업 숨김 만료 시간 저장 또는 삭제
+	// 체크박스 상태에 따라 로컬스토리지에 팝업 숨김 만료 시간 저장/삭제
 const updatePopupHideTime = (hideForDayCheckbox) => {
 	if(hideForDayCheckbox.checked) {
 		const expireTime = Date.now() + 24 * 60 * 60 * 1000 // 24시간 후
@@ -131,7 +140,6 @@ const showAutoPopup = () => {
 	const hideUntil = localStorage.getItem('hidePopupUntil')
 	const now = Date.now()
 
-	// 팝업 표시
 	// 로컬스토리지에 저장된 시간이 있고, 현재 시간이 만료시간보다 작으면 팝업 숨김
 	if(hideUntil && now < Number(hideUntil)){
 		popup.classList.remove('active')
@@ -180,13 +188,13 @@ const weatherDefaultLocation = () => {
 	return defaultLocationObj
 }
 
-	// 오늘 주요 날씨 정보
+	// 현재 날씨 정보 업데이트 (메인 화면 변경)
 const updateCurrentWeatherInfo = (currentWeatherDto) => {
 	const weather = currentWeatherDto.weather[0].main // Clear, Wind, Clouds, Rain, Sno
 	updateMainImageByWeather(weather)
 }
 
-	// 날씨에 따라 메인 화면 변경
+	// 날씨에 따라 메인 비디오 소스 변경
 const updateMainImageByWeather = (weather) => {
 	const path = document.querySelector("#contextPath").getAttribute("data-context-path")
 	const video = document.querySelector("#weatherVideo")
@@ -197,7 +205,7 @@ const updateMainImageByWeather = (weather) => {
 	video.src = updateSrc
 }
 
-	// 서버에서 날씨 정보 가져오기
+	// 서버에 날씨 정보 요청
 const getWeatherInfo = (latitude, longitude) => {
 	if (!(latitude) || !(longitude)) {
 		const defaultLocation  = weatherDefaultLocation()
@@ -218,7 +226,7 @@ const getWeatherInfo = (latitude, longitude) => {
 	})
 }
 
-	// 현위치 정보 가져오기
+	// 현재 위치 정보 가져와서 날씨 정보 요청
 const getCurrentLocationAndFetchWeather = () => {
 	if ("geolocation" in navigator) {
 		navigator.geolocation.getCurrentPosition((position) => {
@@ -230,13 +238,13 @@ const getCurrentLocationAndFetchWeather = () => {
 	}
 }
 
-/* 목록 정렬
+/* 게시글 정렬 및 버튼 처리
 ================================================== */
 
 const sort_latest = document.querySelector("#sort_latest")
 const sort_hit = document.querySelector("#sort_hit")
 
-	// 최신순 기본 설정
+	// 페이지 로드 시 최신순 기본 활성화
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("sort_latest").classList.add("active")
 	let page = paging
@@ -250,6 +258,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 const sortTypeInput = document.querySelector('#sortTypeInput')
 
+	// 최신순 버튼 클릭 시
 sort_latest.addEventListener('click',function(){
 	if(!this.classList.contains('active')){
 		sort('latest') // 현재 페이지 정렬
@@ -259,6 +268,7 @@ sort_latest.addEventListener('click',function(){
 	}
 })
 
+	// 조회순 버튼 클릭 시
 sort_hit.addEventListener('click', function(){
 	if(!this.classList.contains('active')){
 		sort('hit')
@@ -268,6 +278,7 @@ sort_hit.addEventListener('click', function(){
 	}
 })
 
+	// 페이지네이션 링크에 정렬 타입 쿼리 파라미터 추가
 const updatePaginationLinks = (sortType) => {
 	document.querySelectorAll('.page-link').forEach(function(link){
 		try{
@@ -280,6 +291,8 @@ const updatePaginationLinks = (sortType) => {
 	})
 }
 
+/* 활성화된 버튼 스타일 업데이트
+================================================== */
 const updateSortBtnStyle = (sortType) => {
 	if(sortType == 'latest'){
 		updateLatestBtnClass()
@@ -288,6 +301,7 @@ const updateSortBtnStyle = (sortType) => {
 	}
 }
 
+	// 최신순 버튼 활성화, 조회순 버튼 비활성화
 const updateLatestBtnClass = () => {
 	sort_latest.classList.remove('btn', 'btn-dark')
 	sort_latest.classList.add('active', 'btn', 'btn-dark')
@@ -296,39 +310,13 @@ const updateLatestBtnClass = () => {
 	sort_hit.classList.add('btn')
 }
 
+	// 최신순 버튼 비활성화, 조회순 버튼 활성화
 const updateHitBtnClass = () => {
 	sort_hit.classList.remove('btn', 'btn-dark')
 	sort_hit.classList.add('active', 'btn', 'btn-dark')
 	
 	sort_latest.classList.remove('btn', 'btn-dark', 'active')
 	sort_latest.classList.add('btn')
-}
-
-	// 현재 위치한 페이지 정렬
-const sort = (type) => {
-	let page = paging
-	let gubun = searchGubun
-	let text = searchText
-	
-	$.ajax({
-		type: "get",
-		data: {
-			page: page,
-			searchGubun: gubun,
-			searchText: text,
-			sortType: type
-		},
-		url: "/board/paging/ajax",
-		dataType: "json",
-		success: function(data){
-			let pagingList = data["sort_hitPagingList"]
-            let paging = data["pageDto"]
-			updateSortedByHits(pagingList, paging)
-		},
-		error: function(error){
-			console.error("sort_hit fail", error)
-		}
-	})
 }
 
 /* Date 객체를 "YYYY-MM-DD" 형식의 문자열로 변환
@@ -358,7 +346,7 @@ const updateSortedByHits = (pagingList, paging) => {
 						<div class="post-bName">${dto.unickName}</div>
 						<div class="post-bTitle">${dto.bTitle}</div>
 						<footer>
-							<div class="create-date">${dto.bDate}</div>
+							<div class="create-date">${formattedDate}</div>
 							<div class="icons">
 								<div class="views"><i class="ion-eye"></i>${dto.bHit}</div>
 								<div class="love"><i class="ion-heart"></i>${dto.bLike}</div>
@@ -376,12 +364,40 @@ const updateSortedByHits = (pagingList, paging) => {
 	updateBoardCards()
 }
 
+/* 게시글 정렬 AJAX 요청 및 목록 업데이트
+================================================== */
+const sort = (type) => {
+	let page = paging
+	let gubun = searchGubun
+	let text = searchText
+	
+	$.ajax({
+		type: "get",
+		data: {
+			page: page,
+			searchGubun: gubun,
+			searchText: text,
+			sortType: type
+		},
+		url: "/board/paging/ajax",
+		dataType: "json",
+		success: function(data){
+			let pagingList = data["sort_hitPagingList"]
+            let paging = data["pageDto"]
+			updateSortedByHits(pagingList, paging)
+		},
+		error: function(error){
+			console.error("sort_hit fail", error)
+		}
+	})
+}
+
 /* 페이징
 ================================================== */
 const pagination = (paging) => {
 	let output = `<nav><ul class="pagination justify-content-center">`
 	
-	// Previous 버튼 추가
+	// 이전 버튼: 현재 페이지가 1이면 비활성화, 아니면 이전 또는 5페이지 전으로 이동
 	if(paging.page <= 1){
 		output += `<li class="page-item"></li>`
 	} else {
@@ -392,7 +408,7 @@ const pagination = (paging) => {
 		output += `<li class="page-item">${previousPageLink}</li>`
 	}
 	
-	// 페이지번호 추가 및 링크 생성
+	// 페이지 번호 버튼 생성
 	for(let i = paging.startPage; i <= paging.endPage; i++){
 	    let pagingLink = (i == paging.page) ? 
 	    	`<span class="page-link" style="background-color: #ad9f94; pointer-events: none;">${i}</span>` :
@@ -401,9 +417,10 @@ const pagination = (paging) => {
 	    output += `<li class="page-item">${pagingLink}</li>`
 	}
 	
-	// Next 버튼 추가
+	// 다음 버튼: 현재 페이지가 최대 페이지면 비활성화, 아니면 다음 또는 5페이지 후로 이동
 	if(paging.page >= paging.maxPage){
-		paginationOutput += `<li class="page-item"></li>`
+		output += `<li class="page-item"></li>`
+		// paginationOutput += `<li class="page-item"></li>`
 	} else {
 		let nextPageLink = (paging.page + 5 >= paging.maxPage) ? 
 			`<a class="page-link" href="/board/paging?page=${paging.maxPage}"> > </a>` :
@@ -416,7 +433,9 @@ const pagination = (paging) => {
 
 const badge = document.querySelector(".badge")
 
-// 게시글 이미지
+/* 게시글의 첫 번째 이미지 추출하여 카드에 표시,
+   첫 번째 이미지가 없으면 기본 이미지로 대체
+================================================== */
 const updateBoardCards = () => {
 	const boardCards = document.querySelectorAll('.image')
 	boardCards.forEach(function (card) {
@@ -429,13 +448,16 @@ const updateBoardCards = () => {
 			const imageSrc = firstImg.src
 			card.innerHTML = `<img src="${imageSrc}" alt="image"/>`
 		} else {
-			//card.innerHTML = '<img src="https://buly.kr/1RDn8CU" alt="image">' // 기본 설정 이미지 있음
+			// 기본 이미지
 			card.innerHTML = '<img src="https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&dpr=1&w=1000" alt="image">' // 기본 설정 이미지 없음 
 		}
 	})
 }
 
 /* 페이지 로드 시 실행될 함수
+   - 자동 팝업 표시
+   - 게시글 카드 이미지 표시
+   - 현재 위치 기반 날씨 정보 가져오기
 ================================================== */
 showAutoPopup()
 updateBoardCards()
