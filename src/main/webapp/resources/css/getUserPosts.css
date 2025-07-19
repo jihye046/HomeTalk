@@ -151,8 +151,8 @@
 
 	/* '작성자' 열 */
 .my-posts-table tbody td:nth-child(2) {
-    width: 7rem;
-    text-align: left;
+    width: 10rem;
+/*     text-align: left; */
 }
 
 	/* '제목' 열 */
