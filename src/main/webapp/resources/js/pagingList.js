@@ -331,11 +331,24 @@ const sort = (type) => {
 	})
 }
 
+/* Date 객체를 "YYYY-MM-DD" 형식의 문자열로 변환
+================================================== */
+const formatDate = (timestamp) => {
+	const year = timestamp.getFullYear()
+	const month = String(timestamp.getMonth() + 1).padStart(2, '0')
+	const day = String(timestamp.getDate()).padStart(2, '0')
+	
+	return `${year}-${month}-${day}`
+}
+
+/* 정렬 후 게시글 목록 업데이트
+================================================== */
 const updateSortedByHits = (pagingList, paging) => {
 	const hitContainer = document.querySelector("#hitContainer")
 	hitContainer.innerHTML = ''
 	let tableOutput = `<div class="card-container">`
 	pagingList.forEach(function(dto){
+		const formattedDate = formatDate(new Date(dto.bDate))
 		tableOutput +=
 	  		`
 	  			<figure class="snip1518 hover">

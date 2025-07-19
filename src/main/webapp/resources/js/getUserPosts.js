@@ -5,11 +5,23 @@ const searchBox = document.querySelector("#searchOption")
 const searchInput = document.querySelector("#searchInput")
 let sortType = ''
 
+/* Date 객체를 "YYYY-MM-DD" 형식의 문자열로 변환
+================================================== */
+const formatDate = (timestamp) => {
+	const year = timestamp.getFullYear()
+	const month = String(timestamp.getMonth() + 1).padStart(2, '0')
+	const day = String(timestamp.getDate()).padStart(2, '0')
+	
+	return `${year}-${month}-${day}`
+}
+
 /* 정렬 후 게시글 목록 업데이트
 ================================================== */
 const updatePostList = (list) => {
     let output = ''
+    
     list.forEach((dto, index) => {
+        const formattedDate = formatDate(new Date(dto.bDate))
         output += `
             <tr>
                 <td>${index + 1}</td>
@@ -24,7 +36,7 @@ const updatePostList = (list) => {
                     <i class="fa-regular fa-comment-dots"></i> 
                     <span class="commentCount">${dto.commentCount}</span>
                 </td>
-                <td>${dto.bDate}</td>
+                <td>${formattedDate}</td>
                 <td>${dto.bHit}</td>
             </tr>
         `
