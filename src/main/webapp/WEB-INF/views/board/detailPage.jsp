@@ -369,7 +369,7 @@
 	<div class="hidden-data" id="updateResult" data-update-result="${updateResult}"></div>
 	<div class="hidden-data" id="bId" data-bId="${dto.bId}"></div>
 	<div class="hidden-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
-	<div class="hidden-data" id="bContent" data-bContent='${dto.bContent}'></div>
+	<div class="hidden-data" id="bContent" data-bContent="<c:out value='${dto.bContent}'/>"></div>
 	<div class="hidden-data" id="isLiked" data-isLiked="${isLiked}"></div>
 	<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
 	<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
