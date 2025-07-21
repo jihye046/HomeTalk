@@ -237,5 +237,9 @@ window.connect2 = (roomId, otherUserId, userId) => {
 			}
 		}
 		msg.addEventListener('keydown', window.handleKeyDown)
+		msg.addEventListener('input', () => {
+			msg.style.height = 'auto'
+			msg.style.height = msg.scrollHeight + 'px'
+		})
 	}
 }

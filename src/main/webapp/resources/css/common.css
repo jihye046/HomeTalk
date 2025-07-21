@@ -1110,6 +1110,9 @@ body.dark .logo img {
 	border-radius: 20px;
 	border: 1px solid #EAEDEF;
 	padding: 6px;
+	resize: none;
+	overflow-y: auto;
+	max-height: 150px; /* 4~5줄 정도까지만 커지고 이후 스크롤 */
 }
 
 #msg:focus {

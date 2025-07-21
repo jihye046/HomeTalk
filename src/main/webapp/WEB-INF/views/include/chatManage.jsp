@@ -27,8 +27,8 @@
 	            <div id="header"></div>
 				<div id="dateDisplay"></div>
 				<div id="chatList"></div>
-				<!-- <input type="text" id="msg" placeholder = "메시지를 입력하세요." onkeydown="handleKeyDown(event)"> -->
-				<input type="text" id="msg" placeholder = "메시지를 입력하세요." >
+<!-- 				<input type="text" id="msg" placeholder = "메시지를 입력하세요." > -->
+				<textarea id="msg" placeholder = "메시지를 입력하세요." rows="1"></textarea>
 	        </div>
         </div>
     </div>

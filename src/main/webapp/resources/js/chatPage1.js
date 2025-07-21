@@ -249,6 +249,10 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 		}
 		// 새로운 리스너 연결
 		msg.addEventListener('keydown', window.handleKeyDown)
+		msg.addEventListener('input', () => {
+			msg.style.height = 'auto'
+			msg.style.height = msg.scrollHeight + 'px'
+		})
 	}
 }
 
