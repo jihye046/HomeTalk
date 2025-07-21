@@ -165,7 +165,7 @@ public class SocialService implements ISocialService {
 			URL url = new URL(googleLoginRequestDto.getOauthBaseUri() + type);
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Authorization", "Bearer" + token.getAccess_token());
+			connection.setRequestProperty("Authorization", "Bearer " + token.getAccess_token());
 			return readResponse(connection);
 		} catch (Exception e) {
 			e.printStackTrace();
