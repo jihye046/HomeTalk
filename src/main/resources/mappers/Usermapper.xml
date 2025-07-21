@@ -90,6 +90,7 @@
 		  JOIN mvc_like6 l ON b.bId = l.bId
 		  JOIN mvc_login6 u ON b.bName = u.userId
 		 WHERE l.userId = #{userId}
+		   AND bStep = 0 
 		 ORDER BY b.bId DESC
 	</select>
 	
