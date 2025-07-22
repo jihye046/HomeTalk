@@ -2,6 +2,7 @@
 ================================================== */
 let chatList = document.querySelector("#chatList")
 const path = document.querySelector("#contextPath").getAttribute("data-context-path")
+let ws = null
 
 /* 오늘 일자 표시
 ================================================== */
@@ -134,14 +135,16 @@ const print = (name, msg, side, state, time) => {
 
 /* 웹소캣
 ================================================== */
-// let ws = ''
-let ws = null
 window.connect2 = (roomId, otherUserId, userId) => {
 	const msg = document.querySelector("#msg")
 	const serverUrl = document.querySelector("#serverUrl").getAttribute("data-serverUrl")
 	const unickName = document.querySelector("#userNickname").getAttribute("data-userNickname") // 로그인 사용자 닉네임
 
 	window.name = userId
+
+	if(ws && (ws.readyState == WebSocket.CONNECTING || ws.readyState == WebSocket.OPEN)){
+		disconnect()
+	}
 	
 	if(!ws || ws.readyState == WebSocket.CLOSED) {
 		ws = new WebSocket(serverUrl)
@@ -178,7 +181,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 
 				displayDate()
 			} else if (message.code == '2') {
-				print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
+				// print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
 
 				/* 입력창 비활성화 */
 				// msg.disabled = true
@@ -204,38 +207,56 @@ window.connect2 = (roomId, otherUserId, userId) => {
 			}, 3000)
 		}
 
+		// 기존 웹소캣에 연결된 리스너를 지움
+		msg.removeEventListener('keydown', window.handleKeyDown)
+
 		// 메시지 전송
 		window.handleKeyDown = (event) => {
 			if(event.key === 'Enter') {
-				let message = {
-					code: '3',
-					roomId: roomId,
-					sender: window.name,
-					receiver: otherUserId,
-					content: msg.value,
-					regdate: displayDate(),
-					regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
-				}
+				event.preventDefault()
 
-				if(msg.value.startsWith('/')) {
-					message.code = '4'
-				}
-
-				if(ws && ws.readyState == WebSocket.OPEN){
-					ws.send(JSON.stringify(message))
-					msg.value = ''
-					msg.focus()
-
-					if(message.code == '3') {
-						print(unickName, message.content, 'me', 'msg', message.regTime)	
-					} else if(message.code == '4') {
-						printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+				if(msg.value != null || msg.value != ""){
+					let message = {
+						code: '3',
+						roomId: roomId,
+						sender: window.name,
+						receiver: otherUserId,
+						content: msg.value,
+						regdate: displayDate(),
+						regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
 					}
-				} else {
-					log("메시지를 보낼 수 없습니다. 웹소캣이 열려있지 않습니다.")
+
+					if(msg.value.startsWith('/')) {
+						message.code = '4'
+					}
+
+					if(ws && ws.readyState == WebSocket.OPEN){
+						ws.send(JSON.stringify(message))
+
+						// 메시지 전송 후 입력창 초기화
+						msg.value = ''
+						msg.style.height = 'auto' // 메시지 입력창 높이 초기화
+						msg.style.height = msg.scrollHeight + 'px'
+						msg.focus()
+
+						if(message.code == '3') {
+							print(unickName, message.content, 'me', 'msg', message.regTime)	
+						} else if(message.code == '4') {
+							printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+						}
+					} else {
+						log("메시지를 보낼 수 없습니다. 웹소캣이 열려있지 않습니다.")
+					}
 				}
 			}
 		}
+		// 새로운 리스너 연결
 		msg.addEventListener('keydown', window.handleKeyDown)
+
+		// "입력 중"의 입력창 높이 동적 조절
+		msg.addEventListener('input', () => {
+			msg.style.height = 'auto'
+			msg.style.height = msg.scrollHeight + 'px'
+		})
 	}
 }

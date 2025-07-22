@@ -10,8 +10,7 @@
 		<div id="header"><small>${unickName}님과의 대화방</small></div>
 		<div id="dateDisplay"></div>
 		<div id="chatList"></div>
-<!--  		<input type="text" id="msg" placeholder = "대화 내용을 입력하세요." onkeydown="handleKeyDown(event)"> -->
- 		<input type="text" id="msg" placeholder = "대화 내용을 입력하세요.">
+ 		<textarea id="msg" placeholder = "메시지를 입력하세요." rows="1" maxlength="2000"></textarea>
 	</div>
 	
 	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>

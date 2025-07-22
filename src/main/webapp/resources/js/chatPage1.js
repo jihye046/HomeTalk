@@ -5,7 +5,7 @@ let roomList = document.querySelector("#roomList")
 let chatRecords = document.querySelector(".chat-records")
 const searchTextInput = document.querySelector("#searchTextInput")
 const path = document.querySelector("#contextPath").getAttribute("data-context-path")
-let ws = ''
+let ws = null
 
 /* 채팅 아이콘 - 안읽은 메시지 총 개수
 ================================================== */
@@ -216,8 +216,9 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 		// 메시지 전송 이벤트 핸들러
 		window.handleKeyDown = (event) => {
 			if(event.key === 'Enter') {
-				if(msg.value != null || msg.value != ""){
+				event.preventDefault()
 
+				if(msg.value != null || msg.value != ""){
 					let message = {
 						code: '3',
 						roomId: roomId,
@@ -232,23 +233,36 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 						message.code = '4'
 					}
 
-					ws.send(JSON.stringify(message))
-					msg.value = ''
-					msg.focus()
+					if(ws && ws.readyState == WebSocket.OPEN){
+						ws.send(JSON.stringify(message))
 
-					if(message.code == '3') {
-						// print(window.name, message.content, 'me', 'msg', message.regTime)	
-						print(unickName, message.content, 'me', 'msg', message.regTime)	
-					} else if(message.code == '4') {
-						// printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
-						printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+						// 메시지 전송 후 입력창 초기화
+						msg.value = ''
+						msg.style.height = 'auto'
+						msg.style.height = msg.scrollHeight + 'px'
+						msg.focus()
+
+						if(message.code == '3') {
+							// print(window.name, message.content, 'me', 'msg', message.regTime)	
+							print(unickName, message.content, 'me', 'msg', message.regTime)	
+						} else if(message.code == '4') {
+							// printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
+							printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+						}
+					} else {
+						log("메시지를 보낼 수 없습니다. 웹소캣이 열려있지 않습니다.")
 					}
-
 				}
 			}
 		}
 		// 새로운 리스너 연결
 		msg.addEventListener('keydown', window.handleKeyDown)
+
+		// "입력 중"의 입력창 높이 동적 조절
+		msg.addEventListener('input', () => {
+			msg.style.height = 'auto'
+			msg.style.height = msg.scrollHeight + 'px'
+		})
 	}
 }
 

@@ -1014,10 +1014,10 @@ body.dark .logo img {
     font-weight: bold;
 }
 
-.chat-room .last-message {
-    font-size: 12px;
-    color: #777;
-}
+/* .chat-room .last-message { */
+/*     font-size: 12px; */
+/*     color: #777; */
+/* } */
 
 .chat-room .chat-time {
     font-size: 10px;
@@ -1108,8 +1108,11 @@ body.dark .logo img {
     margin-bottom: 1rem;
 	width: 100%;
 	border-radius: 20px;
-	border: 1px solid #EAEDEF;
 	padding: 6px;
+	resize: none;
+	overflow-y: auto;
+	min-height: 40px;
+	max-height: 150px; /* 4~5줄 정도까지만 커지고 이후 스크롤 */
 }
 
 #msg:focus {
