@@ -2,6 +2,8 @@ package com.my.ex.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -271,31 +275,27 @@ public class UserController {
 	public void getProfileFilename(@PathVariable String bName) {
 		System.out.println("getProfileFilename 호출");
 		System.out.println("bName: " + bName);
-//		String filename = service.getProfileFilename(bName);
-//		return filename;
 	}
 	
 	// 프로필 이미지 파일 서빙
 	@RequestMapping("/getProfileImage/{filename:.+}")
 	@ResponseBody
 	public Resource getProfileImage(@PathVariable String filename) {
-//		String uploadDir = "C:\\server_program\\profileImgTest\\";
 		String uploadDir = environmentService.getProfileUploadPath();
 		File file = new File(uploadDir, filename);
 		
 		if (file.exists()) {
 			return new FileSystemResource(file); // file자체를 보내는 것은 X, HTTP 본문 응답으로 자동 변환해주는 API(FileSystemResource())를 이용해서 보내야 함
 		} else {
-			throw new RuntimeException("File not found");
+			throw new RuntimeException("File not found: " + file.getAbsolutePath());
 		}
 	}
 	
 	// 파일 저장
 	private String saveProfileImage(MultipartFile profileImage, String userId) throws IOException {
 		// 파일 저장 경로 설정
-//		String uploadDir = "C:\\server_program\\profileImgTest\\";
 		String uploadDir = environmentService.getProfileUploadPath();
-		String filename = userId + "_" + profileImage.getOriginalFilename();
+		String filename = userId + "_" + profileImage.getOriginalFilename().trim().replace(" ", "_"); 
 		File fileToSave = new File(uploadDir, filename);
 		
 		// 파일 저장
