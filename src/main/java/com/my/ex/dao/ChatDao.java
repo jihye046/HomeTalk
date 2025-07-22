@@ -32,11 +32,6 @@ public class ChatDao implements IChatDao {
 	}
 
 	@Override
-	public MessageDto getLastMessage(Map<String, String> map) {
-		return session.selectOne(NAMESPACE + "getLastMessage", map);
-	}
-
-	@Override
 	public String getReceiver(Map<String, String> map) {
 		return session.selectOne(NAMESPACE + "getReceiver", map);
 	}
@@ -49,6 +44,11 @@ public class ChatDao implements IChatDao {
 	@Override
 	public void setIsRead(Map<String, String> map) {
 		session.update(NAMESPACE + "setIsRead", map);
+	}
+
+	@Override
+	public List<MessageDto> getLastMessagesByUserId(Map<String, String> map) {
+		return session.selectList(NAMESPACE + "getLastMessagesByUserId", map);
 	}
 
 }

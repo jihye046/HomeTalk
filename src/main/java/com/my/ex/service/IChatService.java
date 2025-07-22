@@ -9,8 +9,8 @@ public interface IChatService {
 	int getUnreadMessageTotalCount(String receiver);
 	List<MessageDto> getChatHistory(String roomId);
 	List<String> getRoomId(String userId);
-	MessageDto getLastMessage(String roomId, String searchText);
 	String getReceiver(String roomId, String userId, String sender);
 	int getUnreadMessageCount(String roomId, String userId);
 	void setIsRead(Map<String, String> map);
+	List<MessageDto> getLastMessagesByUserId(String userId, String searchText);
 }
