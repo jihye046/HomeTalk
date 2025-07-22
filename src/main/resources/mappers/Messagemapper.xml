@@ -3,6 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.my.ex.MessageMapper">
+	<resultMap id="messageResultMap" type="MessageDto">
+	    <result property="roomId" column="room_id"/>
+	</resultMap>
 
 	<select id="findRoomId" parameterType="java.util.HashMap" resultType="String">
 		SELECT DISTINCT room_Id
@@ -18,23 +21,29 @@
 		    OR receiver = #{userId}
 	</select>
 	
-	<!-- 마지막 대화 내용 조회 -->
-	<select id="getLastMessage" parameterType="java.util.HashMap" resultType="MessageDto">
+	<!-- 채팅방 목록에 표시할 마지막 메시지(요약용)를 각 채팅방별로 가져옴 -->
+	<select id="getLastMessagesByUserId" parameterType="java.util.HashMap" resultMap="messageResultMap">
 		SELECT *
 		  FROM (
-		       SELECT DISTINCT *
-		         FROM mvc_chat6
-		        WHERE room_id = #{roomId}
-		        <if test="searchText != null and searchText != ''">
-		        	AND (
-						content LIKE '%' || #{searchText} || '%'
-						OR receiver LIKE '%' || #{searchText} || '%'
-						OR sender LIKE '%' || #{searchText} || '%'		        	
-		        	)
-		        </if>
-		     ORDER BY message_id DESC
-          )
-		 WHERE ROWNUM = 1
+		     SELECT 
+		     	m.*,
+		        ROW_NUMBER() OVER (PARTITION BY room_id ORDER BY regdate DESC, regtime DESC) AS rn
+		       FROM mvc_chat6 m
+		      WHERE m.room_id IN (
+		      	  SELECT room_id
+		      		FROM mvc_chat6
+		      	   WHERE sender = #{userId} OR receiver = #{userId}
+		      )
+		      <if test="searchText != null and searchText != ''">
+		          AND (
+			  		  content LIKE '%' || #{searchText} || '%'
+					  OR receiver LIKE '%' || #{searchText} || '%'
+					  OR sender LIKE '%' || #{searchText} || '%'		        	
+		          )
+	          </if>
+		   )
+		 WHERE rn = 1
+		 ORDER BY regdate DESC, regtime DESC
 	</select>
 	
 	<!-- 대화 상대방이 누군지 조회 -->
@@ -104,15 +113,7 @@
 			)
 	</insert>
 	
-	<!-- 과거 대화내용 불러오기 -->
-	<select id="getPastMessages1" resultType="MessageDto">
-		SELECT *
-		  FROM mvc_chat6
-		 WHERE room_id = #{roomId}
-	  ORDER BY message_id  
-	</select>
-	
-	<!-- 과거 대화내용 불러오기 -->
+	<!-- 특정 채팅방의 이전 채팅 내역(스크롤로 불러오기 등)을 가져오기 -->
 	<select id="getPastMessages" resultType="MessageDto">
 		SELECT 
 			c.*,

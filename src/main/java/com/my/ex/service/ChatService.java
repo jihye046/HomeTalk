@@ -32,14 +32,6 @@ public class ChatService implements IChatService {
 	}
 
 	@Override
-	public MessageDto getLastMessage(String roomId, String searchText) {
-		Map<String, String> map = new HashMap<>();
-		map.put("roomId", roomId);
-		map.put("searchText", searchText);
-		return dao.getLastMessage(map);
-	}
-
-	@Override
 	public String getReceiver(String roomId, String userId, String sender) {
 		Map<String, String> map = new HashMap<>();
 		map.put("roomId", roomId);
@@ -61,6 +53,15 @@ public class ChatService implements IChatService {
 	@Override
 	public void setIsRead(Map<String, String> map) {
 		dao.setIsRead(map);
+	}
+
+	@Override
+	public List<MessageDto> getLastMessagesByUserId(String userId, String searchText) {
+		Map<String, String>map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("searchText", searchText);
+		
+		return dao.getLastMessagesByUserId(map);
 	}
 
 }
