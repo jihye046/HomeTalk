@@ -223,17 +223,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 				
 				// 상대방으로부터 받은 메시지를 읽은 경우 서버에 '읽음' 상태 업데이트 요청
 				// 이 요청이 성공하면 서버가 Sender에게 code:'5'를 보내게 됨
-				if(!isMyMessage){
-					// 상대방이 보낸 메시지인 경우
-					if (message.code == '3') {
-						print(message.senderUnickname, message.content, side, 'msg', 
-							message.regTime, message.isRead, message.messageId, message.roomId)
-					} else if (message.code == '4') {
-						printEmotion(message.senderUnickname, message.content, side, 'msg', 
-							message.regTime, message.isRead, message.messageId, message.roomId)
-					}
-					updateReadStatusInDB(roomId, userId)
-				} else {
+				if(isMyMessage){
 					// 내가 보낸 메시지인 경우
 					if(message.messageId != -1 && message.messageId != null){
 						// 1. 이전에 -1로 표시했던 임시 메시지를 찾아서 삭제
@@ -243,6 +233,19 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 							`.item.me[data-temp-marker="-1"][data-room-id="${roomId}"]:last-child`
 						) // 임시 메시지를 찾음('1' 표시된 메시지)
 
+						if(tempMessageElement){
+							tempMessageElement.remove()
+						}
+
+						if(message.code == '3'){
+							print(message.senderUnickname, message.content, side, 'msg', 
+								message.regTime, message.isRead, message.messageId, message.roomId)	
+						} else if(message.code == '4'){
+							printEmoticon(message.senderUnickname, message.content, side, 'msg', 
+								message.regTime, message.isRead, message.messageId, message.roomId)
+						}
+
+						/* 
 						if(message.isRead == 'N'){
 							// 메시지를 안 읽었으면 임시 메시지('1'표시된 메시지) 삭제하지 않음
 							// 새로운 print('1' 해제된 메시지 그림) 호출하지 않음
@@ -254,13 +257,24 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 								print(message.senderUnickname, message.content, side, 'msg', 
 									message.regTime, message.isRead, message.messageId, message.roomId)	
 							} else if(message.code == '4'){
-								printEmotion(message.senderUnickname, message.content, side, 'msg', 
+								printEmoticon(message.senderUnickname, message.content, side, 'msg', 
 									message.regTime, message.isRead, message.messageId, message.roomId)
 							}
 						}
+						*/
 					} else {
 						console.warn(`서버에서 받은 메시지의 ID가 유효하지 않습니다. messageId: ${message.messageId}`)
 					}
+				} else {
+					// 상대방이 보낸 메시지인 경우
+					if (message.code == '3') {
+						print(message.senderUnickname, message.content, side, 'msg', 
+							message.regTime, message.isRead, message.messageId, message.roomId)
+					} else if (message.code == '4') {
+						printEmoticon(message.senderUnickname, message.content, side, 'msg', 
+							message.regTime, message.isRead, message.messageId, message.roomId)
+					}
+					updateReadStatusInDB(roomId, userId)
 				}
 				scrollList()
 			}
@@ -323,7 +337,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 							print(unickName, message.content, 'me', 'msg', 
 								message.regTime, 'N', -1, roomId)	
 						} else if(message.code == '4') {
-							printEmotion(unickName, '고양이', 'me', 'msg', 
+							printEmoticon(unickName, '고양이', 'me', 'msg', 
 								message.regTime, 'N', -1, roomId)	
 						}
 					} else {
@@ -575,23 +589,30 @@ const print = (name, msg, side, state, time, isReadStatus, messageId, roomId) =>
 
 /* 이모티콘 출력
 ================================================== */
-const printEmotion = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
+const printEmoticon = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
 	let displayOne = false
 	if(side == 'me' && isReadStatus == 'N'){
 		displayOne = true
 	}
 
 	let dataAttrs = ''
-	if(messageId) dataAttrs += `data-message-id="${messageId}"`
-	if(roomId) dataAttrs += `data-room-id="${roomId}"`
+	if(messageId != -1 && messageId != null){
+		dataAttrs += `data-message-id="${messageId}"`
+	} 
+	if(roomId) {
+		dataAttrs += ` data-room-id="${roomId}"`
+	}
+	if(messageId == -1){
+		dataAttrs += ` data-temp-marker="${messageId}"`
+	}
 
 	let temp = 
 	`
-		<div class="item ${state} ${side} ${dataAttrs}">
+		<div class="item ${state} ${side}" ${dataAttrs}">
 			<div>
 				<div>${name}</div>
 				<div style="background-color:#fff; border:0;">
-					<img src="${path}/resources/images/emoticon/${msg}.png">
+					<img src="${path}/chat/getEmoticonImage/${msg}.png">
 				</div>
 			</div>
 			<div class="message-time-wrapper">

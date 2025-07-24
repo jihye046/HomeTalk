@@ -6,6 +6,7 @@
 	<resultMap id="messageResultMap" type="MessageDto">
 	    <result property="roomId" column="room_id"/>
 	    <result property="isRead" column="is_read"/>
+	    <result property="messageId" column="message_id"/>
 	</resultMap>
 
 	<select id="findRoomId" parameterType="java.util.HashMap" resultType="String">
@@ -101,10 +102,10 @@
 	
 	<!-- 메시지 전송한 경우 -->
 	<insert id="saveMessage" parameterType="MessageDto">
-		<selectKey keyProperty="messageId" resultType="Integer" order="BEFORE" >
-			SELECT seq_mvc_chat6.NEXTVAL
-			  FROM DUAL
-		</selectKey>
+		<selectKey keyProperty="messageId,isRead" resultType="MessageDto" order="AFTER">
+	        SELECT seq_mvc_chat6.CURRVAL AS message_id, 'N' AS is_read
+	        FROM DUAL
+	    </selectKey>
 		INSERT INTO mvc_chat6
 			(
 			message_id,

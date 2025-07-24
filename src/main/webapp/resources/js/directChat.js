@@ -76,19 +76,28 @@ const disconnect = () => {
 
 /* 이모티콘 출력
 ================================================== */
-const printEmotion = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
+const printEmoticon = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
 	let displayOne = false
 	if(side == 'me' && isReadStatus == 'N'){
 		displayOne = true
 	}
 
 	let dataAttrs = ''
-	if(messageId) dataAttrs += `data-message-id="${messageId}"`
-	if(roomId) dataAttrs += `data-room-id="${roomId}"`
+	if(messageId != -1 && messageId != null){
+		dataAttrs += `data-message-id="${messageId}"`
+	} 
+	if(roomId) {
+		dataAttrs += ` data-room-id="${roomId}"`
+	}
+	if(messageId == -1){
+		dataAttrs += ` data-temp-marker="${messageId}"`
+	}
+	// if(messageId) dataAttrs += `data-message-id="${messageId}"`
+	// if(roomId) dataAttrs += `data-room-id="${roomId}"`
 
 	let temp = 
 	`
-		<div class="item ${state} ${side} ${dataAttrs}">
+		<div class="item ${state} ${side}" ${dataAttrs}">
 			<div>
 				<div>${name}</div>
 				<div style="background-color:#fff; border:0;">
@@ -254,7 +263,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 						print(message.senderUnickname, message.content, side, 'msg', 
 							message.regTime, message.isRead, message.messageId, message.roomId)
 					} else if(message.code == '4'){
-						printEmotion(message.senderUnickname, message.content, side, 'msg', 
+						printEmoticon(message.senderUnickname, message.content, side, 'msg', 
 							message.regTime, message.isRead, message.messageId, message.roomId)
 					}
 					updateReadStatusInDB(roomId, userId)
@@ -271,7 +280,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 								print(message.senderUnickname, message.content, side, 'msg', 
 									message.regTime, message.isRead, message.messageId, message.roomId)	
 							} else if(message.code == '4'){
-								printEmotion(message.senderUnickname, message.content, side, 'msg', 
+								printEmoticon(message.senderUnickname, message.content, side, 'msg', 
 									message.regTime, message.isRead, message.messageId, message.roomId)
 							}
 						}
@@ -283,7 +292,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 				// print(message.senderUnickname, message.content, 'other', 'msg', message.regTime)	
 			} 
 			// else if (message.code == '4') {
-			// 	printEmotion(message.sender, message.content, 'other', 'msg', message.regTime)
+			// 	printEmoticon(message.sender, message.content, 'other', 'msg', message.regTime)
 			// }
 
 			else if(message.code == '5'){
@@ -337,7 +346,7 @@ window.connect2 = (roomId, otherUserId, userId) => {
 							print(unickName, message.content, 'me', 'msg', 
 								message.regTime, 'N', -1, roomId)
 						} else if(message.code == '4') {
-							printEmotion(unickName, '고양이', 'me', 'msg', 
+							printEmoticon(unickName, '고양이', 'me', 'msg', 
 								message.regTime, 'N', -1, roomId)
 						}
 					} else {
