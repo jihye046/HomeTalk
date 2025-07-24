@@ -41,7 +41,7 @@ const loadChatRooms = () => {
 const getRoomList = () => {
 	const userId = document.querySelector("#userId").getAttribute("data-userId")
 	
-	fetch(`/chat/getRoomList?userId=${userId}`)
+	fetch(`${path}/chat/getRoomList?userId=${userId}`)
 	.then(response => response.json())
 	.then(data => {
 		roomList.innerHTML = ''
@@ -71,7 +71,7 @@ const searchUser = () => {
 
 	roomList.innerHTML = ''		
 	if(searchText != '') {
-		fetch(`/chat/getRoomList?userId=${userId}&searchText=${searchText}`)
+		fetch(`${path}/chat/getRoomList?userId=${userId}&searchText=${searchText}`)
 		.then(response => response.json())
 		.then(data => {
 			data.rooms.forEach(chatRoomDto => {
@@ -103,14 +103,14 @@ const openChatRoom = (serverUrl) => {
 	document.querySelectorAll(".chat-room").forEach(room => {
 		room.addEventListener('click', function() {
 			const roomId = this.getAttribute('data-room-id')
-			const otherUserId = this.querySelector(".userNickname").textContent 					// 상대방 닉네임
+			const otherUserNickname = this.querySelector(".userNickname").textContent 				// 상대방 닉네임
 			const otherUser = this.querySelector(".otherUserId").getAttribute("data-otherUserId")   // 상대방 id
 			const imageUrl = this.querySelector("img").src 											// 상대방 프로필 이미지URL
 			const unreadBadge = this.querySelector(".message-badge")
 			const userId = document.querySelector("#userId").getAttribute("data-userId") 			// 본인 ID
 
 			hideUnreadBadge(unreadBadge, roomId, userId)
-			getChatHistory(roomId, imageUrl, otherUserId, userId)
+			getChatHistory(roomId, imageUrl, otherUserNickname, userId)
 			// connect2(roomId, otherUserId, userId)
 			connect2(serverUrl, roomId, otherUser, userId)
 		})
@@ -137,6 +137,41 @@ const disconnect = () => {
 	}
 }
 
+/* 화면에서 읽음 표시를 제거
+================================================== */
+const removeUnreadIndicator = (roomId) => {
+	// 특정 대화방(roomId)의 내가 보낸 메시지들 중 '1' 표시를 제거
+	const myMessagesInRoom = document.querySelectorAll(`.item.me[data-room-id="${roomId}"] .unread-indicator`)
+	myMessagesInRoom.forEach((indicator) => {
+		indicator.remove()
+	})
+}
+
+/* 서버에 읽음 상태를 업데이트
+================================================== */
+const updateReadStatusInDB = (roomId, userId) => {
+	fetch(`${path}/chat/setIsRead`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			roomId: roomId,
+			receiver: userId
+		})
+	})
+	.then((response) => {
+		if(response.ok){
+			// console.log(`${userId}님이 '${roomId}' 대화방의 메시지를 읽었습니다.`)
+		} else {
+			console.error('failed to update')
+		}
+	})
+	.catch(error => {
+		console.error('error: ', error)
+	})	
+}
+
 /* 웹소캣
 ================================================== */
 const connect2 = (serverUrl, roomId, otherUserId, userId) => {
@@ -145,6 +180,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 
 	window.name = userId
 
+	// 이미 연결된 웹소켓이 있다면 먼저 끊음
 	if(ws && (ws.readyState == WebSocket.CONNECTING || ws.readyState == WebSocket.OPEN)){
 		disconnect()
 	}
@@ -172,45 +208,88 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 		// 서버로부터 수신한 메시지
 		ws.onmessage = (serverMsg) => {
 			let message = JSON.parse(serverMsg.data)
-			
-			if(message.code == '1') {
-				/*
-				if(message.sender == window.name) {
-					print(message.sender, message.content, 'me', 'msg', message.regTime)
-				} else {
-					print(message.sender, message.content, 'other', 'msg', message.regTime)	
-				}
-				*/
 
+			// 일반 메시지 처리(code: 1~4)
+			if(message.code == '1') {
+				// 연결 초기화 및 과거 메시지 수신
 				displayDate()
 			} else if (message.code == '2') {
-				// print('', `[${message.sender}]님이 나갔습니다.`, 'other', 'state', message.regTime)
+				// 유저 나감 알림
 				//print('', `[${message.senderUnickname}]님이 나갔습니다.`, 'other', 'state', message.regTime)
-
-				/* 입력창 비활성화 */
-				//msg.disabled = true
-				//msg.placeholder = '대화상대가 없습니다.'
-				//msg.style.backgroundColor = '#f0f0f0'
-			} else if (message.code == '3') {
-				if(message.sender == window.name) {
-					// print(message.sender, message.content, 'me', 'msg', message.regTime)
-					print(message.senderUnickname, message.content, 'me', 'msg', message.regTime)
+			} else if (message.code == '3' || message.code == '4') {
+				// 이 메시지는 서버에서 DB 저장 후 다시 모든 클라이언트(나 자신 포함)에게 보내진 것
+				const isMyMessage = (message.sender == userId)
+				const side = isMyMessage ? 'me' : 'other'
+				
+				// 상대방으로부터 받은 메시지를 읽은 경우 서버에 '읽음' 상태 업데이트 요청
+				// 이 요청이 성공하면 서버가 Sender에게 code:'5'를 보내게 됨
+				if(!isMyMessage){
+					// 상대방이 보낸 메시지인 경우
+					if (message.code == '3') {
+						print(message.senderUnickname, message.content, side, 'msg', 
+							message.regTime, message.isRead, message.messageId, message.roomId)
+					} else if (message.code == '4') {
+						printEmotion(message.senderUnickname, message.content, side, 'msg', 
+							message.regTime, message.isRead, message.messageId, message.roomId)
+					}
+					updateReadStatusInDB(roomId, userId)
 				} else {
-					// print(message.sender, message.content, 'other', 'msg', message.regTime)	
-					print(message.senderUnickname, message.content, 'other', 'msg', message.regTime)	
+					// 내가 보낸 메시지인 경우
+					if(message.messageId != -1 && message.messageId != null){
+						// 1. 이전에 -1로 표시했던 임시 메시지를 찾아서 삭제
+						// 현재 방(roomId)에서, 내가 보낸 (.item.me) 메시지 중 data-temp-marker="-1"을 가진 요소를 찾음
+						// 가장 최근에 보낸 메시지를 업데이트할 것이므로, 마지막 요소를 찾음
+						const tempMessageElement = chatList.querySelector(
+							`.item.me[data-temp-marker="-1"][data-room-id="${roomId}"]:last-child`
+						) // 임시 메시지를 찾음('1' 표시된 메시지)
+
+						if(message.isRead == 'N'){
+							// 메시지를 안 읽었으면 임시 메시지('1'표시된 메시지) 삭제하지 않음
+							// 새로운 print('1' 해제된 메시지 그림) 호출하지 않음
+						} else if(message.isRead == 'Y'){
+							// 메시지를 읽었으면 임시 메시지('1'표시된 메시지) 삭제함
+							// 새로운 print('1' 해제된 메시지 그림) 호출
+							tempMessageElement.remove()
+							if(message.code == '3'){
+								print(message.senderUnickname, message.content, side, 'msg', 
+									message.regTime, message.isRead, message.messageId, message.roomId)	
+							} else if(message.code == '4'){
+								printEmotion(message.senderUnickname, message.content, side, 'msg', 
+									message.regTime, message.isRead, message.messageId, message.roomId)
+							}
+						}
+					} else {
+						console.warn(`서버에서 받은 메시지의 ID가 유효하지 않습니다. messageId: ${message.messageId}`)
+					}
 				}
-			} else if (message.code == '4') {
-				printEmotion(message.sender, message.content, 'other', 'msg', message.regTime)
+				scrollList()
+			}
+			else if(message.code == '5'){
+				// 보낸 사람(Sender)이 받는 '읽음' 알림
+				// console.log("읽음 확인(코드 5) 수신", message) // roomId, code 수신
+				if(message.roomId == roomId){ // 현재 보고 있는 방의 알림이라면
+					removeUnreadIndicator(message.roomId) // 해당 방의 모든 '1' 표시 제거
+					getUnreadMessageTotalCount() // 전체 안 읽은 메시지 뱃지 업데이트
+				}
 			}
 		}
 
 		// 웹소캣 종료
-		window.addEventListener('beforeunload', function(event){
-			event.preventDefault()
-			disconnect()
-		})
+		ws.onclose = (event) => {
+			log(`웹소켓 연결 종료. 코드: ${event.code}, 이유: ${event.reason}`)
+			// 재연결 시도 로직 (3초 후 재연결)
+			if(event.code  != 1000){
+				// 정상 종료가 아닌 경우만 재연결 시도
+				setTimeout(() => {
+					connect2(serverUrl, roomId, otherUserId, userId)
+				}, 3000)
+			}
+		}
+		// window.addEventListener('beforeunload', function(event){
+		// 	event.preventDefault()
+		// })
 
-		// 기존 웹소캣에 연결된 리스너를 지움
+		// 기존 웹소캣 리스너 제거
 		msg.removeEventListener('keydown', window.handleKeyDown)
 
 		// 메시지 전송 이벤트 핸들러
@@ -218,19 +297,15 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 			if(event.key === 'Enter') {
 				event.preventDefault()
 
-				if(msg.value != null || msg.value != ""){
+				if(msg.value.trim() != ""){
 					let message = {
-						code: '3',
+						code: msg.value.startsWith('/') ? '4' : '3',
 						roomId: roomId,
 						sender: window.name,
 						receiver: otherUserId,
 						content: msg.value,
 						regdate: displayDate(),
 						regTime: new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"})
-					}
-
-					if(msg.value.startsWith('/')) {
-						message.code = '4'
 					}
 
 					if(ws && ws.readyState == WebSocket.OPEN){
@@ -241,13 +316,15 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 						msg.style.height = 'auto'
 						msg.style.height = msg.scrollHeight + 'px'
 						msg.focus()
-
+						
+						// 메시지를 보낸 직후 화면에 즉시 표시하고 '1'을 표시
+						// 이때 실제 messageId는 없으므로 null, 대신 tempMessageId를 전달합
 						if(message.code == '3') {
-							// print(window.name, message.content, 'me', 'msg', message.regTime)	
-							print(unickName, message.content, 'me', 'msg', message.regTime)	
+							print(unickName, message.content, 'me', 'msg', 
+								message.regTime, 'N', -1, roomId)	
 						} else if(message.code == '4') {
-							// printEmotion(window.name, '고양이', 'me', 'msg', message.regTime)	
-							printEmotion(unickName, '고양이', 'me', 'msg', message.regTime)	
+							printEmotion(unickName, '고양이', 'me', 'msg', 
+								message.regTime, 'N', -1, roomId)	
 						}
 					} else {
 						log("메시지를 보낼 수 없습니다. 웹소캣이 열려있지 않습니다.")
@@ -270,7 +347,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 ================================================== */
 const hideUnreadBadge = (unreadBadge, roomId, userId) => {
 	if(unreadBadge) {
-		fetch('/chat/setIsRead', {
+		fetch(`${path}/chat/setIsRead`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -296,28 +373,30 @@ const hideUnreadBadge = (unreadBadge, roomId, userId) => {
 
 /* 채팅방 내용 불러오기
 ================================================== */
-const getChatHistory = (roomId, imageUrl, otherUserId, userId) => {
-	fetch(`/chat/getChatHistory?roomId=${roomId}`)
-	.then(response => response.json())
-	.then(data => {
-		chatList.innerHTML = ''
-		document.querySelector('.chat-rooms').classList.add('shrink')
-		document.querySelector('.chat-records').classList.add('show')
+const getChatHistory = (roomId, imageUrl, otherUserNickname, userId) => {
+	fetch(`${path}/chat/getChatHistory?roomId=${roomId}`)
+		.then(response => response.json())
+		.then(data => {
+			chatList.innerHTML = ''
+			document.querySelector('.chat-rooms').classList.add('shrink')
+			document.querySelector('.chat-records').classList.add('show')
 
-		data.forEach(messageDto => {
-			if(messageDto.sender == userId) {
-				//print(messageDto.sender, messageDto.content, 'me', 'msg', messageDto.regTime)	
-				print(messageDto.senderUnickname, messageDto.content, 'me', 'msg', messageDto.regTime)	
-			} else {
-				// print(messageDto.sender, messageDto.content, 'other', 'msg', messageDto.regTime)
-				print(messageDto.senderUnickname, messageDto.content, 'other', 'msg', messageDto.regTime)
-			}
+			data.forEach(messageDto => {
+				if(messageDto.sender == userId) {
+					print(messageDto.senderUnickname, messageDto.content, 'me', 'msg',
+						messageDto.regTime, messageDto.isRead, messageDto.messageId, messageDto.roomId)	
+				} else {
+					print(messageDto.senderUnickname, messageDto.content, 'other', 'msg', 
+						messageDto.regTime, messageDto.isRead, messageDto.messageId, messageDto.roomId)
+				}
+			})
+			printHeader(imageUrl, otherUserNickname)
+			scrollList()
+			updateReadStatusInDB(roomId, userId)
 		})
-		printHeader(imageUrl, otherUserId)
-	})
-	.catch(error => {
-		console.error('error: ', error)
-	})
+		.catch(error => {
+			console.error('error: ', error)
+		})
 }
 
 /* 메시지 전송
@@ -374,13 +453,13 @@ const scrollList = () => {
 
 /* 채팅방 상대정보(header) 출력
 ================================================== */
-const printHeader = (uprofile_image, otherUserId) => {
+const printHeader = (uprofile_image, otherUserNickname) => {
 	const header = document.querySelector("#header")
 	header.innerHTML = 
 	`
 		<div class="header">
 			<img src=${uprofile_image} alt="image" class="user-avatar">
-			<span class="userNickname" data-userNickname="${otherUserId}">${otherUserId}</span>
+			<span class="userNickname" data-userNickname="${otherUserNickname}">${otherUserNickname}</span>
 		</div>
 	`
 }
@@ -425,7 +504,7 @@ const printRoomList = (chatRoomDto) => {
 		return
 	}
 	
-	printHeader(uprofile_image, otherUserId)
+	printHeader(uprofile_image, otherUserNickname)
 	scrollList()
 }
 
@@ -443,38 +522,94 @@ const printDate = (regdate) => {
         const div = document.createElement('div')
         div.innerHTML = temp
         chatList.append(div)
+		scrollList()
 	} else {
 		alert('chatList 찾을 수 없음')
 		return
 	}
-	
-	scrollList()
 }
 
 /* 채팅창 출력
 ================================================== */
-const print = (name, msg, side, state, time) => {
-	let temp = 
+const print = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
+	let displayOne = false
+	if(side == 'me' && isReadStatus == 'N'){ // 내가 보낸 메시지가 아직 안 읽혔을 때만 '1' 표시
+		displayOne = true
+	}
+
+	let dataAttrs = ''
+	if(messageId != -1 && messageId != null){
+		dataAttrs += `data-message-id="${messageId}"`
+	} 
+	if(roomId) {
+		dataAttrs += ` data-room-id="${roomId}"`
+	}
+	if(messageId == -1){
+		dataAttrs += ` data-temp-marker="${messageId}"`
+	}
+
+	let	temp =
 	`
-		<div class="item ${state} ${side}">
+		<div class="item ${state} ${side}" ${dataAttrs}">
 			<div>
 				<div>${name}</div>
 				<div>${msg}</div>
 			</div>
-			<div>${time}</div>
+			<div class="message-time-wrapper">
+				${displayOne ? `<span class="unread-indicator">1</span>` : ''}
+				<span>${time}</span>
+			</div>
 		</div>
 	`
-
+				
 	if(chatList) {
         const div = document.createElement('div')
         div.innerHTML = temp
         chatList.append(div)
+		scrollList()
 	} else {
 		alert('chatList 찾을 수 없음')
 		return
 	}
-	
-	scrollList()
+}
+
+/* 이모티콘 출력
+================================================== */
+const printEmotion = (name, msg, side, state, time, isReadStatus, messageId, roomId) => {
+	let displayOne = false
+	if(side == 'me' && isReadStatus == 'N'){
+		displayOne = true
+	}
+
+	let dataAttrs = ''
+	if(messageId) dataAttrs += `data-message-id="${messageId}"`
+	if(roomId) dataAttrs += `data-room-id="${roomId}"`
+
+	let temp = 
+	`
+		<div class="item ${state} ${side} ${dataAttrs}">
+			<div>
+				<div>${name}</div>
+				<div style="background-color:#fff; border:0;">
+					<img src="${path}/resources/images/emoticon/${msg}.png">
+				</div>
+			</div>
+			<div class="message-time-wrapper">
+				${displayOne ? `<span class="unread-indicator">1</span>` : ''}
+				<span>${time}</span>
+			</div>
+		</div>
+	`
+
+	if(chatList){
+		const div = document.createElement('div')
+        div.innerHTML = temp
+        chatList.append(div)
+		setTimeout(scrollList, 100)
+	} else {
+		alert('chatList 찾을 수 없음')
+		return
+	}
 }
 
 /* 오늘 일자 표시
@@ -498,33 +633,6 @@ window.displayDate = () => {
 ================================================== */
 const log = (msg) => {
     console.log(`[${new Date().toLocaleTimeString()}] ${msg}`)
-}
-
-/* 이모티콘 출력
-================================================== */
-const printEmotion = (name, msg, side, state, time) => {
-	let temp = 
-	`
-		<div class="item ${state} ${side}">
-			<div>
-				<div>${name}</div>
-				<div style="background-color:#fff; border:0;">
-					<img src="${path}/resources/images/emoticon/${msg}.png">
-				</div>
-				<div>${time}</div>
-			</div>
-		</div>
-	`
-
-	if(chatList){
-		const div = document.createElement('div')
-        div.innerHTML = temp
-        chatList.append(div)
-	} else {
-		alert('chatList 찾을 수 없음')
-		return
-	}
-	setTimeout(scrollList, 100)
 }
 
 /* 페이지 로드 시 실행될 함수

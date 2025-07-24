@@ -1,7 +1,9 @@
 package com.my.ex.dao;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,12 @@ public class ChatDao implements IChatDao {
 	@Override
 	public List<MessageDto> getLastMessagesByUserId(Map<String, String> map) {
 		return session.selectList(NAMESPACE + "getLastMessagesByUserId", map);
+	}
+
+	@Override
+	public Set<String> getUniqueSenderIdsOfUnreadMessages(Map<String, String> map) {
+		List<String> senderIdsList = session.selectList(NAMESPACE + "getUniqueSenderIdsOfUnreadMessages", map);
+		return new HashSet<>(senderIdsList);
 	}
 
 }

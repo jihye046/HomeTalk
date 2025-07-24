@@ -3,6 +3,7 @@ package com.my.ex.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,11 @@ public class ChatService implements IChatService {
 		map.put("searchText", searchText);
 		
 		return dao.getLastMessagesByUserId(map);
+	}
+
+	@Override
+	public Set<String> getUniqueSenderIdsOfUnreadMessages(Map<String, String> map) {
+		return dao.getUniqueSenderIdsOfUnreadMessages(map);
 	}
 
 }

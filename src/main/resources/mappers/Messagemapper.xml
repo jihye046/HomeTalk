@@ -5,6 +5,7 @@
 <mapper namespace="com.my.ex.MessageMapper">
 	<resultMap id="messageResultMap" type="MessageDto">
 	    <result property="roomId" column="room_id"/>
+	    <result property="isRead" column="is_read"/>
 	</resultMap>
 
 	<select id="findRoomId" parameterType="java.util.HashMap" resultType="String">
@@ -89,8 +90,21 @@
 		   AND receiver = #{receiver}
 	</update>	
 	
+	<!-- 아직 안읽은 메시지의 sender 아이디 얻기 -->
+	<select id="getUniqueSenderIdsOfUnreadMessages" parameterType="java.util.HashMap" resultType="String">
+		SELECT DISTINCT sender
+		  FROM mvc_chat6
+		 WHERE room_id = #{roomId}
+		   AND receiver = #{receiver}
+		   AND is_read = 'N'
+	</select>
+	
 	<!-- 메시지 전송한 경우 -->
 	<insert id="saveMessage" parameterType="MessageDto">
+		<selectKey keyProperty="messageId" resultType="Integer" order="BEFORE" >
+			SELECT seq_mvc_chat6.NEXTVAL
+			  FROM DUAL
+		</selectKey>
 		INSERT INTO mvc_chat6
 			(
 			message_id,
@@ -114,7 +128,7 @@
 	</insert>
 	
 	<!-- 특정 채팅방의 이전 채팅 내역(스크롤로 불러오기 등)을 가져오기 -->
-	<select id="getPastMessages" resultType="MessageDto">
+	<select id="getPastMessages" resultMap="messageResultMap">
 		SELECT 
 			c.*,
 			sender_user.unickname AS senderUnickname,

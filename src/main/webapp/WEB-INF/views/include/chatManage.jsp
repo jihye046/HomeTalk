@@ -31,7 +31,8 @@
 	        </div>
         </div>
     </div>
-<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
-<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
-<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
-<script src="<c:url value="/resources/js/chatPage1.js"/>" ></script>
+    
+	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+	<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
+	<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
+	<script src="<c:url value="/resources/js/chatPage1.js"/>" ></script>
