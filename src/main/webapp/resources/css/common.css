@@ -1178,6 +1178,7 @@ body.dark .logo img {
 #chatList .item {
 	font-size: 14px;
 	margin: 15px 0;
+	position: relative;
 }
 
 #chatList .item > div:first-child {
@@ -1247,6 +1248,28 @@ body.dark .logo img {
 	text-align: center;
 	padding: 20px;
 	color: #888;
+}
+
+	/* 특정 채팅방에서 읽지 않음 표시 */
+#chatList .message-time-wrapper {
+    position: relative;
+    gap: 5px;
+}
+
+#chatList .unread-indicator {
+    position: absolute;
+    color: red;
+    font-size: 0.87em;
+    font-weight: 600;
+    background-color: transparent;
+    padding: 0 3px;
+}
+
+.item.me .unread-indicator {
+    right: 12%;
+    transform: translateX(calc(100% + 5px)); /* '1' 크기만큼 이동 + 약간의 간격 */
+    bottom: 0;
+    white-space: nowrap; /* '1'이 줄바꿈 되지 않도록 */
 }
 
 /* 데이터 전달용 <div> 숨기기

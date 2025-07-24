@@ -1,22 +1,30 @@
 package com.my.ex.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.my.ex.EnvironmentService;
 import com.my.ex.dto.ChatRoomDto;
 import com.my.ex.dto.MessageDto;
+import com.my.ex.server.ChatServer;
 import com.my.ex.service.ChatService;
 import com.my.ex.service.MessageService;
 import com.my.ex.service.UserService;
@@ -84,10 +92,25 @@ public class ChatController {
 	}
 	
 	// 안읽음표시 없애기
+	// 호출될 때 보낸 사람에게 WebSocket 알림을 보냄
 	@RequestMapping(value = "/setIsRead", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public void setIsRead(@RequestBody Map<String, String> map) {
+		// 아직 안읽은 메시지의 sender 아이디 얻기
+		Set<String> senderIds = service.getUniqueSenderIdsOfUnreadMessages(map);
+		// 읽음 처리
 		service.setIsRead(map);
+		
+		Gson gson = new Gson();
+		for(String senderId : senderIds) {
+			Map<String, Object> notification = new HashMap<>();
+			notification.put("code", "5");
+			notification.put("roomId", map.get("roomId"));
+			
+			String readNotificationMsg = gson.toJson(notification);
+			
+			ChatServer.sendMessageToUser(senderId, readNotificationMsg);
+		}
 	}
 	
 	// 신규 채팅인지 체크
@@ -100,5 +123,4 @@ public class ChatController {
 		roomId = messageService.findRoomId(map);
 		return roomId;
 	}
-	
 }

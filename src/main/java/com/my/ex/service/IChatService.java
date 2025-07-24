@@ -2,6 +2,7 @@ package com.my.ex.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.my.ex.dto.MessageDto;
 
@@ -13,4 +14,5 @@ public interface IChatService {
 	int getUnreadMessageCount(String roomId, String userId);
 	void setIsRead(Map<String, String> map);
 	List<MessageDto> getLastMessagesByUserId(String userId, String searchText);
+	Set<String> getUniqueSenderIdsOfUnreadMessages(Map<String, String> map);
 }

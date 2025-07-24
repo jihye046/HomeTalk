@@ -1,116 +1,145 @@
 html, body {
-		padding: 0 !important;
-		margin: 0 !important;
-		background-color: #FFF !important; 
-		display: block;
-		overflow: hidden;
-	}
-	
-	body > div {
-		margin: 0; 
-		padding: 0; 
-	}
+	padding: 0 !important;
+	margin: 0 !important;
+	background-color: #FFF !important; 
+	display: block;
+	overflow: hidden;
+}
 
-	#main {
-		width: 400px;
-		height: 510px;
-		margin: 3px;
-		display: grid;
-		grid-template-rows: repeat(12, 1fr);
-	}
-	#header > h2 {		
-		margin: 0px;
-		margin-bottom: 10px;
-		padding: 5px;
-	}
+body > div {
+	margin: 0; 
+	padding: 0; 
+}
 
-	#chatList {
-		border: 1px solid var(--border-color);
-		box-sizing: content-box;
-		padding: .5rem;
-		grid-row-start: 2;
-		grid-row-end: 12;
-		font-size: 14px;
-		overflow: auto;
-	}
-	
-	#msg {
-		margin-top: 1rem;
-		background-color: #f0f0f0;
-		transition: all 0.3s ease;
-	}
-	
-	#msg:focus {
-		background-color: #fff; 
-	    border: 1px solid #286EFA; 
-	    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
-	    outline: none;
-	}
-	
-	#chatList .item {
-		font-size: 14px;
-		margin: 15px 0;
-	}
-	
-	#chatList .item > div:first-child {
-		display: flex;
-	}
-	
-	#chatList .item.me > div:first-child {
-		justify-content: flex-end;
-	}
-	
-	#chatList .item.other > div:first-child {
-		justify-content: flex-end;
-		flex-direction: row-reverse;
-	}
-	
-	#chatList .item > div:first-child > div:first-child {
-		font-size: 10px;
-		color: #777;
-		margin: 3px 5px;
-	}
-	
-	#chatList .item > div:first-child > div:nth-child(2) {
-		border: 1px solid var(--border-color);
-		display: inline-block;
-		min-width: 100px;
-		max-width: 250px;
-		text-align: left;
-		padding: 3px 7px;
-	}
-	
-	#chatList .state.item > div:first-child > div:nth-child(2) {
-		background-color: #EEE;
-	}
-	
-	#chatList .item > div:last-child {
-		font-size: 10px;
-		color: #777;
-		margin-top: 5px;
-	}
-	
-	#chatList .me {
-		text-align: right;
-	}
-	
-	#chatList .other {
-		text-align: left;
-	}
-	
-	#chatList .firstPrint {
-		text-align: left;
-	}
-	
-	#chatList .msg.me.item > div:first-child > div:nth-child(2) {
-		background-color: rgba(255, 99, 71, .2);
-	}
-	
-	#chatList .msg.other.item > div:first-child > div:nth-child(2) {
-		background-color: rgba(100, 149, 237, .2);
-	}
-	
-	#chatList .msg img {
+#main {
+	width: 400px;
+	height: 510px;
+	margin: 3px;
+	display: grid;
+	grid-template-rows: repeat(12, 1fr);
+}
+#header > h2 {		
+	margin: 0px;
+	margin-bottom: 10px;
+	padding: 5px;
+}
+
+#chatList {
+	border: 1px solid var(--border-color);
+	box-sizing: content-box;
+	padding: .5rem;
+	grid-row-start: 2;
+	grid-row-end: 12;
+	font-size: 14px;
+	overflow: auto;
+}
+
+#msg {
+	margin-top: 1rem;
+	background-color: #f0f0f0;
+	transition: all 0.3s ease;
+}
+
+#msg:focus {
+	background-color: #fff; 
+    border: 1px solid #286EFA; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+    outline: none;
+}
+
+#chatList .item {
+	font-size: 14px;
+	margin: 15px 0;
+}
+
+#chatList .item > div:first-child {
+	display: flex;
+}
+
+#chatList .item.me > div:first-child {
+	justify-content: flex-end;
+}
+
+#chatList .item.other > div:first-child {
+	justify-content: flex-end;
+	flex-direction: row-reverse;
+}
+
+#chatList .item > div:first-child > div:first-child {
+	font-size: 10px;
+	color: #777;
+	margin: 3px 5px;
+}
+
+#chatList .item > div:first-child > div:nth-child(2) {
+	border: 1px solid var(--border-color);
+	display: inline-block;
+	min-width: 100px;
+	max-width: 250px;
+	text-align: left;
+	padding: 3px 7px;
+}
+
+#chatList .state.item > div:first-child > div:nth-child(2) {
+	background-color: #EEE;
+}
+
+#chatList .item > div:last-child {
+	font-size: 10px;
+	color: #777;
+	margin-top: 5px;
+}
+
+#chatList .me {
+	text-align: right;
+}
+
+#chatList .other {
+	text-align: left;
+}
+
+#chatList .firstPrint {
+	text-align: left;
+}
+
+#chatList .msg.me.item > div:first-child > div:nth-child(2) {
+	background-color: rgba(255, 99, 71, .2);
+}
+
+#chatList .msg.other.item > div:first-child > div:nth-child(2) {
+	background-color: rgba(100, 149, 237, .2);
+}
+
+#chatList .msg img {
 /* 		weight: 50px; */
-		height: 100px;
-	}
+	height: 100px;
+}
+
+/* 채팅방이 없을 때 보여줄 메시지 */
+.chat-rooms .no-chat-message { 
+	text-align: center;
+	padding: 20px;
+	color: #888;
+}
+
+	/* 특정 채팅방에서 읽지 않음 표시 */
+#chatList .message-time-wrapper {
+    position: relative;
+    gap: 5px;
+}
+
+#chatList .unread-indicator {
+    position: absolute;
+    color: red;
+    font-size: 0.87em;
+    font-weight: 600;
+    background-color: transparent;
+    padding: 0 3px;
+}
+
+.item.me .unread-indicator {
+    right: 18%;
+    transform: translateX(calc(100% + 5px)); /* '1' 크기만큼 이동 + 약간의 간격 */
+    bottom: 0;
+    white-space: nowrap; /* '1'이 줄바꿈 되지 않도록 */
+}
