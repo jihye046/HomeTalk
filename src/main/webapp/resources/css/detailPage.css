@@ -497,6 +497,7 @@ p.removeMessage {
 
 	/* 댓글 내용 */
 p.post-content {
+	word-wrap: break-word;
     font-size: 15px;
     line-height: 1.6;
     margin: 0 0 8px 0;
@@ -684,6 +685,14 @@ span.page-link {
     color: #fff !important;
     border-color: #ad9f94 !important;
     cursor: default !important;
+}
+
+/* 댓글 알림 클릭 시 해당 댓글 하이라이트
+ ================================================== */
+.highlight-comment {
+	background-color: #fff8c6;
+	border-left: 4px solid #ffd54f;
+	transition: background-color 0.7s ease;
 }
 
 /* 반응형 모바일

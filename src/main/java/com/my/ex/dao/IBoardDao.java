@@ -51,6 +51,9 @@ public interface IBoardDao {
 	int removeReplyIfNoChildReplies(Map<String, Integer> map);
 	int updateCommentStep(Map<String, Integer> map);
 	
+	// targetComment가 몇 번째에 위치하는지 확인
+	int getCommentOrderById(Map<String, Object> map);
+	
 	int boardCount();
 	int incrementCommentCount(int bGroup);
 	int decrementCommentCount(int bGroup);

@@ -23,7 +23,11 @@ const userId = document.querySelector("#userId").getAttribute("data-userId")
 const userNickname = document.querySelector("#userNickname").getAttribute("data-userNickname")
 
 if(userId) {
-	document.querySelector("#welcomeText").innerHTML = `<a class="menubar-button-primary" href="/user/myPage">${userNickname}</a><span style="font-size: 16px;">님 환영합니다.<span>`
+	// 환영 메시지 표시
+	document.querySelector("#welcomeText").innerHTML = 
+	`
+		<a class="menubar-button-primary" href="/user/myPage">${userNickname}</a><span style="font-size: 16px;">님 환영합니다.<span>
+	`
 } else {
 	// 로그인 안 된 경우 기본 메시지(필요 시 활성화)
 	//document.querySelector("#welcomeText").innerHTML = "로그인"		

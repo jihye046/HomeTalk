@@ -16,6 +16,7 @@
 	var searchText = "${param.searchText}"
     var sortType = ("${param.sortType}" == "") ? "latest" : "${param.sortType}"
 </script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>

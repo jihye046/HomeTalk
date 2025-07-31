@@ -50,6 +50,7 @@
 	<div class="hidden-data" id="errorbTitle" data-errorbTitle="${bTitle}"></div>
 	<div class="hidden-data" id="errorbAddress" data-errorbAddress="${bAddress}"></div>
 	<div class="hidden-data" id="errorTags" data-errortagJsonList="${fn:escapeXml(tagJsonList)}"></div>
+	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 	
 	<script src="<c:url value="/resources/js/createPage.js"/>"></script>
 	<script src="<c:url value="/resources/js/uploadAdapter.js"/>"></script>

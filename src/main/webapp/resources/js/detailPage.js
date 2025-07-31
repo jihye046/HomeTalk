@@ -223,9 +223,42 @@ if(address) {
 	addressInfo.innerHTML = `<div>${address}</div>`
 } 
 
+/* URL 쿼리스트링에서 targetCommentId를 추출하고, 해당 댓글로 스크롤 및 하이라이트 효과를 적용
+================================================== */
+const scrollToTargetComment = () => {
+	const urlParams = new URLSearchParams(window.location.search) // URL의 ?부터 시작하는 쿼리 문자열 전체 중 key-value로 다룰 수 있게 해줌
+	const targetCommentId = urlParams.get('targetCommentId')
+	if(targetCommentId){
+		const commentElement = document.querySelector(`#comment-${targetCommentId}`)
+
+		if(commentElement){
+			setTimeout(() => {
+				// 스크롤 동작
+				commentElement.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center'
+				})
+
+				// 하이라이트 스타일
+				commentElement.classList.add('highlight-comment')
+
+				// 일정 시간 뒤에 하이라이트 제거
+				setTimeout(() => {
+					commentElement.classList.remove('highlight-comment')
+				}, 3000)
+			}, 300)
+		} else {
+			console.warn(`댓글 ID ${targetCommentId}에 해당하는 요소가 없습니다.`)
+		}
+	}
+}
+
 /* 페이지 로드 시 실행될 함수
 ================================================== */
-renderImages()
-closeModal()
-hideChatButton()
-hideDropdownMenu()
+document.addEventListener('DOMContentLoaded', () => {
+	renderImages()
+	closeModal()
+	hideChatButton()
+	hideDropdownMenu()
+	scrollToTargetComment()
+})

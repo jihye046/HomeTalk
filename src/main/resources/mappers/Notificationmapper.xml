@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.ex.NotificationMapper">
+	<insert id="addNotification" parameterType="NotificationDto">
+		INSERT INTO mvc_notifications6
+			(
+			notificationId,
+			userId,
+			type,
+			relatedId,
+			senderId,
+			data_json,
+			link
+			)
+		VALUES
+			(
+			seq_mvc_notification6.NEXTVAL,
+			#{userId},
+			#{type},
+			#{relatedId},
+			#{senderId},
+			#{dataJson},
+			#{link}
+			)
+	</insert>
+	
+	<select id="getNotifications" resultType="NotificationDto">
+		SELECT *
+		  FROM mvc_notifications6
+		 WHERE userId = #{userId}
+		   AND (
+		   	   is_read = 'N'
+		   	   OR created_at >= SYSTIMESTAMP - INTERVAL '3' DAY
+		   )
+		 ORDER BY is_read ASC, created_At DESC
+	</select>
+	
+	<select id="getAllNotifications" parameterType="java.util.HashMap" resultType="NotificationDto">
+		SELECT * FROM (
+		    SELECT a.*, ROWNUM rnum FROM (
+		        SELECT * FROM mvc_notifications6
+		        WHERE userId = #{userId}
+		        ORDER BY is_read ASC, created_At DESC
+		    ) a
+		    WHERE ROWNUM &lt;= #{offset} + #{size}
+		)
+		WHERE rnum &gt; #{offset}
+	</select>
+
+	<update id="updateReadStatus">
+		UPDATE mvc_notifications6
+		   SET is_read = 'Y'
+		 WHERE notificationId = #{notificationId}
+	</update>
+	
+	<select id="getUnreadCount" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM mvc_notifications6
+		 WHERE userId = #{userId} 
+		   AND is_read = 'N'
+	</select>
+</mapper>

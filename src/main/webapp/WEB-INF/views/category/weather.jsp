@@ -8,6 +8,9 @@
 
 <!-- ckeditor -->
 <%-- <script src="${pageContext.request.contextPath}/resources/static/ckeditor/build/ckeditor.js"></script> --%>
+
+<!-- axios -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
@@ -34,6 +37,9 @@
 </body>
 <div class="hidden-data" id="latitude" data-latitude="${sessionScope.latitude}"></div>
 <div class="hidden-data" id="longitude" data-longitude="${sessionScope.longitude}"></div>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
+<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
 
 <script src="<c:url value="/resources/js/common.js"/>"></script>
 <script src="<c:url value="/resources/js/weather.js"/>"></script>

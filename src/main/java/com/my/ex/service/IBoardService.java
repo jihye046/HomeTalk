@@ -6,6 +6,7 @@ import java.util.Map;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.BoardPagingDto;
 import com.my.ex.dto.CommentsPagingDto;
+import com.my.ex.dto.NotificationDto;
 import com.my.ex.dto.TagDto;
 
 public interface IBoardService {
@@ -39,13 +40,16 @@ public interface IBoardService {
 	int decrementRecommendationAndGetCount(int bId);
 	
 	// 댓글 및 답글 등록, 삭제
-	void replyInsert(BoardDto dto);
+	void replyInsert(BoardDto dto, NotificationDto notificationDto, int commentPage);
 	void replyChildInsert(BoardDto dto);
 	int incrementCommentCount(int bGroup);
 	int decrementCommentCount(int bGroup);
 	boolean removeReply(Map<String, Object> map);
 	boolean updateCommentStep(Map<String, Integer> map);
 	boolean removeReplyIfNoChildReplies(Map<String, Integer> map);
+	
+	// 특정 댓글 ID에 해당하는 댓글이 현재 댓글 내에서 몇 번째 페이지에 위치하는지 계산
+	int calculateCommentPage(Integer targetCommentId, int bGroup, int commentsPageLimit);
 	
 	int getTotalBookmarks(int bId);
 	List<BoardDto> replyList(int bGroup);

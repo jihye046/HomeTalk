@@ -35,8 +35,31 @@
 								</li>
 							</ul>
 						</div>
+						
 						<div class="col-md-6 header-welcomeText">
-							<h5 id="welcomeText"></h5>
+							<div>
+								<!-- 알림 아이콘 -->
+								<span id="notificationIconWrapper">
+									<i class="fas fa-bell"></i>
+									<span id="notificationBadge"></span>
+								</span>
+								<!-- 알림 아이콘 end -->
+							
+								<!-- 알림 모달창 -->
+								<div id="notificationModal" class="notification-modal">
+							        <div class="notification-header">
+							            <h3>알림</h3>
+							            <span class="close-modal-btn">&times;</span>
+							        </div>
+							        <ul class="notification-list"></ul>
+							        <div class="notification-footer">
+							            <a href="/notification/getAllNotifications">모든 알림 보기</a>
+							        </div>
+							    </div>
+								<!-- 알림 모달창 end -->
+							
+								<h5 id="welcomeText"></h5>
+							</div>
 <%-- 							<a class="menubar-button-primary" id="loginLogoutLink" href="${empty sessionScope.userId ? --%>
 <%-- 														  '/user/loginPage' :  --%>
 <%-- 														  '/user/logout'}"  --%>
