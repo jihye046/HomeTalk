@@ -47,11 +47,13 @@ import com.my.ex.dto.BoardPagingDto;
 import com.my.ex.dto.BookmarkDto;
 import com.my.ex.dto.CommentsPagingDto;
 import com.my.ex.dto.LikeDto;
+import com.my.ex.dto.NotificationDto;
 import com.my.ex.dto.TagDto;
 import com.my.ex.dto.map.KakaoMapRequestDto;
 import com.my.ex.service.BoardService;
 import com.my.ex.service.BookmarkService;
 import com.my.ex.service.LikeService;
+import com.my.ex.service.NotificationService;
 import com.my.ex.service.SocialService;
 import com.my.ex.service.UserService;
 
@@ -145,31 +147,48 @@ public class BoardController {
 	
 	// 게시글 상세보기
 	@RequestMapping("/detailBoard")
-	public String detailBoard(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-		@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
-		HttpServletRequest request,
-		Model model, 
-		HttpSession session, 
-		@RequestParam int bId, 
-		@RequestParam int bGroup,
-		@RequestParam String bName) {
+	public String detailBoard(
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
+			@RequestParam(value = "commentPage", required = false, defaultValue = "1") int commentPage,
+			@RequestParam(value = "targetCommentId", required = false) Integer targetCommentId, // 알림을 통해 직접 넘어온 댓글 ID
+			HttpServletRequest request,
+			Model model, 
+			HttpSession session, 
+			@RequestParam int bId, 
+			@RequestParam int bGroup,
+			@RequestParam String bName) {
 		
 		String userId = (String)session.getAttribute("userId"); 
 		
 		// 게시글 조회
 		BoardDto dto = service.detailBoard(bId);
+		
 		// 해당 게시글에 사용자가 좋아요를 눌렀는지 확인
 		boolean isLiked = likeService.isLiked(bId, userId);
+		
 		// 해당 게시글에 사용자가 북마크를 눌렀는지 확인
 		boolean isBookmarked = bookmarkService.isBookmarked(bId, userId);
+		
+		// 만약 알림 링크를 통해 targetCommentId가 넘어왔다면, 해당 댓글의 실제 페이지를 계산
+		int actualCommentPageToLoad = 1; // 기본적으로 1페이지 로드
+		if(targetCommentId != null) {
+			int commentsPageLimit = 6; // 서비스와 동일한 값 사용
+			// 해당 targetCommentId가 현재 몇번째 페이지에 위치하는지 계산
+			actualCommentPageToLoad = service.calculateCommentPage(targetCommentId, bGroup, commentsPageLimit);
+		} 
+		
 		// 댓글 페이징 정보
-		commentsPaging(page, sortType, bGroup, model, userId);
+//		commentsPaging(commentPage, sortType, bGroup, model, userId);
+		commentsPaging(actualCommentPageToLoad, sortType, bGroup, model, userId);
+		
 		// 좋아요 수 업데이트
 		updateHitCount(bId);
+		
 		// 프로필 이미지 url 반환
 		String filename = userService.getProfileFilename(bName);
-				
 		String imageUrl = "/user/getProfileImage/" + filename;
+		
 		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);
 		
@@ -243,14 +262,35 @@ public class BoardController {
 	// 게시글 좋아요
 	@ResponseBody
 	@RequestMapping(value =  "/addLike", method = RequestMethod.POST)
-	public ResponseEntity<Integer> addLike(@RequestParam("bId")int bId, HttpSession session) {
+	public ResponseEntity<Integer> addLike(@RequestParam("bId")int bId,
+			@RequestParam String bName,
+			@RequestParam int bGroup,
+			HttpSession session) {
 		String userId = (String)session.getAttribute("userId");
+		
+		// 게시글 좋아요 개수 늘림
 		service.incrementLikesCount(bId);
+		
+		// 좋아요 테이블에 추가
 		LikeDto dto = new LikeDto();
 		dto.setBId(bId);
 		dto.setUserId(userId);
-		likeService.addLike(dto);
+		
+		// 알림 정보 넘김
+		NotificationDto notificationDto = new NotificationDto();
+		notificationDto.setUserId(bName); // 알림을 받을 사용자ID
+		notificationDto.setType("LIKE");
+		notificationDto.setRelatedId(bId);
+		notificationDto.setSenderId(userId); // 알림을 발생시킨 사용자ID
+		notificationDto.setLink("/board/detailBoard?"
+				+ "bId=" + bId
+				+ "&bGroup=" + bGroup 
+				+ "&bName=" + bName);
+		likeService.addLike(dto, notificationDto);
+		
+		// 게시글 좋아요 총 개수 조회
 		int totalLikes = service.getTotalLikes(bId);
+		
 		return new ResponseEntity<>(totalLikes, HttpStatus.OK);
 	}
 	
@@ -342,10 +382,18 @@ public class BoardController {
 	public Map<String, Object> replyInsert(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
 										   @RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
 										   HttpSession session,
-										   BoardDto dto) {
+										   BoardDto dto,
+										   @RequestParam String boardWriterId) {
 		String userId = (String)session.getAttribute("userId");
-		dto.setbName(userId);
-		service.replyInsert(dto);
+		dto.setbName(userId); // 댓글 작성자ID (알림을 발생시킨 사용자ID)
+		
+		// 알림 정보 넘김
+		NotificationDto notificationDto = new NotificationDto();
+		notificationDto.setUserId(boardWriterId); // 알림을 받을 사용자ID
+		notificationDto.setType("COMMENT");
+		notificationDto.setSenderId(userId); // 알림을 발생시킨 사용자ID
+		
+		service.replyInsert(dto, notificationDto, page);
 		
 		int commentsCount = service.incrementCommentCount(dto.getbGroup());
 		CommentsListResponse response = commentsPagingAjax(page, sortType, dto.getbGroup(), session);
@@ -516,9 +564,9 @@ public class BoardController {
 	}
 	
 	// 댓글 페이징_로드
-	public Model commentsPaging(int page, String sortType, int bGroup, Model model, String userId) {
+	public Model commentsPaging(int commentPage, String sortType, int bGroup, Model model, String userId) {
 		// 댓글 목록
-		List<BoardDto> commentsPagingList = service.commentsPagingList(page, sortType, bGroup);
+		List<BoardDto> commentsPagingList = service.commentsPagingList(commentPage, sortType, bGroup);
 		
 		// 프로필 이미지 목록
 		List<String> profileImageUrls = new ArrayList<>();
@@ -528,7 +576,7 @@ public class BoardController {
 			profileImageUrls.add(imageUrl);
 		}
 		
-		CommentsPagingDto commentsPageDto = service.commentsPagingParam(page, bGroup);
+		CommentsPagingDto commentsPageDto = service.commentsPagingParam(commentPage, bGroup);
 		for(BoardDto dto : commentsPagingList) {
 			dto.setSortType(sortType);
 			// HTML 이스케이프 처리
@@ -547,12 +595,13 @@ public class BoardController {
 	// 댓글 페이징_비동기
 	@ResponseBody
 	@RequestMapping("/commentsPaging/ajax")
-	public CommentsListResponse commentsPagingAjax(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-												   @RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
-												   int bGroup,
-												   HttpSession session) {
+	public CommentsListResponse commentsPagingAjax(
+			@RequestParam(value = "page", required = false, defaultValue = "1") int currentcommentPage,
+			@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
+			int bGroup,
+			HttpSession session) {
 		// 'page', 'sortType' 값이 없는 경우 지정해주어야하는데, fetch로 보내면 @RequestParam을 사용못하기때문에 $.ajax로 요청하고 @RequestParam을 사용 
-		List<BoardDto> commentsPagingList = service.commentsPagingList(page, sortType, bGroup);
+		List<BoardDto> commentsPagingList = service.commentsPagingList(currentcommentPage, sortType, bGroup);
 		
 		// 프로필 이미지 목록
 		List<String> profileImageUrls = new ArrayList<>();
@@ -562,7 +611,7 @@ public class BoardController {
 			profileImageUrls.add(imageUrl);
 		}
 		
-		CommentsPagingDto commentsPageDto = service.commentsPagingParam(page, bGroup);
+		CommentsPagingDto commentsPageDto = service.commentsPagingParam(currentcommentPage, bGroup);
 		String userId = UserController.getUserIdFromSession(session);
 		for(BoardDto dto : commentsPagingList) {
 			dto.setSortType(sortType);

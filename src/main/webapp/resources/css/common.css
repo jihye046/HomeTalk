@@ -412,111 +412,111 @@ h1 span{
 	transform: translate(0);
 }
 
-h1 span:nth-child(1){
-	opacity: 0;
-	transform: translateY(-20px);
-}
-body.hero-anime h1 span:nth-child(2){
-	opacity: 0;
-	transform: translateY(-30px);
-}
-body.hero-anime h1 span:nth-child(3){
-	opacity: 0;
-	transform: translateY(-50px);
-}
-body.hero-anime h1 span:nth-child(4){
-	opacity: 0;
-	transform: translateY(-10px);
-}
-body.hero-anime h1 span:nth-child(5){
-	opacity: 0;
-	transform: translateY(-50px);
-}
-body.hero-anime h1 span:nth-child(6){
-	opacity: 0;
-	transform: translateY(-20px);
-}
-body.hero-anime h1 span:nth-child(7){
-	opacity: 0;
-	transform: translateY(-40px);
-}
-body.hero-anime h1 span:nth-child(8){
-	opacity: 0;
-	transform: translateY(-10px);
-}
-body.hero-anime h1 span:nth-child(9){
-	opacity: 0;
-	transform: translateY(-30px);
-}
-body.hero-anime h1 span:nth-child(10){
-	opacity: 0;
-	transform: translateY(-20px);
-}
-h1 span:nth-child(1){
-    transition-delay: 1000ms;
-}
-h1 span:nth-child(2){
-    transition-delay: 700ms;
-}
-h1 span:nth-child(3){
-    transition-delay: 900ms;
-}
-h1 span:nth-child(4){
-    transition-delay: 800ms;
-}
-h1 span:nth-child(5){
-    transition-delay: 1000ms;
-}
-h1 span:nth-child(6){
-    transition-delay: 700ms;
-}
-h1 span:nth-child(7){
-    transition-delay: 900ms;
-}
-h1 span:nth-child(8){
-    transition-delay: 800ms;
-}
-h1 span:nth-child(9){
-    transition-delay: 600ms;
-}
-h1 span:nth-child(10){
-    transition-delay: 700ms;
-}
-body.hero-anime h1 span:nth-child(11){
-	opacity: 0;
-	transform: translateY(30px);
-}
-body.hero-anime h1 span:nth-child(12){
-	opacity: 0;
-	transform: translateY(50px);
-}
-body.hero-anime h1 span:nth-child(13){
-	opacity: 0;
-	transform: translateY(20px);
-}
-body.hero-anime h1 span:nth-child(14){
-	opacity: 0;
-	transform: translateY(30px);
-}
-body.hero-anime h1 span:nth-child(15){
-	opacity: 0;
-	transform: translateY(50px);
-}
-h1 span:nth-child(11){
-    transition-delay: 1300ms;
-}
-h1 span:nth-child(12){
-    transition-delay: 1500ms;
-}
-h1 span:nth-child(13){
-    transition-delay: 1400ms;
-}
-h1 span:nth-child(14){
-    transition-delay: 1200ms;
-}
-h1 span:nth-child(15){
-    transition-delay: 1450ms;
-}
+/* h1 span:nth-child(1){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-20px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(2){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-30px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(3){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-50px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(4){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-10px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(5){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-50px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(6){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-20px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(7){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-40px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(8){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-10px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(9){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-30px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(10){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(-20px); */
+/* } */
+/* h1 span:nth-child(1){ */
+/*     transition-delay: 1000ms; */
+/* } */
+/* h1 span:nth-child(2){ */
+/*     transition-delay: 700ms; */
+/* } */
+/* h1 span:nth-child(3){ */
+/*     transition-delay: 900ms; */
+/* } */
+/* h1 span:nth-child(4){ */
+/*     transition-delay: 800ms; */
+/* } */
+/* h1 span:nth-child(5){ */
+/*     transition-delay: 1000ms; */
+/* } */
+/* h1 span:nth-child(6){ */
+/*     transition-delay: 700ms; */
+/* } */
+/* h1 span:nth-child(7){ */
+/*     transition-delay: 900ms; */
+/* } */
+/* h1 span:nth-child(8){ */
+/*     transition-delay: 800ms; */
+/* } */
+/* h1 span:nth-child(9){ */
+/*     transition-delay: 600ms; */
+/* } */
+/* h1 span:nth-child(10){ */
+/*     transition-delay: 700ms; */
+/* } */
+/* body.hero-anime h1 span:nth-child(11){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(30px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(12){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(50px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(13){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(20px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(14){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(30px); */
+/* } */
+/* body.hero-anime h1 span:nth-child(15){ */
+/* 	opacity: 0; */
+/* 	transform: translateY(50px); */
+/* } */
+/* h1 span:nth-child(11){ */
+/*     transition-delay: 1300ms; */
+/* } */
+/* h1 span:nth-child(12){ */
+/*     transition-delay: 1500ms; */
+/* } */
+/* h1 span:nth-child(13){ */
+/*     transition-delay: 1400ms; */
+/* } */
+/* h1 span:nth-child(14){ */
+/*     transition-delay: 1200ms; */
+/* } */
+/* h1 span:nth-child(15){ */
+/*     transition-delay: 1450ms; */
+/* } */
 #switch,
 #circle {
 	cursor: pointer;
@@ -609,63 +609,241 @@ body.hero-anime #switch{
 	background-color: #ad9f94;
 }
 
-body.dark{
-	color: #fff;
-	background-color: #1f2029;
-}
-body.dark .navbar-brand img{
-    filter: brightness(100%);
-}
-body.dark h1{
-	color: #fff;
-}
-body.dark h1 span{
-    transition-delay: 0ms !important;
-}
-body.dark p{
-	color: #fff;
-    transition-delay: 0ms !important;
-}
-body.dark .bg-light {
-	background-color: #14151a !important;
-}
-body.dark .start-header {
-	box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
-}
-body.dark .start-header.scroll-on {
-	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
-}
-body.dark .nav-link{
-	color: #fff !important;
-}
-body.dark .nav-item.active .nav-link{
-	color: #999 !important;
-}
-body.dark .dropdown-menu {
-	color: #fff;
-	background-color: #1f2029;
-	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.25);
-}
-body.dark .dropdown-item {
-	color: #fff;
-}
-body.dark .navbar-light .navbar-toggler-icon {
-	border-bottom: 1px solid #fff;
-}
-body.dark .navbar-light .navbar-toggler-icon:after, 
-body.dark .navbar-light .navbar-toggler-icon:before{
-	background-color: #fff;
-}
-body.dark .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
-	border-color: transparent;
-}
-
 hr {
     padding: 0;
     height: 1px;
     border: none;
     background-color: #EAEDEF;
     margin-top: 20px;
+}
+
+/* 알림 아이콘
+================================================== */
+#notificationIconWrapper {
+	margin-left: 10px; 
+	position: relative; 
+	cursor: pointer;
+}
+
+#notificationIconWrapper #notificationBadge {
+	position: absolute;
+	top: -10px;
+	right: -8px;
+	background-color: red;
+	color: white;
+	border-radius: 50%;
+	padding: 2px 6px;
+	font-size: 9px;
+	min-width: 15px;
+	text-align: center;
+	display: none; /* 초기에는 숨김 */
+}
+
+.fas.fa-bell {
+	font-size: 20px; 
+	color: #333;
+}
+
+/* 알림 아이콘 클릭치 띄울 모달창
+================================================== */
+.notification-modal {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 380px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+.notification-modal.show {
+    display: block;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fbfbfb;
+}
+
+.notification-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.close-modal-btn {
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: #333;
+}
+
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.no-notifications {
+    padding: 50px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+/* 알림 항목 <li> */
+.notification-item {
+    background-color: #ffffff;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.notification-item.unread {
+    background-color: #eaf6ff;
+    border-bottom: 1px solid #d4eafc;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+/* 알림 항목 내부 링크 */
+.notification-item a {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease;
+}
+
+/* 읽은 알림의 hover 효과 */
+.notification-item a:hover {
+    background-color: #f8f8f8;
+}
+
+/* 읽지 않은 알림의 hover 효과 */
+.notification-item.unread a:hover {
+    background-color: #dbeeff;
+}
+
+/* 알림 내용 영역 */
+.notification-content {
+    flex-grow: 1;
+    flex-shrink: 1; /* 필요시 축소 허용 */
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* 메인 알림 텍스트 */
+.notification-main-text {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.notification-main-text strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 댓글 미리보기 텍스트 */
+.comment-preview-text {
+    font-style: normal;
+    color: #555;
+    margin-top: 4px;
+    display: block; /* 새 줄에서 시작 */
+    font-size: 13px;
+    text-align: left;
+    white-space: nowrap; /* 한 줄로 표시 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* 시간과 뱃지 컨테이너 */
+.notification-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: 15px;
+    flex-shrink: 0; /* 이 영역이 줄어들지 않도록 */
+}
+
+/* 알림 시간 */
+.notification-time {
+    font-size: 12px;
+    color: #999;
+    white-space: nowrap;
+}
+
+/* 'N' 뱃지 */
+.new-badge {
+    background-color: tomato;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    min-width: 15px;
+    text-align: center;
+    margin-top: 5px;
+    flex-shrink: 0;
+    align-self: flex-end;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notification-info-message {
+	text-align: center;
+	color: #888;
+	font-size: 12px;
+	padding: 10px 0;
+	border-top: 1px solid #eee;
+}
+
+/* 모달 푸터 */
+.notification-footer {
+	display: none;
+    padding: 15px 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    background-color: #fbfbfb;
+}
+
+.notification-footer a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.notification-footer a:hover {
+    color: #0056b3;
 }
 
 /* .buttonn-primary
@@ -1267,9 +1445,9 @@ body.dark .logo img {
 
 .item.me .unread-indicator {
     right: 12%;
-    transform: translateX(calc(100% + 5px)); /* '1' 크기만큼 이동 + 약간의 간격 */
+    transform: translateX(calc(100% + 5px)); '1' 크기만큼 이동 + 약간의 간격
     bottom: 0;
-    white-space: nowrap; /* '1'이 줄바꿈 되지 않도록 */
+    white-space: nowrap; '1'이 줄바꿈 되지 않도록
 }
 
 /* 데이터 전달용 <div> 숨기기

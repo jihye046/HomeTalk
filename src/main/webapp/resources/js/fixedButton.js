@@ -1,6 +1,8 @@
 const activeClass = "fa-solid" // ♥
 const inactiveClass = "fa-regular" // ♡
 const bId = document.querySelector("#bId").getAttribute("data-bId")
+const bName = document.querySelector("#bName").getAttribute("data-bName")
+const bGroup = document.querySelector("#bGroup").getAttribute("data-bGroup")
 
 /* 좋아요
 ================================================== */
@@ -41,7 +43,9 @@ likeBtn.addEventListener('click', function(){
         $.ajax({
 			type: "post",
 			data: {
-				bId: bId 
+				bId: bId,
+				bName: bName,
+				bGroup: bGroup
 			},
 			url: "/board/addLike",
 			success: function(data){

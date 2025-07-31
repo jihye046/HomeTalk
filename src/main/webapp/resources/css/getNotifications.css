@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f5f7;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 메인 컨텐츠 영역 */
+.my-posts-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    min-height: calc(100vh - 120px);
+    box-sizing: border-box;
+}
+
+.my-posts-container {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* 알림 목록 <ul> */
+.noti-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 개별 알림 항목 <li> */
+.noti-item {
+    border-bottom: 1px solid #fff;
+    padding: 15px 10px;
+}
+
+.noti-item:last-child {
+    border-bottom: none;
+}
+
+.noti-item a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+}
+
+/* 읽지 않은 알림 스타일 */
+.noti-item.unread {
+    background-color: #eaf6ff;
+}
+
+/* 알림 내용 */
+.noti-content {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.noti-content .sender-name {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 5px;
+}
+
+.noti-content .comment-preview-text {
+    display: block;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* 기본적으로 한 줄로 표시하고 ... 처리 */
+}
+
+/* 알림 메타 정보 */
+.noti-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #999;
+    font-size: 0.85em;
+}
+
+.noti-meta .notification-time {
+    margin-bottom: 5px;
+}
+
+.noti-meta .new-badge {
+    background-color: tomato;
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 3px 8px;
+}
+
+/* 호버 효과 */
+.noti-item a:hover {
+    background-color: #f8f8f8;
+}
+
+.noti-item.unread a:hover {
+    background-color: #dbeeff;
+}
+
+/* 알림 없음 메시지 */
+.no-noti {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+    font-size: 1em;
+}
+
+.spinner-grow {
+	display: none;
+	position: absolute;
+	top: calc(100% + 30px); /* ul 바로 아래 10px 간격 */
+	left: 50%;
+}
+
+.spinner-grow.show {
+	display: block;
+}
+
+.no-more-notifications {
+    text-align: center;
+    color: #666;
+    padding: 10px 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .my-posts-container {
+        padding: 20px;
+    }
+
+    .noti-item a {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .noti-content {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .noti-meta {
+        align-items: flex-start;
+    }
+}

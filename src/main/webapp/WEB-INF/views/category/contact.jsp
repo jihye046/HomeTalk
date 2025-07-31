@@ -83,5 +83,6 @@
     </div>
 	
 	<%@ include file="/WEB-INF/views/include/footer.jsp" %>
+	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 </body>
 </html>

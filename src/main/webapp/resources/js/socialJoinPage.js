@@ -82,7 +82,7 @@ nicknameInput.addEventListener('input', _.debounce(() => {
 
     // debounce: 입력이 멈춘 뒤 0.3초 후에 중복 검사 요청을 보내 서버 과부하 방지
     axios.get('/user/check-nickname-duplicate', {
-    params: {checkNickanme: nickname}
+    	params: {checkNickanme: nickname}
     })
         .then(response => {
             if(response.data){

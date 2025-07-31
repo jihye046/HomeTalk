@@ -9,6 +9,9 @@
 <!-- 지도 표시 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${jsKey}&libraries=services"></script>
+
+<!-- axios -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
@@ -204,7 +207,7 @@
 							
 								<!-- 댓글인 경우 -->
 								<c:if test="${comment.bIndent == 1}">
-									<article>
+									<article id="comment-${comment.bId}">
 										<c:choose>
 											<c:when test="${comment.bContent == '작성자가 삭제한 댓글입니다.'}">
 												<p class="post-content removeMessage">${comment.bContent}</p>
@@ -249,7 +252,7 @@
 								
 								<!-- 답글인 경우 -->
 								<c:if test="${comment.bIndent != 1}">
-									<article class="comment-child">
+									<article class="comment-child" id="comment-${comment.bId}">
 										<div class="user-info">
 											<div class="left-info">
 												<img id="profile-photo-${comment.bId} comment-child" src="${profileImageUrls[status.index]}" />
@@ -370,6 +373,8 @@
 	<div class="hidden-data" id="bId" data-bId="${dto.bId}"></div>
 	<div class="hidden-data" id="bTitle" data-bTitle="${dto.bTitle}"></div>
 	<div class="hidden-data" id="bContent" data-bContent="<c:out value='${dto.bContent}'/>"></div>
+	<div class="hidden-data" id="bName" data-bName="${dto.bName}"></div>
+	<div class="hidden-data" id="bGroup" data-bGroup="${dto.bGroup}"></div>
 	<div class="hidden-data" id="isLiked" data-isLiked="${isLiked}"></div>
 	<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
 	<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
@@ -403,11 +408,11 @@ const replyTable = document.querySelector(".comments")
 const replyInput = document.querySelector("#comment-input")
 const COMMENTS_PAGE_LIMIT = 6
 const COMMENTS_BLOCK_LIMIT = 3
-let currentPage = 1
+let currentcommentPage = 1
 
 	// 현재 페이지 블록
 const setPage = (page) => {
-	currentPage = page
+	currentcommentPage = page
 }
 
 	// 댓글 개수UI 업데이트
@@ -436,7 +441,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 			const formattedDate = formatDate(new Date(replyList[i].bDate))
 			
 			if(replyList[i].bIndent == 1){ // 댓글
-			output += `<article>`
+			output += `<article id="comment-\${replyList[i].bId}">`
 				if(replyList[i].bContent == removeMessage) {
 					output += `<p class="post-content removeMessage">\${replyList[i].bContent}</p>`
 				} else {
@@ -476,7 +481,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 				}
 				output += `</article>`
 			} else { // 답글
-				output += `<article class="comment-child">
+				output += `<article class="comment-child" id="comment-\${replyList[i].bId}">
 								<div class="user-info">
 									<div class="left-info">
 										<img id="profile-photo-\${replyList[i].bId} comment-child" src="\${profileImageUrls[i]}" />
@@ -640,7 +645,6 @@ const ajaxBlockLink  = () => {
 		})
 	})
 }
-
 	// 댓글 버튼 리스너
 replyBtn.addEventListener('click', function(){
 	let replyInputValue = replyInput.value
@@ -652,8 +656,9 @@ replyBtn.addEventListener('click', function(){
 			type: "post",
 			url: "/board/replyInsert",
 			data: {
-				page: currentPage,
+				page: currentcommentPage,
 				bId: "${dto.bId}",
+				boardWriterId: "${dto.bName}",
 				bContent: replyInputValue,
 				bGroup: "${dto.bGroup}",
 				bStep: "${dto.bStep}",
@@ -703,7 +708,7 @@ function registerEventListeners(){
                     	type: "post",
                     	url: "replyChildInsert",
                     	data: {
-                    		page: currentPage,
+                    		page: currentcommentPage,
                     		bContent: bContent,
                     		bGroup: bGroup,
                     		bStep: bStep,
@@ -816,7 +821,7 @@ const commentRemove = (bId, bGroup, bStep, bIndent) => {
 		type: "post",
 		url: "/board/removeReply",
 		data: {
-			page: currentPage,
+			page: currentcommentPage,
 			bId: bId,
 			bGroup: bGroup,
 			bStep: bStep,
@@ -839,7 +844,7 @@ const commentChildRemove = (bId, bGroup, bStep) => {
 		type: "post",
 		url: "/board/removeChildReply",
 		data: {
-			page: currentPage,
+			page: currentcommentPage,
 			bId: bId,
 			bGroup: bGroup,
 			bStep: bStep

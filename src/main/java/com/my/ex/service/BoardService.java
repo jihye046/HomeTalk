@@ -7,10 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.ex.dao.BoardDao;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.BoardPagingDto;
 import com.my.ex.dto.CommentsPagingDto;
+import com.my.ex.dto.NotificationDto;
 import com.my.ex.dto.PostTagDto;
 import com.my.ex.dto.TagDto;
 
@@ -25,6 +28,9 @@ public class BoardService implements IBoardService {
 	
 	@Autowired
 	private BoardDao dao;
+	
+	@Autowired
+	private NotificationService notificationService;
 	
 	@Override
 	public boolean createBoard(BoardDto dto) {
@@ -104,8 +110,47 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public void replyInsert(BoardDto dto) {
+	public void replyInsert(BoardDto dto, NotificationDto notificationDto, int commentPage) {
 		dao.replyInsert(dto);
+		
+		// 댓글 작성자와 게시글 작성자가 다를 경우에만 알림 생성
+		if(!notificationDto.getUserId().equals(notificationDto.getSenderId())) {
+			int commentId = dto.getbId(); // 댓글 삽입 후 set된 댓글ID
+			
+			String commentSnippet = dto.getbContent().length() > 10 ? dto.getbContent().substring(0, 10) + "..." : dto.getbContent();
+			ObjectMapper mapper = new ObjectMapper();
+			String dataJsonString = null;
+			try {
+				Map<String, Object> dataMap = new HashMap<>();
+				dataMap.put("commentSnippet", commentSnippet);
+				dataMap.put("commentPage", commentPage);
+				dataJsonString = mapper.writeValueAsString(dataMap);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+			notificationDto.setDataJson(dataJsonString);
+			
+			notificationDto.setRelatedId(commentId);
+			notificationDto.setLink("/board/detailBoard?"
+					+ "bId=" + dto.getbGroup()
+					+ "&bGroup=" + dto.getbGroup() 
+					+ "&bName=" + notificationDto.getUserId() // 알림을 받을 사용자ID(게시글 작성자ID)
+					+ "&targetCommentId=" + commentId);
+			notificationService.addNotification(notificationDto);
+		}
+	}
+	
+	@Override
+	public int calculateCommentPage(Integer targetCommentId, int bGroup, int commentsPageLimit) {
+		// targetComment가 몇번째에 위치하는지 확인
+		Map<String, Object> map = new HashMap<>();
+		map.put("targetCommentId", targetCommentId);
+		map.put("bGroup", bGroup);
+		int commentOrder = dao.getCommentOrderById(map);
+		
+		// targetComment가 위치한 페이지 링크
+		int calculatedPage =(int) Math.ceil((double)commentOrder / COMMENTS_PAGE_LIMIT);
+		return calculatedPage;
 	}
 
 	@Override

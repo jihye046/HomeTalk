@@ -161,6 +161,10 @@
 	</select>
 	
 	<insert id="replyInsert" parameterType="BoardDto">
+		<selectKey keyProperty="bId" resultType="Integer" order="BEFORE">
+			SELECT seq_mvc_board6.NEXTVAL 
+			  FROM dual
+		</selectKey>
 		INSERT INTO mvc_board6
 			(
 			bId,
@@ -172,7 +176,7 @@
 			)
 		VALUES
 			(
-			seq_mvc_board6.nextval,
+			#{bId},
 			#{bName},
 			#{bContent},
 			#{bGroup},
@@ -180,6 +184,14 @@
 			#{bIndent} + 1
 			)
 	</insert>
+	
+	<select id="getCommentOrderById" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT COUNT(bId) 
+		  FROM MVC_BOARD6
+		 WHERE bGroup = #{bGroup}
+		   AND bId <![CDATA[ >= ]]> #{targetCommentId}
+		   AND bStep > 0
+	</select>
 	
 	<update id="replyShape" parameterType="java.util.HashMap">
 		UPDATE mvc_board6

@@ -220,4 +220,9 @@ public class BoardDao implements IBoardDao {
 		return session.selectList(NAMESPACE + "getAllTags");
 	}
 
+	@Override
+	public int getCommentOrderById(Map<String, Object> map) {
+		return session.selectOne(NAMESPACE + "getCommentOrderById", map);
+	}
+
 }
