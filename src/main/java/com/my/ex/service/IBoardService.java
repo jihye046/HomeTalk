@@ -41,7 +41,7 @@ public interface IBoardService {
 	
 	// 댓글 및 답글 등록, 삭제
 	void replyInsert(BoardDto dto, NotificationDto notificationDto, int commentPage);
-	void replyChildInsert(BoardDto dto);
+	void replyChildInsert(BoardDto dto, NotificationDto notificationDto, int commentPage);
 	int incrementCommentCount(int bGroup);
 	int decrementCommentCount(int bGroup);
 	boolean removeReply(Map<String, Object> map);

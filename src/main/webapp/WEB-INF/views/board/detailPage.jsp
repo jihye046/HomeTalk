@@ -213,11 +213,13 @@
 												<p class="post-content removeMessage">${comment.bContent}</p>
 											</c:when>
 											<c:otherwise>
+												<!-- 정상적인 댓글이라면 -->
 												<div class="user-info">
 													<div class="left-info">
 															<img id="profile-photo-${comment.bId}" src="${profileImageUrls[status.index]}" />
 														<span class="author-name"><a href="#">${comment.unickName}</a></span>
 													</div>
+													<!-- 본인이 작성한 댓글이라면 삭제 버튼 보여줌 -->
 													<c:if test="${comment.bName == sessionScope.userId}">
 														<button type="button" class="button-filled-primary comment-remove"
 															data-comment-remove-bId="${comment.bId}"
@@ -231,13 +233,16 @@
 												</div>
 												<p class="post-content">${comment.bContent}</p>
 												<time class="post-time">${comment.bDate}</time>
+												<!-- 답글 달기 버튼 -->
 												<button type="button" class="button-filled-primary comment-child-btn"
 													data-bGroup="${comment.bGroup}"
 													data-bStep="${comment.bStep}"
 													data-bIndent="${comment.bIndent}"
+													data-commentWriterId="${comment.bName}"
 												>
 													답글 달기
 												</button>
+												<!--  -->
 												<button type="button" class="button-filled-primary"
 													id="thumbupButton"
 													data-recommend-bId="${comment.bId}"
@@ -468,6 +473,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 					    		data-bGroup="\${replyList[i].bGroup}"
 					    		data-bStep="\${replyList[i].bStep}"
 					    		data-bIndent="\${replyList[i].bIndent}"
+								data-commentWriterId="\${replyList[i].bName}"
 				    		> 
 					    		답글 달기
 					    	</button>
@@ -517,7 +523,7 @@ const editCommentTable = (replyList, profileImageUrls) => {
 	return output
 }
 
-	// 답글UI 업데이트
+	// 답글 입력창UI
 const replyChildUI = () => {
 	let output = `<div class="comment-input-container commentCell">
 					<input type="text" name="bContent" class="styled-input" required>
@@ -691,6 +697,7 @@ function registerEventListeners(){
 	        const bGroup = this.getAttribute('data-bGroup')
 	        const bStep = this.getAttribute('data-bStep')	
 	        const bIndent = this.getAttribute('data-bIndent')
+	        const commentWriterId = this.getAttribute('data-commentWriterId')
 	        
 	        // 새로운 입력 필드 추가
             const output = replyChildUI()
@@ -709,6 +716,7 @@ function registerEventListeners(){
                     	url: "replyChildInsert",
                     	data: {
                     		page: currentcommentPage,
+							commentWriterId: commentWriterId,
                     		bContent: bContent,
                     		bGroup: bGroup,
                     		bStep: bStep,

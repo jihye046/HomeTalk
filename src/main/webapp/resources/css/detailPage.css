@@ -690,9 +690,14 @@ span.page-link {
 /* 댓글 알림 클릭 시 해당 댓글 하이라이트
  ================================================== */
 .highlight-comment {
-	background-color: #fff8c6;
-	border-left: 4px solid #ffd54f;
+	background-color: #fff8c6 !important;
+	border-left: 4px solid #ffd54f !important;
 	transition: background-color 0.7s ease;
+}
+
+/* 답글의 자식 요소들에 적용된 배경색을 초기화 */
+.highlight-comment .comment-child {
+    background-color: transparent !important; /* 하이라이트 되는 동안 자식 요소의 배경색을 투명하게 만듦 */
 }
 
 /* 반응형 모바일

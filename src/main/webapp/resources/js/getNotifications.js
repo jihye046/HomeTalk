@@ -62,6 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <strong class="sender-name">${notificationDto.senderId}</strong>님이 댓글을 달았습니다:<br/>
                     <span class="comment-preview-text">${commentSnippet}</span>
                 `
+            } else if(notificationDto.type == 'CHILD_COMMENT'){
+                const data = JSON.parse(notificationDto.dataJson)
+                commentSnippet = data.childcommentSnippet
+                notificationText =
+                `
+                    <strong class="sender-name">${notificationDto.senderId}</strong>님이 답글을 달았습니다:<br/>
+                    <span class="comment-preview-text">${commentSnippet}</span>
+                `
             }
 
             output += 
