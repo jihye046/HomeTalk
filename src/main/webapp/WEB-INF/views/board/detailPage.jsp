@@ -303,7 +303,7 @@
 															data-bGroup="${dto.bGroup}"
 															data-page="${commentsPaging.page-3}"
 															data-sortType=""
-														> < 
+														> &lt; 
 														</a>
 													</li>
 										</c:otherwise>
@@ -333,19 +333,34 @@
 									
 									<!-- Next 버튼 -->
 									<c:choose>
-										<c:when test="${commentsPaging.maxPage <= (commentsPaging.page+3) || commentsPaging.page >= commentsPaging.maxPage}">
-											<li class="page-item"></li>
-										</c:when>
-										<c:otherwise>
-													<li class="page-item">
-														<a class="page-link" href="#"
-															data-bGroup="${dto.bGroup}"
-															data-page="${commentsPaging.page + 3}"
-															data-sortType=""
-														> > 
-														</a>
-													</li>
-										</c:otherwise>
+										<!-- 버튼 숨김 -->
+									    <c:when test="${commentsPaging.page >= commentsPaging.maxPage}">
+									        <li class="page-item"></li>
+									    </c:when>
+									    <c:otherwise>
+									        <c:choose>
+									            <c:when test="${commentsPaging.page + 3 >= commentsPaging.maxPage}">
+									                <li class="page-item">
+									                    <a class="page-link" href="#"
+									                       data-bGroup="${dto.bGroup}"
+									                       data-page="${commentsPaging.maxPage}"
+									                       data-sortType=""
+									                    > &gt; 
+									                    </a>
+									                </li>
+									            </c:when>
+									            <c:otherwise>
+									                <li class="page-item">
+									                    <a class="page-link" href="#"
+									                       data-bGroup="${dto.bGroup}"
+									                       data-page="${commentsPaging.page + 3}"
+									                       data-sortType=""
+									                    > &gt; 
+									                    </a>
+									                </li>
+									            </c:otherwise>
+									        </c:choose>
+									    </c:otherwise>
 									</c:choose>
 								</ul>
 							</nav>
