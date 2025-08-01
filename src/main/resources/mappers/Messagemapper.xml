@@ -45,7 +45,7 @@
 	          </if>
 		   )
 		 WHERE rn = 1
-		 ORDER BY regdate DESC, regtime DESC
+		 ORDER BY is_read ASC, regdate DESC, regtime DESC
 	</select>
 	
 	<!-- 대화 상대방이 누군지 조회 -->
