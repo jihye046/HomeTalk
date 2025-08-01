@@ -23,8 +23,8 @@
 					<div class="form-body">
 						<!-- 프로필 이미지 -->
 						<div class="profile-section">
-					        <img id="profileImage" src="/user/getProfileImage/${uprofile_image}" alt="Profile Image"
-					        	 class="profile-image" style="cursor: pointer;" data-currentImage="${uprofile_image}">
+					        <img id="profileImage" src="/user/getProfileImage/${uprofileImage}" alt="Profile Image"
+					        	 class="profile-image" style="cursor: pointer;" data-currentImage="${uprofileImage}">
 					        <!-- 드롭다운 메뉴 -->	
 							<div class="dropdown-menu" id="dropdownMenu">
 								<a class="dropdown-item" href="#" id="defaultImage">기본이미지로 변경</a>

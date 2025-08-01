@@ -156,10 +156,10 @@ public class UserService implements IUserService {
 
 	// 소셜 아이디 존재 여부 확인
 	@Override
-	public boolean isSocialUserExists(String sns_id, String sns_type) {
+	public boolean isSocialUserExists(String snsId, String snsType) {
 		HashMap<String, String> map = new HashMap<>();
-		map.put("userId", sns_id);
-		map.put("user_type", sns_type);
+		map.put("userId", snsId);
+		map.put("userType", snsType);
 		return dao.isSocialUserExists(map) > 0;
 	}
 

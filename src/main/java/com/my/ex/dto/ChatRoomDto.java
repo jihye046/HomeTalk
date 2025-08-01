@@ -8,15 +8,15 @@ public class ChatRoomDto {
 	private MessageDto messageDto;
 	private String otherUserId;
 	private String otherUserNickname;
-	private String uprofile_image; // UserDto
+	private String uprofileImage; // UserDto
 	private int unreadMessageCount;
 	
-	public ChatRoomDto(MessageDto messageDto, String otherUserId, String otherUserNickname, String uprofile_image,
+	public ChatRoomDto(MessageDto messageDto, String otherUserId, String otherUserNickname, String uprofileImage,
 			int unreadMessageCount) {
 		this.messageDto = messageDto;
 		this.otherUserId = otherUserId;
 		this.otherUserNickname = otherUserNickname;
-		this.uprofile_image = uprofile_image;
+		this.uprofileImage = uprofileImage;
 		this.unreadMessageCount = unreadMessageCount;
 	}
 	

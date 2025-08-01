@@ -205,7 +205,8 @@ public class UserController {
 	@RequestMapping("/updateProfileForm")
 	public String updateProfileForm(HttpSession session, Model model) {
 		UserDto currentProfile = service.getCurrentProfile(getUserIdFromSession(session));
-		model.addAttribute("uprofile_image", currentProfile.getUprofile_image());
+//		model.addAttribute("uprofile_image", currentProfile.getUprofile_image());
+		model.addAttribute("uprofileImage", currentProfile.getUprofileImage());
 		return "/user/updateProfile";
 	}
 	

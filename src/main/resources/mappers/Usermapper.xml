@@ -22,7 +22,7 @@
     		#{uemail},
     		#{username},
     		#{umobile},
-    		#{user_type}
+    		#{userType}
     		)
 	</insert>
 	
@@ -202,6 +202,6 @@
 		SELECT COUNT(*)
 		  FROM mvc_login6
 		 WHERE userId = #{userId}
-		   AND user_type = #{user_type}
+		   AND user_type = #{userType}
 	</select>
 </mapper>
