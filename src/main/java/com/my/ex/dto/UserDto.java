@@ -10,15 +10,15 @@ public class UserDto {
 	private String unickName;
 	private String uemail; 
 	private int upoint;
-	private Date create_date;
-	private Date modify_date;
-	private String uprofile_image;
-	private String user_type;
+	private Date createDate;
+	private Date modifyDate;
+	private String uprofileImage;
+	private String userType;
 	
 	public UserDto() {}
 
 	public UserDto(String username, String umobile, String userId, String userPw, String unickName, String uemail,
-			int upoint, Date create_date, Date modify_date, String uprofile_image, String user_type) {
+			int upoint, Date createDate, Date modifyDate, String uprofileImage, String userType) {
 		this.username = username;
 		this.umobile = umobile;
 		this.userId = userId;
@@ -26,10 +26,10 @@ public class UserDto {
 		this.unickName = unickName;
 		this.uemail = uemail;
 		this.upoint = upoint;
-		this.create_date = create_date;
-		this.modify_date = modify_date;
-		this.uprofile_image = uprofile_image;
-		this.user_type = user_type;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.uprofileImage = uprofileImage;
+		this.userType = userType;
 	}
 
 	public String getUsername() {
@@ -88,44 +88,44 @@ public class UserDto {
 		this.upoint = upoint;
 	}
 
-	public Date getCreate_date() {
-		return create_date;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setCreate_date(Date create_date) {
-		this.create_date = create_date;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
-	public Date getModify_date() {
-		return modify_date;
+	public Date getModifyDate() {
+		return modifyDate;
 	}
 
-	public void setModify_date(Date modify_date) {
-		this.modify_date = modify_date;
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
 	}
 
-	public String getUprofile_image() {
-		return uprofile_image;
+	public String getUprofileImage() {
+		return uprofileImage;
 	}
 
-	public void setUprofile_image(String uprofile_image) {
-		this.uprofile_image = uprofile_image;
+	public void setUprofileImage(String uprofileImage) {
+		this.uprofileImage = uprofileImage;
 	}
 
-	public String getUser_type() {
-		return user_type;
+	public String getUserType() {
+		return userType;
 	}
 
-	public void setUser_type(String user_type) {
-		this.user_type = user_type;
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 	@Override
 	public String toString() {
 		return "UserDto [username=" + username + ", umobile=" + umobile + ", userId=" + userId + ", userPw=" + userPw
-				+ ", unickName=" + unickName + ", uemail=" + uemail + ", upoint=" + upoint + ", create_date="
-				+ create_date + ", modify_date=" + modify_date + ", uprofile_image=" + uprofile_image + ", user_type="
-				+ user_type + "]";
+				+ ", unickName=" + unickName + ", uemail=" + uemail + ", upoint=" + upoint + ", createDate="
+				+ createDate + ", modifyDate=" + modifyDate + ", uprofileImage=" + uprofileImage + ", userType="
+				+ userType + "]";
 	}
-
+	
 }

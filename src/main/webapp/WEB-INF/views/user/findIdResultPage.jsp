@@ -15,7 +15,7 @@
                 	<c:forEach items="${findIdResultList}" var="dto">
 	                    <div class="id-item">
 	                        <span class="found-id">${dto.userId}</span>
-	                        <span class="signup-date">가입일: ${dto.create_date }</span>
+	                        <span class="signup-date">가입일: ${dto.createDate }</span>
 	                    </div>
                 	</c:forEach>
                 </div>

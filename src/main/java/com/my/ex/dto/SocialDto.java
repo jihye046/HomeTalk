@@ -3,45 +3,45 @@ package com.my.ex.dto;
 import java.sql.Date;
 
 public class SocialDto {
-	private String sns_id;
-	private String sns_nickName;
+	private String snsId;
+	private String snsNickName;
 	private String upoint;
-	private String sns_email;
-	private String sns_name;
-	private String sns_mobile;
-	private String sns_type;
-	private String sns_profile;
-	private Date sns_connect_date;
-	
+	private String snsEmail;
+	private String snsName;
+	private String snsMobile;
+	private String snsType;
+	private String snsProfile;
+	private Date snsConnectDate;
+
 	public SocialDto() {}
 
-	public SocialDto(String sns_id, String sns_nickName, String upoint, String sns_email, String sns_name,
-			String sns_mobile, String sns_type, String sns_profile, Date sns_connect_date) {
-		this.sns_id = sns_id;
-		this.sns_nickName = sns_nickName;
+	public SocialDto(String snsId, String snsNickName, String upoint, String snsEmail, String snsName, String snsMobile,
+			String snsType, String snsProfile, Date snsConnectDate) {
+		this.snsId = snsId;
+		this.snsNickName = snsNickName;
 		this.upoint = upoint;
-		this.sns_email = sns_email;
-		this.sns_name = sns_name;
-		this.sns_mobile = sns_mobile;
-		this.sns_type = sns_type;
-		this.sns_profile = sns_profile;
-		this.sns_connect_date = sns_connect_date;
+		this.snsEmail = snsEmail;
+		this.snsName = snsName;
+		this.snsMobile = snsMobile;
+		this.snsType = snsType;
+		this.snsProfile = snsProfile;
+		this.snsConnectDate = snsConnectDate;
 	}
 
-	public String getSns_id() {
-		return sns_id;
+	public String getSnsId() {
+		return snsId;
 	}
 
-	public void setSns_id(String sns_id) {
-		this.sns_id = sns_id;
+	public void setSnsId(String snsId) {
+		this.snsId = snsId;
 	}
 
-	public String getSns_nickName() {
-		return sns_nickName;
+	public String getSnsNickName() {
+		return snsNickName;
 	}
 
-	public void setSns_nickName(String sns_nickName) {
-		this.sns_nickName = sns_nickName;
+	public void setSnsNickName(String snsNickName) {
+		this.snsNickName = snsNickName;
 	}
 
 	public String getUpoint() {
@@ -52,59 +52,59 @@ public class SocialDto {
 		this.upoint = upoint;
 	}
 
-	public String getSns_email() {
-		return sns_email;
+	public String getSnsEmail() {
+		return snsEmail;
 	}
 
-	public void setSns_email(String sns_email) {
-		this.sns_email = sns_email;
+	public void setSnsEmail(String snsEmail) {
+		this.snsEmail = snsEmail;
 	}
 
-	public String getSns_name() {
-		return sns_name;
+	public String getSnsName() {
+		return snsName;
 	}
 
-	public void setSns_name(String sns_name) {
-		this.sns_name = sns_name;
+	public void setSnsName(String snsName) {
+		this.snsName = snsName;
 	}
 
-	public String getSns_mobile() {
-		return sns_mobile;
+	public String getSnsMobile() {
+		return snsMobile;
 	}
 
-	public void setSns_mobile(String sns_mobile) {
-		this.sns_mobile = sns_mobile;
+	public void setSnsMobile(String snsMobile) {
+		this.snsMobile = snsMobile;
 	}
 
-	public String getSns_type() {
-		return sns_type;
+	public String getSnsType() {
+		return snsType;
 	}
 
-	public void setSns_type(String sns_type) {
-		this.sns_type = sns_type;
+	public void setSnsType(String snsType) {
+		this.snsType = snsType;
 	}
 
-	public String getSns_profile() {
-		return sns_profile;
+	public String getSnsProfile() {
+		return snsProfile;
 	}
 
-	public void setSns_profile(String sns_profile) {
-		this.sns_profile = sns_profile;
+	public void setSnsProfile(String snsProfile) {
+		this.snsProfile = snsProfile;
 	}
 
-	public Date getSns_connect_date() {
-		return sns_connect_date;
+	public Date getSnsConnectDate() {
+		return snsConnectDate;
 	}
 
-	public void setSns_connect_date(Date sns_connect_date) {
-		this.sns_connect_date = sns_connect_date;
+	public void setSnsConnectDate(Date snsConnectDate) {
+		this.snsConnectDate = snsConnectDate;
 	}
 
 	@Override
 	public String toString() {
-		return "NaverDto [sns_id=" + sns_id + ", sns_nickName=" + sns_nickName + ", upoint=" + upoint + ", sns_email="
-				+ sns_email + ", sns_name=" + sns_name + ", sns_mobile=" + sns_mobile + ", sns_type=" + sns_type
-				+ ", sns_profile=" + sns_profile + ", sns_connect_date=" + sns_connect_date + "]";
+		return "SocialDto [snsId=" + snsId + ", snsNickName=" + snsNickName + ", upoint=" + upoint + ", snsEmail="
+				+ snsEmail + ", snsName=" + snsName + ", snsMobile=" + snsMobile + ", snsType=" + snsType
+				+ ", snsProfile=" + snsProfile + ", snsConnectDate=" + snsConnectDate + "]";
 	}
 	
 }

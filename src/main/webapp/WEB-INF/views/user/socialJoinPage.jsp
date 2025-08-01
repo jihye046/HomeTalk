@@ -17,9 +17,9 @@
 				<form id="join-form" action="/social/join" method="post" class="join-form">
 					<input type="hidden" name="uemail" value="${socialDto.uemail}">
 					<input type="hidden" name="userId" value="${socialDto.userId}">
-<%-- 					<input type="text" name="sns_profile" value="${socialDto.sns_profile}"> --%>
-					<input type="hidden" name="username" value="${socialDto.username}">
-					<input type="hidden" name="user_type" value="${socialDto.user_type}">
+<%-- 					<input type="text" name="snsProfile" value="${socialDto.snsProfile}"> --%>
+<%-- 					<input type="hidden" name="username" value="${socialDto.username}"> --%>
+					<input type="hidden" name="userType" value="${socialDto.userType}">
 					
 					<div class="input-group">
 						<label for="username">이름</label>	

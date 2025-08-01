@@ -467,12 +467,12 @@ const scrollList = () => {
 
 /* 채팅방 상대정보(header) 출력
 ================================================== */
-const printHeader = (uprofile_image, otherUserNickname) => {
+const printHeader = (uprofileImage, otherUserNickname) => {
 	const header = document.querySelector("#header")
 	header.innerHTML = 
 	`
 		<div class="header">
-			<img src=${uprofile_image} alt="image" class="user-avatar">
+			<img src=${uprofileImage} alt="image" class="user-avatar">
 			<span class="userNickname" data-userNickname="${otherUserNickname}">${otherUserNickname}</span>
 		</div>
 	`
@@ -484,7 +484,7 @@ const printRoomList = (chatRoomDto) => {
 	const messageDto = chatRoomDto["messageDto"]
 	const otherUserId = chatRoomDto["otherUserId"]
 	const otherUserNickname = chatRoomDto["otherUserNickname"]
-	const uprofile_image = chatRoomDto["uprofile_image"]
+	const uprofileImage = chatRoomDto["uprofileImage"]
 	const unreadMessageCount = chatRoomDto["unreadMessageCount"]
 	const today = displayDate()
 	const messageTime = (messageDto.regdate == today) ? messageDto.regTime : messageDto.regdate
@@ -492,7 +492,7 @@ const printRoomList = (chatRoomDto) => {
 	let temp = 
 	`
 		<div class="chat-room" data-room-id=${messageDto.roomId}>
-			<img src="${uprofile_image}" alt="image" class="user-avatar"/>
+			<img src="${uprofileImage}" alt="image" class="user-avatar"/>
 			<div class="chat-room-info">
 
             	<span class="otherUserId" data-otherUserId="${otherUserId}"></span>
@@ -518,7 +518,7 @@ const printRoomList = (chatRoomDto) => {
 		return
 	}
 	
-	printHeader(uprofile_image, otherUserNickname)
+	printHeader(uprofileImage, otherUserNickname)
 	scrollList()
 }
 

@@ -42,5 +42,5 @@ public interface IUserService {
 	boolean resetPassword(String userId, String password);
 
 	// oauth 인증 관련
-	boolean isSocialUserExists(String sns_id, String sns_type);
+	boolean isSocialUserExists(String snsId, String snsType);
 }

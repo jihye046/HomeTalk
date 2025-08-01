@@ -84,7 +84,7 @@ public class SocialController {
 				UserDto dto = new UserDto();
 				
 				dto.setUsername(naverUser.getResponse().getName());
-				dto.setUser_type("NAVER");
+				dto.setUserType("NAVER");
 				dto.setUemail(naverUser.getResponse().getEmail());;
 				dto.setUserId(naverUser.getResponse().getId());
 				dto.setUnickName(naverUser.getResponse().getNickname());
@@ -141,7 +141,7 @@ public class SocialController {
 				String name = googleUser.getName(); 
 				String family_name = googleUser.getFamily_name();
 				dto.setUsername((name == null ? "" : name) + (family_name == null ? "" : family_name)); // 이름
-				dto.setUser_type("GOOGLE"); // 타입
+				dto.setUserType("GOOGLE"); // 타입
 				dto.setUemail(googleUser.getEmail());
 				dto.setUserId(googleUser.getSub());
 				
