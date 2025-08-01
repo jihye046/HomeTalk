@@ -49,7 +49,7 @@ public interface IBoardService {
 	boolean removeReplyIfNoChildReplies(Map<String, Integer> map);
 	
 	// 특정 댓글 ID에 해당하는 댓글이 현재 댓글 내에서 몇 번째 페이지에 위치하는지 계산
-	int calculateCommentPage(Integer targetCommentId, int bGroup, int commentsPageLimit);
+	int calculateCommentPage(Integer targetCommentId, int bGroup);
 	
 	int getTotalBookmarks(int bId);
 	List<BoardDto> replyList(int bGroup);
