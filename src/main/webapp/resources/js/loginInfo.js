@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			// 읽음 여부 표시 클래스
 			let readClass = notificationDto.isRead == 'N'? 'unread' : ''
 
-			// type이 댓글인 경우 미리보기로 보여줄 내용
+			// type이 댓글 또는 답글인 경우 미리보기로 보여줄 내용
 			let commentSnippet = ''
 
 			// 알림 메시지
@@ -121,6 +121,19 @@ document.addEventListener('DOMContentLoaded', () => {
 				notificationText = 
 				`
 					<strong>${notificationDto.senderId}</strong>님이 새로운 댓글을 달았습니다:
+					<span class="comment-preview-text">"${commentSnippet}"</span>
+				`
+			} else if(notificationDto.type == 'CHILD_COMMENT'){
+				if(notificationDto.dataJson){
+					const parsedData = JSON.parse(notificationDto.dataJson)
+					if(parsedData.childcommentSnippet){
+						commentSnippet = parsedData.childcommentSnippet
+					}
+				}
+
+				notificationText = 
+				`
+					<strong>${notificationDto.senderId}</strong>님이 새로운 답글을 달았습니다:
 					<span class="comment-preview-text">"${commentSnippet}"</span>
 				`
 			}
@@ -200,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						// notificationListContainer.appendChild(infoMessage)
 						
 						// 클릭 시 읽음 처리 
-						const aElements = notificationModal.querySelectorAll("notification-item a")
+						const aElements = notificationModal.querySelectorAll(".notification-item a")
 						aElements.forEach((a) => {
 							a.addEventListener('click', (event) => {
 								event.preventDefault()

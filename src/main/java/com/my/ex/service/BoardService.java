@@ -159,8 +159,34 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public void replyChildInsert(BoardDto dto) {
+	public void replyChildInsert(BoardDto dto, NotificationDto notificationDto, int commentPage) {
 		dao.replyChildInsert(dto);
+		
+		// 답글 작성자와 댓글 작성자가 다를 경우에만 알림 생성
+		if(!notificationDto.getUserId().equals(notificationDto.getSenderId())) {
+			int childCommentId = dto.getbId(); // 답글 삽입 후 set된 답글ID
+			
+			String childCommentSnippet = dto.getbContent().length() > 10 ? dto.getbContent().substring(0, 10) + "..." : dto.getbContent();
+			ObjectMapper mapper = new ObjectMapper();
+			String dataJson = null;
+			try {
+				Map<String, Object> map = new HashMap<>();
+				map.put("childcommentPage", "1");
+				map.put("childcommentSnippet", childCommentSnippet);
+				dataJson = mapper.writeValueAsString(map);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+			notificationDto.setDataJson(dataJson);
+			
+			notificationDto.setRelatedId(childCommentId);
+			notificationDto.setLink("/board/detailBoard?"
+					+ "bId=" + dto.getbGroup()
+					+ "&bGroup=" + dto.getbGroup() 
+					+ "&bName=" + notificationDto.getUserId() // 알림을 받을 사용자ID(게시글 작성자ID)
+					+ "&targetCommentId=" + childCommentId);
+			notificationService.addNotification(notificationDto);
+		}
 	}
 
 	@Override

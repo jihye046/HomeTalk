@@ -213,6 +213,10 @@
 	</select>
 	
 	<insert id="replyChildInsert" parameterType="BoardDto">
+		<selectKey keyProperty="bId" resultType="Integer" order="BEFORE">
+			SELECT seq_mvc_board6.NEXTVAL
+			  FROM dual
+		</selectKey>
 		INSERT INTO mvc_board6
 			 (
 			 bId,
@@ -224,7 +228,7 @@
 			 )
 		VALUES
 			 (
-			 seq_mvc_board6.nextval,
+			 #{bId},
 			 #{bName},
 			 #{bContent},
 			 #{bGroup},

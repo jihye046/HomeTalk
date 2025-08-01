@@ -379,11 +379,11 @@ public class BoardController {
 	// 댓글 등록
 	@ResponseBody
 	@RequestMapping(value = "/replyInsert", method = RequestMethod.POST)
-	public Map<String, Object> replyInsert(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+	public Map<String, Object> replyInsert(@RequestParam(value = "page", required = false, defaultValue = "1") int commentPage,
 										   @RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
+										   @RequestParam String boardWriterId,
 										   HttpSession session,
-										   BoardDto dto,
-										   @RequestParam String boardWriterId) {
+										   BoardDto dto) {
 		String userId = (String)session.getAttribute("userId");
 		dto.setbName(userId); // 댓글 작성자ID (알림을 발생시킨 사용자ID)
 		
@@ -393,10 +393,10 @@ public class BoardController {
 		notificationDto.setType("COMMENT");
 		notificationDto.setSenderId(userId); // 알림을 발생시킨 사용자ID
 		
-		service.replyInsert(dto, notificationDto, page);
+		service.replyInsert(dto, notificationDto, commentPage);
 		
 		int commentsCount = service.incrementCommentCount(dto.getbGroup());
-		CommentsListResponse response = commentsPagingAjax(page, sortType, dto.getbGroup(), session);
+		CommentsListResponse response = commentsPagingAjax(commentPage, sortType, dto.getbGroup(), session);
 		Map<String, Object> map = new HashMap<>();
 		map.put("commentsCount", commentsCount);
 		map.put("commentsListResponse", response);
@@ -407,18 +407,28 @@ public class BoardController {
 	// 답글 등록
 	@ResponseBody
 	@RequestMapping(value = "/replyChildInsert", method = RequestMethod.POST)
-	public Map<String, Object> replyChildInsert(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+	public Map<String, Object> replyChildInsert(@RequestParam(value = "page", required = false, defaultValue = "1") int commentPage,
 										  		@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
-										  		HttpSession session, BoardDto dto) {
+										  		@RequestParam String commentWriterId,
+										  		HttpSession session, 
+										  		BoardDto dto) {
 		String userId = (String)session.getAttribute("userId");
 		dto.setbName(userId);
-		service.replyChildInsert(dto);
+		
+		// 알림 정보 넘김
+		NotificationDto notificationDto = new NotificationDto();
+		notificationDto.setUserId(commentWriterId); // 알림을 받을 사용자ID(댓글 작성자)
+		notificationDto.setType("CHILD_COMMENT");
+		notificationDto.setSenderId(userId); // 알림을 발생시킨 사용자ID(답글 작성자)
+		
+		service.replyChildInsert(dto, notificationDto, commentPage);
 		
 		int commentsCount = service.incrementCommentCount(dto.getbGroup());
-		CommentsListResponse response = commentsPagingAjax(page, sortType, dto.getbGroup(), session);
+		CommentsListResponse response = commentsPagingAjax(commentPage, sortType, dto.getbGroup(), session);
 		Map<String, Object> map = new HashMap<>();
 		map.put("commentsCount", commentsCount);
 		map.put("commentsListResponse", response);
+		
 		return map;
 	}
 	
@@ -600,6 +610,7 @@ public class BoardController {
 			@RequestParam(value = "sortType", required = false, defaultValue = "latest") String sortType,
 			int bGroup,
 			HttpSession session) {
+		
 		// 'page', 'sortType' 값이 없는 경우 지정해주어야하는데, fetch로 보내면 @RequestParam을 사용못하기때문에 $.ajax로 요청하고 @RequestParam을 사용 
 		List<BoardDto> commentsPagingList = service.commentsPagingList(currentcommentPage, sortType, bGroup);
 		
