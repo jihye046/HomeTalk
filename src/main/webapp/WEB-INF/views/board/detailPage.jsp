@@ -333,7 +333,6 @@
 									
 									<!-- Next 버튼 -->
 									<c:choose>
-										<!-- 버튼 숨김 -->
 									    <c:when test="${commentsPaging.page >= commentsPaging.maxPage}">
 									        <li class="page-item"></li>
 									    </c:when>

@@ -143,11 +143,11 @@ const updateCurrentWeatherInfo = (currentWeatherDto) => {
   let output = ''
   output +=
     `
-        <p><span id="temp_min">${temp_min}</span> / <span id="temp_max">${temp_max}</span></p>
-        <p>${icon}</p>
-        <p><h2>${temp}°</h2></p>
-        <p>${weather}</p>
-        <p>체감 ${feels_like}</p>
+        <p class="high-low-temperature"><span id="temp_min">${temp_min}°</span> / <span id="temp_max">${temp_max}°</span></p>
+        <p></p>
+        <p><h2 class="currentTemperature">${temp}°</h2></p>
+        <p>${icon} ${weather}</p>
+        <p>체감 ${feels_like}°</p>
     `
   return output
 }
@@ -170,12 +170,12 @@ const updateWeeklyWeatherInfo = (weeklyWeatherDto) => {
         <div class="weekly-weather-row">
           <span>${dateTime.month} / ${dateTime.day}</span>
           <span>${icon}</span>
-          <span id="hour">${dateTime.hour}</span>
+          <span id="hour">${dateTime.hour}시</span>
           <span>${temp}°</span>
           <span>${weather}</span>
-          <span>체감 ${feels_like}</span>
+          <span>체감 ${feels_like}°</span>
           <span>
-            <span id="temp_min">${temp_min}</span> / <span id="temp_max">${temp_max}</span>
+            <span id="temp_min">${temp_min}°</span> / <span id="temp_max">${temp_max}°</span>
           </span><br>
         </div>
       `

@@ -8,6 +8,7 @@
 }
 
 #city {
+	font-size: 1.2rem;
 	color: blue;
 	text-decoration: underline;
 }
@@ -24,6 +25,15 @@
 	padding: 20px;
 }
 
+.currentTemperature {
+	padding: 20px 0px;
+	font-size: 3.5rem;
+}
+
+.high-low-temperature {
+	font-size: 1.2rem;	
+}
+
 .currentHourWeather {
 	display: flex;
 	flex-direction: column;
@@ -31,6 +41,7 @@
   	justify-content: center;
   	gap: 6px;
   	min-height: 100%;
+  	padding-top: 20px;
 }
 
 .weather-row {
@@ -67,14 +78,16 @@
 }
 
 .bi{
-	font-size: 2rem;
+	font-size: 1.7rem;
 }
 
 #temp_min {
+	font-weight: 600;
 	color: blue;
 }
 
 #temp_max {
+	font-weight: 600;
 	color: crimson;
 }
 
