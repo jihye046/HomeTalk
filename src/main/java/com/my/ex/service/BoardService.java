@@ -23,7 +23,7 @@ public class BoardService implements IBoardService {
 	// BETWEEN A AND B
 	private static final int PAGE_LIMIT = 12;  // 한 페이지에 표시할 게시글 개수
     private static final int BLOCK_LIMIT = 5;  // 하단에 표시할 페이지 번호 블록 개수 [1],[2] ..
-    private static final int COMMENTS_PAGE_LIMIT = 6;  // 한 페이지에 표시할 댓글 개수
+    public static final int COMMENTS_PAGE_LIMIT = 6;  // 한 페이지에 표시할 댓글 개수
     private static final int COMMENTS_BLOCK_LIMIT = 3;  // 하단에 표시할 페이지 번호 블록 개수 [1],[2] ..
 	
 	@Autowired
@@ -141,12 +141,12 @@ public class BoardService implements IBoardService {
 	}
 	
 	@Override
-	public int calculateCommentPage(Integer targetCommentId, int bGroup, int commentsPageLimit) {
+	public int calculateCommentPage(Integer targetCommentId, int bGroup) {
 		// targetComment가 몇번째에 위치하는지 확인
 		Map<String, Object> map = new HashMap<>();
 		map.put("targetCommentId", targetCommentId);
 		map.put("bGroup", bGroup);
-		int commentOrder = dao.getCommentOrderById(map);
+		int commentOrder = dao.getCommentOrderById(map); // 알림 발생시기와 확인시기에 댓글이 위치한 page가 다를 수 있으므로 페이지를 재계산하기 위함
 		
 		// targetComment가 위치한 페이지 링크
 		int calculatedPage =(int) Math.ceil((double)commentOrder / COMMENTS_PAGE_LIMIT);

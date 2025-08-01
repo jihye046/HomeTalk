@@ -384,6 +384,7 @@
 	<div class="hidden-data" id="isBookmarked" data-isBookmarked="${isBookmarked}"></div>
 	<div class="hidden-data" id="userNickname" data-userId="${sessionScope.userNickname}"></div>
 	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
+	<div class="hidden-data" id="commentsPageDto-page" data-commentsPageDto-page="${commentsPaging.page != null ? commentsPaging.page : 1}"></div>
 	
 	<script src="<c:url value="/resources/js/common.js"/>"></script>
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> <!-- 카카오 공유 -->
@@ -411,9 +412,10 @@ const setMessage = (msg) => {
 const replyBtn = document.querySelector("#commentBtn")
 const replyTable = document.querySelector(".comments")
 const replyInput = document.querySelector("#comment-input")
+const commentsPageDtoPage = parseInt(document.querySelector("#commentsPageDto-page").getAttribute("data-commentsPageDto-page"))
 const COMMENTS_PAGE_LIMIT = 6
 const COMMENTS_BLOCK_LIMIT = 3
-let currentcommentPage = 1
+let currentcommentPage = commentsPageDtoPage || 1
 
 	// 현재 페이지 블록
 const setPage = (page) => {

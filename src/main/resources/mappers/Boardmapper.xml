@@ -186,11 +186,11 @@
 	</insert>
 	
 	<select id="getCommentOrderById" parameterType="java.util.HashMap" resultType="Integer">
-		SELECT COUNT(bId) 
-		  FROM MVC_BOARD6
+		SELECT COUNT(*) + 1
+		  FROM mvc_board6
 		 WHERE bGroup = #{bGroup}
-		   AND bId <![CDATA[ >= ]]> #{targetCommentId}
 		   AND bStep > 0
+		   AND bStep <![CDATA[ < ]]> (SELECT bStep FROM mvc_board6 WHERE bId = #{targetCommentId})
 	</select>
 	
 	<update id="replyShape" parameterType="java.util.HashMap">

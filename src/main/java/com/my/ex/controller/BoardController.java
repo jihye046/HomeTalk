@@ -173,9 +173,8 @@ public class BoardController {
 		// 만약 알림 링크를 통해 targetCommentId가 넘어왔다면, 해당 댓글의 실제 페이지를 계산
 		int actualCommentPageToLoad = 1; // 기본적으로 1페이지 로드
 		if(targetCommentId != null) {
-			int commentsPageLimit = 6; // 서비스와 동일한 값 사용
 			// 해당 targetCommentId가 현재 몇번째 페이지에 위치하는지 계산
-			actualCommentPageToLoad = service.calculateCommentPage(targetCommentId, bGroup, commentsPageLimit);
+			actualCommentPageToLoad = service.calculateCommentPage(targetCommentId, bGroup);
 		} 
 		
 		// 댓글 페이징 정보
