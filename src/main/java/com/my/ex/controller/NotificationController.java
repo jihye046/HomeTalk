@@ -97,4 +97,19 @@ public class NotificationController {
 		return responseDto;
 	}
 	
+	// 모두 읽기 처리
+	@PatchMapping("/markAllAsRead")
+	@ResponseBody
+	public NotificationResponseDto markAllAsRead(HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		boolean isUpdated = service.markAllAsRead(userId);
+		int unreadCount = service.getUnreadCount(userId);
+		
+		NotificationResponseDto responseDto = new NotificationResponseDto();
+		responseDto.setAllReadStatusesUpdated(isUpdated);
+		responseDto.setUnreadCount(unreadCount);
+		
+		return responseDto;
+	}
+	
 }

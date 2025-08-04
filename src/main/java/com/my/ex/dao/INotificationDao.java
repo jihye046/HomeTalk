@@ -11,4 +11,5 @@ public interface INotificationDao {
 	List<NotificationDto> getAllNotifications(Map<String, Object> map);
 	int updateReadStatus(int notificationId);
 	int getUnreadCount(String userId);
+	int markAllAsRead(String userId);
 }

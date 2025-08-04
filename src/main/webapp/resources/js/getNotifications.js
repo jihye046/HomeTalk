@@ -102,6 +102,38 @@ document.addEventListener('DOMContentLoaded', () => {
 			badge.textContent = ''
 		}
 	}
+    
+    // '모두 읽음' 버튼 클릭 이벤트 핸들러
+    const markAllRead = () => {
+        markAllAsReadBtnPage.addEventListener('click', () => {
+            const unreadElements = document.querySelectorAll(".unread")
+            if(unreadElements.length > 0){
+                axios.patch('/notification/markAllAsRead')
+				.then(response => {
+					const isUpdated = response.data.allReadStatusesUpdated
+					const unreadCount = response.data.unreadCount
+					if(isUpdated){
+						unreadElements.forEach((unreadElement) => {
+							unreadElement.classList.remove('unread')
+							showUnreadCount(unreadCount)
+						})
+					}
+				})
+				.catch(error => {
+					console.error('error: ', error)
+				})
+            } else {
+                const noNotificationsMessage = document.querySelector("#noNotificationsMessage")
+                const msg = '더 이상 읽을 알림이 없습니다.'
+                noNotificationsMessage.textContent = msg
+                noNotificationsMessage.classList.add('show')
+                
+                setTimeout(() => {
+                    noNotificationsMessage.classList.remove('show')
+                }, 3000)
+            }
+        })
+    }
 
     // 클릭 시 읽음 처리
     const handleNotificationClick = () => {
@@ -150,11 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 다음 알림 데이터 불러오기
     const loadMoreNotifications = (page, observer) => {
-        const params = {
-            page: page,
-            size: 10
-        }
-        
         // 옵저버 종료 후 데이터 없음 알림 메시지
         const handleNoMoreNotifications = () => {
             if(!document.querySelector(".no-more-notifications")){
@@ -167,12 +194,25 @@ document.addEventListener('DOMContentLoaded', () => {
             observer.disconnect()  
         }
 
+        const params = {
+            page: page,
+            size: 10
+        }
+
+        showSpinner() // 요청 직접에 스피너 보이기
         axios.get('/notification/getAllNotifications/axios', { params })
             .then(response => {
                 const notificationList = response.data
                 if(notificationList.length > 0){
                     let output = renderNotificationList(notificationList)
                     container.insertAdjacentHTML('beforeend', output)
+
+                    // 새 sentinel 생성 및 옵저버 연결
+                    const newSentinel = document.createElement('div')
+                    newSentinel.id = 'scroll-sentinel'
+                    container.insertAdjacentElement('beforeend', newSentinel)
+                    newSentinel.insertAdjacentElement('beforebegin', spinner)
+                    observer.observe(newSentinel)
 
                     // 받은 데이터가 요청한 size보다 작으면 더 이상 데이터 없으므로 옵저버 종료
                     if(notificationList.length < params.size){
@@ -236,4 +276,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initInfiniteScrollObserver()
     handleNotificationClick()
+    markAllRead()
 })

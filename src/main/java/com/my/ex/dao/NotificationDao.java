@@ -42,4 +42,9 @@ public class NotificationDao implements INotificationDao {
 		return session.selectList(NAMESPACE + "getAllNotifications", map);
 	}
 
+	@Override
+	public int markAllAsRead(String userId) {
+		return session.update(NAMESPACE + "markAllAsRead", userId);
+	}
+
 }

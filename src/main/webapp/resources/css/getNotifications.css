@@ -28,6 +28,42 @@ body {
     box-sizing: border-box;
 }
 
+/* 페이지 헤더 스타일 */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.5em;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* '모두 읽기' 버튼 */
+.mark-all-read-btn-page {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.mark-all-read-btn-page:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+    color: #333;
+}
+
 /* 알림 목록 <ul> */
 .noti-list {
     list-style: none;
@@ -122,8 +158,10 @@ body {
 
 .spinner-grow {
 	display: none;
-	position: absolute;
-	top: calc(100% + 30px); /* ul 바로 아래 10px 간격 */
+	position: sticky;
+	bottom: 10px; /* 화면 하단에서 띄울 거리 */
+	transform: translateX(-50%);
+	z-index: 9999;
 	left: 50%;
 }
 
@@ -135,6 +173,28 @@ body {
     text-align: center;
     color: #666;
     padding: 10px 0;
+}
+
+.no-notifications-message {
+	position: fixed;
+/* 	top: 10px; */
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%) translateY(0);
+	background-color: black;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	opacity: 0;
+	visibility: hidden;
+	font-size: 14px;
+	z-index: 9999;
+	transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.no-notifications-message.show {
+	opacity: 1;
+	visibility: visible;
 }
 
 /* 반응형 디자인 */
