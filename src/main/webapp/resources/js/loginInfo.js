@@ -233,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						// 알림이 없는 경우
 						if(notifications.length == 0){
 							notificationListContainer.innerHTML = '<li class="no-notifications">새로운 알림이 없습니다.</li>'
+							showMarkAllAsReadButton(unreadCount)
 							return
 						}
 
