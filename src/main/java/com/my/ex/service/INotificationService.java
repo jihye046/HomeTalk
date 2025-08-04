@@ -10,4 +10,5 @@ public interface INotificationService {
 	List<NotificationDto> getAllNotifications(String userId, int size, int offset);
 	boolean updateReadStatus(int notificationId);
 	int getUnreadCount(String userId);
+	boolean markAllAsRead(String userId);
 }

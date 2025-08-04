@@ -160,11 +160,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	const badge = document.querySelector("#notificationBadge")
 	const showUnreadCount = (unreadCount) => {
 		if(unreadCount > 0){
+			// 뱃지에 안 읽은 메시지 수 표시
 			badge.style.display = 'block'
 			badge.textContent = unreadCount
+
+			// '모두 읽음' 버튼 표시
+        	markAllAsReadBtn.style.display = 'block';
 		} else {
 			badge.style.display = 'none'
 			badge.textContent = ''
+		}
+	}
+
+	const markAllAsReadBtn = document.querySelector("#markAllAsReadBtn")
+	// '모두 읽음' 버튼 클릭 이벤트 핸들러
+	const markAllAsRead = () => {
+		markAllAsReadBtn.addEventListener('click', () => {
+			axios.patch('/notification/markAllAsRead')
+				.then(response => {
+					const isUpdated = response.data.allReadStatusesUpdated
+					const unreadCount = response.data.unreadCount
+					if(isUpdated){
+						document.querySelectorAll(".unread").forEach((unreadElement) => {
+							unreadElement.classList.remove('unread')
+							showUnreadCount(unreadCount)
+						})
+					}
+				})
+				.catch(error => {
+					console.error('error: ', error)
+				})
+		})
+	}
+
+	// 안 읽은 메시지가 있다면 '모두 읽기' 버튼 표시
+	
+	const showMarkAllAsReadButton = (unreadCount) => {
+		if(unreadCount > 0){
+			markAllAsReadBtn.style.display = 'block'
+			markAllAsRead()
+		} else {
+			markAllAsReadBtn.style.display = 'none'
 		}
 	}
 
@@ -188,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				axios.get('/notification/getNotifications')
 					.then(response => {
 						const notifications = response.data.notificationDtos // List<>
+						const unreadCount = response.data.unreadCount
 
 						// 초기화
 						const notificationListContainer  = notificationModal.querySelector(".notification-list") // <ul>
@@ -200,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						}
 
 						// 알림이 있는 경우
+						showMarkAllAsReadButton(unreadCount)
 						let output = renderNotificationList(notifications)
 						const infoMessage = 
 						`

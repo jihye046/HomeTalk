@@ -13,9 +13,14 @@
 	
 	<main class="my-posts-main">
 		<div class="my-posts-container">
+			<div class="page-header">
+	            <h2 class="page-title">알림</h2>
+	            <button id="markAllAsReadBtnPage" class="mark-all-read-btn-page">모두 읽기</button>
+	        </div>
 			<ul class="noti-list"></ul>
 			<div class="spinner-grow spinner-grow-sm"></div>
-		</div>			
+		</div>
+		<div class="no-notifications-message" id="noNotificationsMessage"></div>			
 	</main>
 	
 	<%@ include file="/WEB-INF/views/include/footer.jsp" %>

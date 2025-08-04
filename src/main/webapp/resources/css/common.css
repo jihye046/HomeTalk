@@ -846,6 +846,30 @@ hr {
     color: #0056b3;
 }
 
+/* '모두 읽음' 버튼 스타일 */
+.mark-all-read-btn {
+    background-color: transparent;
+    border: none;
+    color: #999; /* 연한 회색 */
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 15px; /* 닫기 버튼과의 간격 */
+    transition: color 0.2s ease;
+}
+
+/* hover 시 효과 */
+.mark-all-read-btn:hover {
+    color: #666; /* 조금 더 진한 회색 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.header-actions {
+	display: flex;
+	align-items: center;
+}
+
 /* .buttonn-primary
 ================================================== */
 

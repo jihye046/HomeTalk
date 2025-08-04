@@ -46,5 +46,10 @@ public class NotificationService implements INotificationService {
 		
 		return dao.getAllNotifications(map);
 	}
+
+	@Override
+	public boolean markAllAsRead(String userId) {
+		return dao.markAllAsRead(userId) > 0;
+	}
 	
 }

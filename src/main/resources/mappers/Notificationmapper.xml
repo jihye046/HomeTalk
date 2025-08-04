@@ -61,4 +61,11 @@
 		 WHERE userId = #{userId} 
 		   AND is_read = 'N'
 	</select>
+	
+	<update id="markAllAsRead">
+		UPDATE mvc_notifications6
+		   SET is_read = 'Y'
+		 WHERE userId = #{userId}
+		   AND is_read = 'N'
+	</update>
 </mapper>

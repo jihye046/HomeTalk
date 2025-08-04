@@ -9,4 +9,5 @@ public class NotificationResponseDto {
 	private List<NotificationDto> notificationDtos;
 	private int unreadCount;
 	private boolean readStatusUpdated;
+	private boolean allReadStatusesUpdated ;
 }

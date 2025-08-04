@@ -49,7 +49,10 @@
 								<div id="notificationModal" class="notification-modal">
 							        <div class="notification-header">
 							            <h3>알림</h3>
-							            <span class="close-modal-btn">&times;</span>
+							            <div class="header-actions">
+								            <button id="markAllAsReadBtn" class="mark-all-read-btn">모두 읽기</button>
+								            <span class="close-modal-btn">&times;</span>
+						            	</div>
 							        </div>
 							        <ul class="notification-list"></ul>
 							        <div class="notification-footer">
