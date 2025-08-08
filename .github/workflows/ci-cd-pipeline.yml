@@ -37,7 +37,7 @@ jobs:
 
       # 5. 빌드된 아티팩트 업로드
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: spring-boot-artifact
           path: target/*.war  # 빌드된 .war 파일
