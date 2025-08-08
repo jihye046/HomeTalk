@@ -26,7 +26,7 @@ jobs:
 
       # 3. Maven 의존성 캐시
       - name: Cache Maven dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -37,7 +37,7 @@ jobs:
 
       # 5. 빌드된 아티팩트 업로드
       - name: Upload build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: spring-boot-artifact
           path: target/*.war  # 빌드된 .war 파일
