@@ -58,25 +58,28 @@ jobs:
           name: spring-boot-artifact
           path: ./artifacts
 
-      # 3. SSH 설정 (비공개 키 사용)
-      - name: Setup SSH
+      # 3. SSH 에이전트 설정 및 비공개 키 로드 (암호화된 키 사용 시)
+      - name: Setup SSH Agent with Passphrase
         run: |
           mkdir -p ~/.ssh
-          echo "Writing SSH private key to file..."  # 확인용
-          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          echo "Setting permissions for private key..."  # 확인용
-          chmod 600 ~/.ssh/id_ed25519
-          echo "Verifying private key file content (first few lines, masked):"  # 확인용
-          head -n 5 ~/.ssh/id_ed25519 | sed 's/./*/g' || true # 키 내용이 제대로 쓰였는지 확인 (마스킹)
-          echo "Running ssh-keyscan to add host to known_hosts..."  # 확인용
-          ssh-keyscan -t ed25519 34.64.199.61 >> ~/.ssh/known_hosts
-          echo "ssh-keyscan completed. Contents of known_hosts:"  # 확인용
-          cat ~/.ssh/known_hosts || true # known_hosts 파일 내용 확인
+          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
+          chmod 600 ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
+          # SSH 키의 passphrase를 추가
+          echo "${{ secrets.HOMETALK_SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
 
-      # 4. GCP VM에 애플리케이션 배포
+      # 4. SSH Known Hosts 설정
+      - name: Setup SSH Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519 34.64.199.61 >> ~/.ssh/known_hosts
+          echo "ssh-keyscan completed. Contents of known_hosts:"
+          cat ~/.ssh/known_hosts || true
+
+      # 5. GCP VM에 애플리케이션 배포
       - name: Deploy to GCP VM
         run: |
           echo "Deploying to GCP VM..."
-          scp -i ~/.ssh/id_ed25519 ./artifacts/*.war kia20250626@34.64.199.61:/opt/apache-tomcat-9.0.106/webapps/  # Tomcat 경로 수정
-          ssh -i ~/.ssh/id_ed25519 kia20250626@34.64.199.61 "mv /opt/apache-tomcat-9.0.106/webapps/*.war /opt/apache-tomcat-9.0.106/webapps/ROOT.war"  # WAR 파일 이름 변경
-          ssh -i ~/.ssh/id_ed25519 kia20250626@34.64.199.61 "sudo /opt/apache-tomcat-9.0.106/bin/shutdown.sh && sudo /opt/apache-tomcat-9.0.106/bin/startup.sh"  # Tomcat 재시작
+          # ssh-agent가 키를 관리하므로 -i 옵션 불필요
+          scp ./artifacts/*.war kia20250626@34.64.199.61:/opt/apache-tomcat-9.0.106/webapps/  # Tomcat 경로 수정
+          ssh kia20250626@34.64.199.61 "mv /opt/apache-tomcat-9.0.106/webapps/*.war /opt/apache-tomcat-9.0.106/webapps/ROOT.war"  # WAR 파일 이름 변경
+          ssh kia20250626@34.64.199.61 "sudo /opt/apache-tomcat-9.0.106/bin/shutdown.sh && sudo /opt/apache-tomcat-9.0.106/bin/startup.sh"  # Tomcat 재시작
