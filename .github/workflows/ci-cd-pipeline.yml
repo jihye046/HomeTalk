@@ -62,14 +62,14 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa 34.64.199.61 >> ~/.ssh/known_hosts
+          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 34.64.199.61 >> ~/.ssh/known_hosts
 
       # 4. GCP VM에 애플리케이션 배포
       - name: Deploy to GCP VM
         run: |
           echo "Deploying to GCP VM..."
-          scp -i ~/.ssh/id_rsa ./artifacts/*.war kia20250626@34.64.199.61:/opt/apache-tomcat-9.0.106/webapps/  # Tomcat 경로 수정
-          ssh -i ~/.ssh/id_rsa kia20250626@34.64.199.61 "mv /opt/apache-tomcat-9.0.106/webapps/*.war /opt/apache-tomcat-9.0.106/webapps/ROOT.war"  # WAR 파일 이름 변경
-          ssh -i ~/.ssh/id_rsa kia20250626@34.64.199.61 "sudo /opt/apache-tomcat-9.0.106/bin/shutdown.sh && sudo /opt/apache-tomcat-9.0.106/bin/startup.sh"  # Tomcat 재시작
+          scp -i ~/.ssh/id_ed25519 ./artifacts/*.war kia20250626@34.64.199.61:/opt/apache-tomcat-9.0.106/webapps/  # Tomcat 경로 수정
+          ssh -i ~/.ssh/id_ed25519 kia20250626@34.64.199.61 "mv /opt/apache-tomcat-9.0.106/webapps/*.war /opt/apache-tomcat-9.0.106/webapps/ROOT.war"  # WAR 파일 이름 변경
+          ssh -i ~/.ssh/id_ed25519 kia20250626@34.64.199.61 "sudo /opt/apache-tomcat-9.0.106/bin/shutdown.sh && sudo /opt/apache-tomcat-9.0.106/bin/startup.sh"  # Tomcat 재시작
