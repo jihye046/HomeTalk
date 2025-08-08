@@ -58,18 +58,18 @@ jobs:
           name: spring-boot-artifact
           path: ./artifacts
 
-      # 3. SSH 에이전트 설정 및 비공개 키 로드 (암호화된 키 사용 시)
-      - name: Setup SSH Agent with Passphrase
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
-          chmod 600 ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
-          # SSH 키의 passphrase를 추가
-          echo "${{ secrets.HOMETALK_SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_ed25519_HOMETALK_SSH_PASSPHRASE
+      # 3. SSH Agent 설정 및 개인 키 로드 (암호화된 키 사용 시)
+      - name: Setup SSH Agent
+        # webfactory/ssh-agent 액션 사용 (안정적인 특정 커밋 SHA로 지정)
+        uses: webfactory/ssh-agent@b221972b9a7c645b045e45c7929497e5d8d9f109
+        with:
+          ssh-private-key: ${{ secrets.HOMETALK_SSH_PRIVATE_KEY }} # 개인 키 시크릿
+          passphrase: ${{ secrets.HOMETALK_SSH_PASSPHRASE }} # 개인 키 암호 시크릿
 
       # 4. SSH Known Hosts 설정
       - name: Setup SSH Known Hosts
         run: |
+          set -euxo pipefail
           mkdir -p ~/.ssh
           ssh-keyscan -t ed25519 34.64.199.61 >> ~/.ssh/known_hosts
           echo "ssh-keyscan completed. Contents of known_hosts:"
