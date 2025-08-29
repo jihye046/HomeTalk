@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		notifications.forEach((notificationDto) => {
 			// 상대적인 시간으로 변환
 			const timeStamp = notificationDto.createdAt
-			const date = timeAgo(timeStamp)
+			const date = timeAgo(new Date(timeStamp))
 
 			// 읽음 여부 표시 클래스
 			let readClass = notificationDto.isRead == 'N'? 'unread' : ''
