@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.my.ex.EnvironmentService;
+import com.my.ex.GcsService;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.UserDto;
 import com.my.ex.service.UserService;
@@ -42,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private EnvironmentService environmentService;
+	
+	@Autowired
+	private GcsService gcsService;
 	
 	// 세션에 저장된 userId 가져오기
 	public static String getUserIdFromSession(HttpSession session) {
@@ -202,11 +207,28 @@ public class UserController {
 	}
 	
 	// 프로필 변경 페이지
+//	@RequestMapping("/updateProfileForm")
+//	public String updateProfileForm(HttpSession session, Model model) {
+//		UserDto currentProfile = service.getCurrentProfile(getUserIdFromSession(session));
+//		model.addAttribute("uprofileImage", currentProfile.getUprofileImage());
+//		return "/user/updateProfile";
+//	}
+	
 	@RequestMapping("/updateProfileForm")
 	public String updateProfileForm(HttpSession session, Model model) {
 		UserDto currentProfile = service.getCurrentProfile(getUserIdFromSession(session));
-//		model.addAttribute("uprofile_image", currentProfile.getUprofile_image());
-		model.addAttribute("uprofileImage", currentProfile.getUprofileImage());
+		String filename = currentProfile.getUprofileImage(); 
+		String src = "";
+		
+		if(filename != null && filename.startsWith("http://")  || filename.startsWith("https://")) {
+			// GCS URL 그대로 사용
+			src = filename;
+		} else {
+			// 로컬 또는 VM에서 이미지 서빙
+			src = "/user/getProfileImage/" + filename;
+		}
+		
+		model.addAttribute("uprofileImage", src);
 		return "/user/updateProfile";
 	}
 	
@@ -282,6 +304,12 @@ public class UserController {
 	@RequestMapping("/getProfileImage/{filename:.+}")
 	@ResponseBody
 	public Resource getProfileImage(@PathVariable String filename) {
+		if(filename != null && filename.startsWith("http://") || filename.startsWith("https://")) {
+			// GCS 이미지는 직접 url로 접근하므로 해당 컨트롤러를 통하지 않음.
+			throw new IllegalArgumentException("GCS 이미지이나, 잘못 들어온 요청. URL: " + filename);
+		}
+		
+		// [로컬 or VM] 파일 서빙
 		String uploadDir = environmentService.getProfileUploadPath();
 		File file = new File(uploadDir, filename);
 		
@@ -292,16 +320,23 @@ public class UserController {
 		}
 	}
 	
-	// 파일 저장
+	// 프로필 이미지 파일 저장
 	private String saveProfileImage(MultipartFile profileImage, String userId) throws IOException {
-		// 파일 저장 경로 설정
-		String uploadDir = environmentService.getProfileUploadPath();
-		String filename = userId + "_" + profileImage.getOriginalFilename().trim().replace(" ", "_"); 
-		File fileToSave = new File(uploadDir, filename);
+		// [GCS] 업로드 및 GCS URL 반환
+		String uniqueFileName;
+		if(environmentService.getStorageType().equals("gcs")) {
+			uniqueFileName = gcsService.uploadProfileImage(profileImage);
+		} else {
+			// [로컬 or VM] 파일 저장
+			String uploadDir = environmentService.getDevProfileUploadPath();
+			String filename = profileImage.getOriginalFilename().trim().replace(" ", "_");
+			uniqueFileName = UUID.randomUUID().toString() + "_" + filename;
+			
+			File fileToSave = new File(uploadDir, uniqueFileName);
+			profileImage.transferTo(fileToSave); // 파일 저장
+		}
 		
-		// 파일 저장
-		profileImage.transferTo(fileToSave);
-		return filename;
+		return uniqueFileName;
 	}
 	
 	// 1:1 채팅

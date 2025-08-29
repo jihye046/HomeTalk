@@ -8,6 +8,9 @@ public class EnvironmentService {
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
 	
+	@Value("${image.storage.type}")
+	private String storageType;
+	
 	@Value("${image.devInitRequest.url}")
 	private String devInitRequestUrl;
 	
@@ -40,11 +43,12 @@ public class EnvironmentService {
 	
 	public EnvironmentService() {}
 
-	
-	public EnvironmentService(String activeProfile, String devInitRequestUrl, String prodInitRequestUrl,
-			String devUploadPath, String prodUploadPath, String devAccessUrl, String prodAccessUrl, String devWebSocket,
-			String prodWebSocket, String devProfileUploadPath, String prodProfileUploadPath) {
+	public EnvironmentService(String activeProfile, String storageType, String devInitRequestUrl,
+			String prodInitRequestUrl, String devUploadPath, String prodUploadPath, String devAccessUrl,
+			String prodAccessUrl, String devWebSocket, String prodWebSocket, String devProfileUploadPath,
+			String prodProfileUploadPath) {
 		this.activeProfile = activeProfile;
+		this.storageType = storageType;
 		this.devInitRequestUrl = devInitRequestUrl;
 		this.prodInitRequestUrl = prodInitRequestUrl;
 		this.devUploadPath = devUploadPath;
@@ -61,135 +65,115 @@ public class EnvironmentService {
 		return activeProfile;
 	}
 
-
 	public void setActiveProfile(String activeProfile) {
 		this.activeProfile = activeProfile;
 	}
 
+	public String getStorageType() {
+		return storageType;
+	}
+
+	public void setStorageType(String storageType) {
+		this.storageType = storageType;
+	}
 
 	public String getDevInitRequestUrl() {
 		return devInitRequestUrl;
 	}
 
-
 	public void setDevInitRequestUrl(String devInitRequestUrl) {
 		this.devInitRequestUrl = devInitRequestUrl;
 	}
-
 
 	public String getProdInitRequestUrl() {
 		return prodInitRequestUrl;
 	}
 
-
 	public void setProdInitRequestUrl(String prodInitRequestUrl) {
 		this.prodInitRequestUrl = prodInitRequestUrl;
 	}
-
 
 	public String getDevUploadPath() {
 		return devUploadPath;
 	}
 
-
 	public void setDevUploadPath(String devUploadPath) {
 		this.devUploadPath = devUploadPath;
 	}
-
 
 	public String getProdUploadPath() {
 		return prodUploadPath;
 	}
 
-
 	public void setProdUploadPath(String prodUploadPath) {
 		this.prodUploadPath = prodUploadPath;
 	}
-
 
 	public String getDevAccessUrl() {
 		return devAccessUrl;
 	}
 
-
 	public void setDevAccessUrl(String devAccessUrl) {
 		this.devAccessUrl = devAccessUrl;
 	}
-
 
 	public String getProdAccessUrl() {
 		return prodAccessUrl;
 	}
 
-
 	public void setProdAccessUrl(String prodAccessUrl) {
 		this.prodAccessUrl = prodAccessUrl;
 	}
-
 
 	public String getDevWebSocket() {
 		return devWebSocket;
 	}
 
-
 	public void setDevWebSocket(String devWebSocket) {
 		this.devWebSocket = devWebSocket;
 	}
-
 
 	public String getProdWebSocket() {
 		return prodWebSocket;
 	}
 
-
 	public void setProdWebSocket(String prodWebSocket) {
 		this.prodWebSocket = prodWebSocket;
 	}
-
 
 	public String getDevProfileUploadPath() {
 		return devProfileUploadPath;
 	}
 
-
 	public void setDevProfileUploadPath(String devProfileUploadPath) {
 		this.devProfileUploadPath = devProfileUploadPath;
 	}
-
 
 	public String getProdProfileUploadPath() {
 		return prodProfileUploadPath;
 	}
 
-
 	public void setProdProfileUploadPath(String prodProfileUploadPath) {
 		this.prodProfileUploadPath = prodProfileUploadPath;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "EnvironmentService [activeProfile=" + activeProfile + ", devInitRequestUrl=" + devInitRequestUrl
-				+ ", prodInitRequestUrl=" + prodInitRequestUrl + ", devUploadPath=" + devUploadPath
-				+ ", prodUploadPath=" + prodUploadPath + ", devAccessUrl=" + devAccessUrl + ", prodAccessUrl="
-				+ prodAccessUrl + ", devWebSocket=" + devWebSocket + ", prodWebSocket=" + prodWebSocket
-				+ ", devProfileUploadPath=" + devProfileUploadPath + ", prodProfileUploadPath=" + prodProfileUploadPath
-				+ "]";
+		return "EnvironmentService [activeProfile=" + activeProfile + ", storageType=" + storageType
+				+ ", devInitRequestUrl=" + devInitRequestUrl + ", prodInitRequestUrl=" + prodInitRequestUrl
+				+ ", devUploadPath=" + devUploadPath + ", prodUploadPath=" + prodUploadPath + ", devAccessUrl="
+				+ devAccessUrl + ", prodAccessUrl=" + prodAccessUrl + ", devWebSocket=" + devWebSocket
+				+ ", prodWebSocket=" + prodWebSocket + ", devProfileUploadPath=" + devProfileUploadPath
+				+ ", prodProfileUploadPath=" + prodProfileUploadPath + "]";
 	}
 
 	// 파일 업로드 요청 url
+	// 업로드 요청 주소 반환 (저장소 종류와는 무관, dev/prod 환경에 따라 도메인만 달라짐)
 	public String getInitRequest() {
 		if("prod".equals(activeProfile)) {
 			return prodInitRequestUrl;
 		}
 		return devInitRequestUrl;
-	}
-	
-	// 저장소
-	public String getUploadPath() {
-		if("prod".equals(activeProfile)) {
-			return prodUploadPath;
-		}
-		return devUploadPath;
 	}
 	
 	// url
@@ -207,13 +191,37 @@ public class EnvironmentService {
 		}
 		return devWebSocket;
 	}
-
-	// 프로필 이미지 업로드 저장소
-	public String getProfileUploadPath() {
-		if("prod".equals(activeProfile)) {
-			return prodProfileUploadPath;
+	
+	// 게시글 이미지 저장소
+	public String getUploadPath() {
+		switch(storageType) {
+			case "local":
+				return devUploadPath;
+			case "vm":
+				return prodUploadPath;
+			case "gcs":
+				return null; // gcs는 업로드 시 URL 직접 사용
+			default:
+				throw new IllegalArgumentException("activeProfile 또는 storageType을 다시 확인해주세요" 
+						+ "[activeProfile]:" + activeProfile
+						+ "[storageType]:" + storageType);
 		}
-		return devProfileUploadPath;
+	}
+
+	// 프로필 이미지 저장소
+	public String getProfileUploadPath() {
+		switch(storageType) {
+			case "local":
+				return devProfileUploadPath;
+			case "vm":
+				return prodProfileUploadPath;
+			case "gcs":
+				return null; // gcs는 업로드 시 URL 직접 사용
+			default:
+				throw new IllegalArgumentException("activeProfile 또는 storageType을 다시 확인해주세요" 
+						+ "[activeProfile]:" + activeProfile
+						+ "[storageType]:" + storageType);
+		} 
 	}
 	
 }

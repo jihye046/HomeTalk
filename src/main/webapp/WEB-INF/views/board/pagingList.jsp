@@ -31,11 +31,21 @@
 	        </p>
 	        <div class="account-info">
 	        	<div>
-	        		<span>아이디</span>
+	        		<span>아이디 1</span>
 	        		<p>my_home</p>
 	        	</div>
 	        	<div>
-	        		<span>비밀번호</span>
+	        		<span>비밀번호 1</span>
+	        		<p>Test1234!</p>
+	        	</div>
+	        </div>
+			<div class="account-info">
+	        	<div>
+	        		<span>아이디 2</span>
+	        		<p>haru88</p>
+	        	</div>
+	        	<div>
+	        		<span>비밀번호 2</span>
 	        		<p>Test1234!</p>
 	        	</div>
 	        </div>
@@ -187,6 +197,7 @@
 	<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 	<div class="hidden-data" id="userNickname" data-userNickname="${sessionScope.userNickname}"></div>
 	<div class="hidden-data" id="contextPath" data-context-path="${pageContext.request.contextPath}"></div>
+	<div class="hidden-data" id="bucketName" data-bucket-name="${bucketName}"></div>
 	
 	<script src="<c:url value="/resources/js/pagingList.js"/>"></script>
 	<script src="<c:url value="/resources/js/common.js"/>"></script>

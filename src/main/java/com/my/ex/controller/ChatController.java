@@ -65,7 +65,12 @@ public class ChatController {
 				String receiverNickname = messageService.getNicknameByUserId(receiver);
 				int unreadMessageCount = service.getUnreadMessageCount(messageDto.getRoomId(), userId);
 				String filename = userService.getProfileFilename(receiver);
-				String imageUrl = "/user/getProfileImage/" + filename;
+				String imageUrl;
+				if(filename != null && filename.startsWith("http://") || filename.startsWith("https://")) {
+					imageUrl = filename; 
+				} else {
+					imageUrl = "/user/getProfileImage/" + filename;
+				}
 				
 				// 목록에 보여줄 정보
 				ChatRoomDto chatRoomDto = new ChatRoomDto(messageDto, receiver, receiverNickname, imageUrl, unreadMessageCount);
