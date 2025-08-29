@@ -20,6 +20,12 @@ public class HomeController {
 	@Autowired
 	private BoardService service;
 	
+	@Autowired
+	private EnvironmentService environmentService;
+	
+	@Autowired
+	private GcsService gcsService;
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page,
 									@RequestParam(value = "searchGubun", required = false, defaultValue = "") String searchGubun,
@@ -32,8 +38,18 @@ public class HomeController {
 			String escapedContent = HtmlUtils.htmlEscape(dto.getbContent());
 			dto.setbContent(escapedContent);
 		}
+		
+		// prod + GCS 환경에서만 GCS 버킷 이름 전달
+		// dev 환경의 HTTP 접속 시 HTTPS GCS 비디오 로드가 제한되기 때문
+		boolean isCloudAssetAvailable = 
+			environmentService.getActiveProfile().equals("prod") && 
+			environmentService.getStorageType().equals("gcs");
+		if(isCloudAssetAvailable) {
+			model.addAttribute("bucketName", gcsService.getBucketName());
+		}
 		model.addAttribute("boardList", pagingList);
 		model.addAttribute("paging", pageDto);
+		
 		return "/board/pagingList";
 	}
 	

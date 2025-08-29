@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -41,6 +43,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.ex.CommentsListResponse;
 import com.my.ex.EnvironmentService;
+import com.my.ex.GcsService;
 import com.my.ex.SortResponse;
 import com.my.ex.dto.BoardDto;
 import com.my.ex.dto.BoardPagingDto;
@@ -82,6 +85,9 @@ public class BoardController {
 	@Autowired
 	private EnvironmentService environmentService;
 	
+	@Autowired
+	private GcsService gcsService;
+	
 	// 게시글 등록 페이지
 	@RequestMapping("/createPage")
 	public String createPage(Model model) throws JsonProcessingException {
@@ -95,7 +101,7 @@ public class BoardController {
 		
 		// 파일 업로드 요청 url
 		model.addAttribute("initRequestUrl", environmentService.getInitRequest());
-		
+		System.out.println("initRequestUrl: " + environmentService.getInitRequest());
 		return "/board/createPage";
 	}
 	
@@ -186,7 +192,12 @@ public class BoardController {
 		
 		// 프로필 이미지 url 반환
 		String filename = userService.getProfileFilename(bName);
-		String imageUrl = "/user/getProfileImage/" + filename;
+		String src = "";
+		if(filename != null && filename.startsWith("http://") || filename.startsWith("https://")) {
+			src = filename;
+		} else {
+			src = "/user/getProfileImage/" + filename; 
+		}
 		
 		// 태그 저장
 		List<TagDto> tagList = service.findTagsByPostId(bId);
@@ -194,7 +205,7 @@ public class BoardController {
 		model.addAttribute("dto", dto);
 		model.addAttribute("isLiked", isLiked);
 		model.addAttribute("isBookmarked", isBookmarked);
-		model.addAttribute("imageUrl", imageUrl);
+		model.addAttribute("imageUrl", src);
 		model.addAttribute("jsKey", kakao.getJsKey());
 		model.addAttribute("tagList", tagList);
 		return "/board/detailPage";
@@ -523,10 +534,20 @@ public class BoardController {
 			String escapedContent = HtmlUtils.htmlEscape(dto.getbContent());
 			dto.setbContent(escapedContent);
 		}
+		
+		// prod + GCS 환경에서만 GCS 버킷 이름 전달
+		// dev 환경의 HTTP 접속 시 HTTPS GCS 비디오 로드가 제한되기 때문
+		boolean isCloudAssetAvailable = 
+			environmentService.getActiveProfile().equals("prod") && 
+			environmentService.getStorageType().equals("gcs");
+		if(isCloudAssetAvailable) {
+			model.addAttribute("bucketName", gcsService.getBucketName());
+		}
 		model.addAttribute("boardList", pagingList);
 		model.addAttribute("paging", pageDto);
 		model.addAttribute("searchGubun", searchGubun);
 		model.addAttribute("searchText", searchText);
+		model.addAttribute("bucketName", gcsService.getBucketName());
 		return "/board/pagingList";
 	}
 	
@@ -580,9 +601,14 @@ public class BoardController {
 		// 프로필 이미지 목록
 		List<String> profileImageUrls = new ArrayList<>();
 		for(BoardDto dto : commentsPagingList) {
+			String src = "";
 			String filename = userService.getProfileFilename(dto.getbName()); // 파일 이름
-			String imageUrl = "/user/getProfileImage/" + filename;
-			profileImageUrls.add(imageUrl);
+			if(filename != null && filename.startsWith("http://") || filename.startsWith("https://")) {
+				src = filename;
+			} else {
+				src = "/user/getProfileImage/" + filename; 
+			}
+			profileImageUrls.add(src);
 		}
 		
 		CommentsPagingDto commentsPageDto = service.commentsPagingParam(commentPage, bGroup);
@@ -617,8 +643,13 @@ public class BoardController {
 		List<String> profileImageUrls = new ArrayList<>();
 		for(BoardDto dto : commentsPagingList) {
 			String filename = userService.getProfileFilename(dto.getbName()); // 파일 이름
-			String imageUrl = "/user/getProfileImage/" + filename;
-			profileImageUrls.add(imageUrl);
+			String src = "";
+			if(filename != null && filename.startsWith("http://") || filename.startsWith("https://")) {
+				src = filename;
+			} else {
+				src = "/user/getProfileImage/" + filename; 
+			}
+			profileImageUrls.add(src);
 		}
 		
 		CommentsPagingDto commentsPageDto = service.commentsPagingParam(currentcommentPage, bGroup);
@@ -636,44 +667,74 @@ public class BoardController {
 		return response;
 	}
 	
-	// 이미지업로드(1) - 업로드한 이미지를 로컬에 저장
+	// 게시글 이미지 파일 서빙
+	@RequestMapping(value = "/getImageForContents")
+	@ResponseBody
+    public Resource getImageForContents(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception {
+//	        String fileStr = "C:\\server_program\\imgUploadTest\\";
+		if(fileName != null && fileName.startsWith("http://") || fileName.startsWith("https://")) {
+			// GCS 이미지는 직접 url로 접근하므로 해당 컨트롤러를 통하지 않음.
+			throw new IllegalArgumentException("GCS 이미지이나, 잘못 들어온 요청. URL: " + fileName);
+		} 
+		
+		// [로컬 or VM] 파일 서빙
+		String uploadDir = environmentService.getUploadPath();
+		File file = new File(uploadDir, fileName);
+		
+		if(file.exists()) {
+			return new FileSystemResource(file);
+		} else {
+			throw new RuntimeException("File not found: " + file.getAbsolutePath());
+		}
+        
+    }
+	
+	// 게시글 이미지 파일 저장
 	@ResponseBody
 	@RequestMapping(value = "/imgUpload", method = RequestMethod.POST)
 	public void imgUpload(MultipartHttpServletRequest multiRequest, 
 						  HttpServletRequest request,
 						  HttpServletResponse response) {
 		try {
-			String real_save_path = environmentService.getUploadPath();
-			
-            // 폴더가 없을 경우 생성
-            File saveFolder = new File(real_save_path);
-            if (!saveFolder.exists() || saveFolder.isFile()) {
-                saveFolder.mkdirs();
-            }
-
-            final Map<String, MultipartFile> files = multiRequest.getFileMap();
+			final Map<String, MultipartFile> files = multiRequest.getFileMap();
             MultipartFile fileload = files.get("upload");
+            
             if (fileload == null || fileload.isEmpty()) {
                 System.out.println("파일이 없습니다.");
                 return;
             }
             
-            // filename 취득
-            String fileName = fileload.getOriginalFilename();
-            String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-            Random ran = new Random(System.currentTimeMillis());
-            fileName = System.currentTimeMillis() + "_" + (int)(ran.nextDouble() * 10000) + "." + ext;
-
-            // 폴더 경로 설정
-            String newfilename = real_save_path + fileName;
-            fileload.transferTo(new File(newfilename)); // 파일 저장 실행
-            
-            String imageUrl = environmentService.getAccessPath() + fileName;
-            
-            // getImageForContents() 메서드 실행
+            String imageUrl = "";
+            if(environmentService.getStorageType().equals("gcs")) {
+            	imageUrl = gcsService.uploadContentImage(fileload);
+            } else {
+            	String realSavePath = environmentService.getUploadPath();
+            	
+            	// 폴더가 없을 경우 생성
+                File saveFolder = new File(realSavePath);
+                if (!saveFolder.exists() || saveFolder.isFile()) {
+                    saveFolder.mkdirs();
+                }
+                
+                // 파일 이름 생성
+                String filename = fileload.getOriginalFilename().trim().replace(" ", "_");
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + filename;
+                
+                // 저장 경로 설정
+                File fileToSave = new File(realSavePath, uniqueFileName);
+                
+                // 실제 저장
+                fileload.transferTo(fileToSave);
+                
+                // 접근 경로 설정
+                imageUrl = environmentService.getAccessPath() + uniqueFileName;
+            }
+			
+            // 응답 생성
             JSONObject outData = new JSONObject();
             outData.put("uploaded", true);
             outData.put("url", imageUrl);
+            
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().print(outData.toString());
@@ -683,48 +744,6 @@ public class BoardController {
         }
 		
 	}
-	
-	// 이미지업로드(2) - 로컬에 저장된 이미지를 사용자에게 제공(텍스트창)
-	@RequestMapping(value = "/getImageForContents")
-    public void getImageForContents(@RequestParam("fileNm") String fileNm, HttpServletResponse response) throws Exception {
-//        String fileStr = "C:\\server_program\\imgUploadTest\\"; 
-        String fileStr = environmentService.getUploadPath();
-        
-        FileInputStream fis = null;
-        BufferedInputStream in = null;
-        ByteArrayOutputStream bStream = null;
-
-        try {
-            File file = new File(fileStr, fileNm);
-            if (!file.exists()) { 
-                response.sendError(HttpServletResponse.SC_NOT_FOUND); // 파일이 없으면 404 오류 응답
-                return;
-            }
-
-            fis = new FileInputStream(file);
-            in = new BufferedInputStream(fis);
-            bStream = new ByteArrayOutputStream();
-
-            int imgByte;
-            while ((imgByte = in.read()) != -1) {
-                bStream.write(imgByte);
-            }
-
-            String type = "";
-            String ext = fileNm.substring(fileNm.lastIndexOf(".") + 1).toLowerCase();
-            type = "jpg".equals(ext) ? "image/jpeg" : "image/" + ext;
-            System.out.println(type);
-            response.setHeader("Content-Type", type);
-            response.setContentLength(bStream.size());
-            bStream.writeTo(response.getOutputStream());
-            response.getOutputStream().flush();
-        } finally {
-            // 자원 해제
-            if (bStream != null) bStream.close();
-            if (in != null) in.close();
-            if (fis != null) fis.close();
-        }
-    }
 	
 	// 카카오 key
 	@ResponseBody

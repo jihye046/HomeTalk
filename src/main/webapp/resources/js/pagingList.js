@@ -200,12 +200,21 @@ const updateCurrentWeatherInfo = (currentWeatherDto) => {
 
 	// 날씨에 따라 메인 비디오 소스 변경
 const updateMainImageByWeather = (weather) => {
-	const path = document.querySelector("#contextPath").getAttribute("data-context-path")
 	const video = document.querySelector("#weatherVideo")
-	const basePath = `${path}/resources/images/weather/`
+	const bucketName = document.querySelector("#bucketName").getAttribute("data-bucket-name")
+	let basePath = null
+
+	if(!bucketName){
+		// local, vm
+		const path = document.querySelector("#contextPath").getAttribute("data-context-path")
+		basePath = `${path}/resources/images/weather/`
+	} else {
+		// gcs
+		basePath = `https://storage.googleapis.com/${bucketName}/weather/`
+	}
 	const extension = '.mp4'
 	const updateSrc = basePath + weather + extension
-
+	
 	video.src = updateSrc
 }
 
@@ -450,10 +459,10 @@ const updateBoardCards = () => {
 		
 		if (firstImg) {
 			const imageSrc = firstImg.src
-			card.innerHTML = `<img src="${imageSrc}" alt="image"/>`
+			card.innerHTML = `<img src="${imageSrc}" loading="lazy" alt="image"/>`
 		} else {
 			// 기본 이미지
-			card.innerHTML = '<img src="https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&dpr=1&w=1000" alt="image">' // 기본 설정 이미지 없음 
+			card.innerHTML = '<img src="https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&dpr=1&w=1000" loading="lazy" alt="image">' // 기본 설정 이미지 없음 
 		}
 	})
 }
