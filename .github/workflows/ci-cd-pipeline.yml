@@ -59,12 +59,30 @@ jobs:
           path: ./artifacts
 
       # 3. SSH Agent 설정 및 개인 키 로드 (암호화된 키 사용 시)
-      - name: Setup SSH Agent
-        # webfactory/ssh-agent 액션 사용 (안정적인 특정 커밋 SHA로 지정)
-        uses: webfactory/ssh-agent@b221972b9a7c645b045e45c7929497e5d8d9f109
-        with:
-          ssh-private-key: ${{ secrets.HOMETALK_SSH_PRIVATE_KEY }} # 개인 키 시크릿
-          passphrase: ${{ secrets.HOMETALK_SSH_PASSPHRASE }} # 개인 키 암호 시크릿
+      - name: Setup SSH Agent with Passphrase
+        run: |
+          set -euxo pipefail
+          # ~/.ssh 디렉토리 생성
+          mkdir -p ~/.ssh
+
+          # SSH Agent 시작 및 환경 변수 설정
+          # ssh-agent를 시작하고 그 결과를 GITHUB_ENV에 추가하여 다음 스텝에서도 사용 가능하게 함
+          eval "$(ssh-agent -s)" >> $GITHUB_ENV
+
+          # 개인 키 파일 생성 및 권한 설정
+          echo "Writing SSH private key to file..."
+          echo "${{ secrets.HOMETALK_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_github_actions
+          chmod 600 ~/.ssh/id_ed25519_github_actions
+          echo "Setting permissions for private key..."
+
+          # 개인 키를 ssh-agent에 추가 (passphrase 자동 입력)
+          echo "Adding SSH private key to agent..."
+          echo "${{ secrets.HOMETALK_SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_ed25519_github_actions
+          echo "SSH private key added to agent."
+
+          # 개인 키 파일 내용 확인 (마스킹)
+          echo "Verifying private key file content (first few lines, masked):"
+          head -n 5 ~/.ssh/id_ed25519_github_actions | sed 's/./*/g' || true
 
       # 4. SSH Known Hosts 설정
       - name: Setup SSH Known Hosts
