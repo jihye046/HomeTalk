@@ -46,6 +46,10 @@ body {
 }
 
 /* '모두 읽기' 버튼 */
+.mark-all-read-btn-page.hidden {
+	display: none;
+}
+
 .mark-all-read-btn-page {
     background-color: transparent;
     border: 1px solid #ccc;

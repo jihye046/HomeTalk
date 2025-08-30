@@ -827,7 +827,7 @@ hr {
 
 /* 모달 푸터 */
 .notification-footer {
-	display: none;
+	display: block;
     padding: 15px 20px;
     text-align: center;
     border-top: 1px solid #eee;

@@ -245,9 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							<li class="notification-info-message">최근 3일 이내의 알림만 표시됩니다.</li>
 						`
 						output += infoMessage
-
 						notificationListContainer.innerHTML = output
-						notificationModal.querySelector(".notification-footer").style.display = 'block' // '모든 알림 보기' 표시
 						
 						// notificationListContainer.appendChild(infoMessage)
 						
