@@ -22,7 +22,7 @@
 						type="password" 
 						name="userPw" 
 						placeholder="비밀번호" 
-						autocomplete="current-password"
+						autocomplete="off"
 					><br>
 					<button class="btn btn-block btn-outline-secondary" type="submit">로그인</button>
 					<div class="login-form-links">
