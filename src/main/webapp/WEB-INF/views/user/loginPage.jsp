@@ -11,8 +11,19 @@
 					<a href="/">
 						<img class="logo-image" alt="logo-image" src="<c:url value="/resources/images/logo2.png"/>">
 					</a>
-					<input type="text" value="${empty userId ? '' : userId}" name="userId" placeholder="아이디"><br>
-					<input type="password" name="userPw" placeholder="비밀번호"><br>
+					<input 
+						type="text" 
+						value="${empty userId ? '' : userId}" 
+						name="userId" 
+						placeholder="아이디" 
+						autocomplete="username"
+					><br>
+					<input 
+						type="password" 
+						name="userPw" 
+						placeholder="비밀번호" 
+						autocomplete="off"
+					><br>
 					<button class="btn btn-block btn-outline-secondary" type="submit">로그인</button>
 					<div class="login-form-links">
 							<a href="/user/joinPage">회원가입</a>
