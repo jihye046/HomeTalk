@@ -133,7 +133,7 @@ const disconnect = () => {
 		ws.send(JSON.stringify(message))
 		ws.close()
 		ws = ''
-		log('웹소캣 연결 종료')
+		// log('웹소캣 연결 종료')
 	}
 }
 
@@ -190,7 +190,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 
 		// 웹소캣 연결
 		ws.onopen = () => {
-			log('웹소캣 연결 성공')
+			// log('웹소캣 연결 성공')
 
 			let message = {
 				code: '1', 
@@ -290,7 +290,7 @@ const connect2 = (serverUrl, roomId, otherUserId, userId) => {
 
 		// 웹소캣 종료
 		ws.onclose = (event) => {
-			log(`웹소켓 연결 종료. 코드: ${event.code}, 이유: ${event.reason}`)
+			// log(`웹소켓 연결 종료. 코드: ${event.code}, 이유: ${event.reason}`)
 			// 재연결 시도 로직 (3초 후 재연결)
 			if(event.code  != 1000){
 				// 정상 종료가 아닌 경우만 재연결 시도

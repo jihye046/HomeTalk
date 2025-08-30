@@ -29,19 +29,19 @@
 	                <div class="input-group">
 	                    <label for="userId">아이디</label>
 	                    <div class="id-input-wrapper">
-	                    	<input type="text" id="userId" name="userId" placeholder="아이디를 입력해주세요" required>
+	                    	<input type="text" id="userId" name="userId" placeholder="아이디를 입력해주세요" autocomplete="username" required>
 	                    	<button type="button" id="checkIdButton" class="btn-check-id" disabled>중복 확인</button>
 	                    </div>
 	                    <p id="idRequirement" class="requirement-message"></p>
 	                </div>
 	                <div class="input-group">
 	                    <label for="password">비밀번호</label>
-	                    <input type="password" id="password" name="userPw" placeholder="새 비밀번호를 입력해주세요 (8~16자)" required>
+	                    <input type="password" id="password" name="userPw" placeholder="새 비밀번호를 입력해주세요 (8~16자)" autocomplete="new-password" required>
 		                <p id="passwordRequirement" class="requirement-message">영문, 숫자, 특수문자 조합 8~16자</p>
 	                </div>
 	                <div class="input-group">
 	                    <label for="confirmPassword">새 비밀번호 확인</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호를 다시 입력해주세요">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호를 다시 입력해주세요" autocomplete="new-password">
                         <p id="passwordMismatchMessage" class="error-message"></p>
 	                </div>
 	                <div class="input-group">

@@ -299,7 +299,7 @@ const updatePaginationLinks = (sortType) => {
 			url.searchParams.set('sortType', sortType)
 			link.href = url.toString()
 		} catch(error){
-			console.log("invalid url:", link.href)
+			// console.log("invalid url:", link.href)
 		}
 	})
 }
