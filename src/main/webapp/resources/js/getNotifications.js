@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationListJson = document.querySelector("#notificationAllList").getAttribute("data-notificationAllList")
     const container = document.querySelector(".noti-list") // <ul>
     const spinner = document.querySelector(".spinner-grow")
+    const markAllAsReadBtnPage = document.querySelector("#markAllAsReadBtnPage")
 
     // 상대적인 시간으로 변환
     const timeAgo = (timestamp) => {
@@ -265,16 +266,21 @@ document.addEventListener('DOMContentLoaded', () => {
         `
             <div id="scroll-sentinel"></div>
         `
+        container.innerHTML = output
+
+        initInfiniteScrollObserver() // 무한 스크롤
+        handleNotificationClick() // 각 알림 클릭 시 읽음 처리
+        markAllAsReadBtnPage.classList.remove('hidden') // '모두 읽기' 버튼 표시
+        markAllRead() // 모두 읽기    
     } else {
         output = 
         `
             <li class="no-noti">알림 내역이 없습니다.</li>
         `
+        container.innerHTML = output
+        
+        markAllAsReadBtnPage.classList.add('hidden') // '모두 읽기' 버튼 숨기기
     }
     
-    container.innerHTML = output
-
-    initInfiniteScrollObserver()
-    handleNotificationClick()
-    markAllRead()
+    
 })
