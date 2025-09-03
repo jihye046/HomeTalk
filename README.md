@@ -32,9 +32,14 @@
 </p>
 
 ## 👀 Preview
-### 🔹 실시간 채팅 기능
+### 🔹 실시간 채팅
 <p align="center">
   <img src="https://github.com/user-attachments/assets/444b57a9-1959-4954-8c77-7cdbffe70433" width="80%"/>
+</p>
+
+### 🔹 실시간 날씨에 따라 바뀌는 메인 영상
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9f433c70-fd22-49ce-a2b8-e1c3d1794415" width="80%"/>
 </p>
 
 ### 🔹 비밀번호 변경
