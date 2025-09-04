@@ -10,7 +10,7 @@
 
 ## ✨ Features
 - 🎥 배경 메인 영상이 **실시간 날씨에 따라 변화**
-- 💬 사용자 간 실시간 채팅 기능
+- 💬 사용자 간 **실시간 채팅** 기능
 - 📍 현재 위치 기반 **실시간 날씨 정보 제공**
 - 🔗 게시글 **외부 공유 및 클립보드 복사** 기능
 - 📝 게시글 작성, 수정, 삭제 (CRUD)
@@ -20,17 +20,6 @@
 - 🔐 **OAuth 로그인** (네이버, 구글)
 - 📧 회원가입 시 이메일 인증 및 유효성 검사
 - 🛠 프로필 수정: 기본 이미지 선택 or 직접 업로드 / 닉네임 변경
-
-## 🛠 Tech Stack
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white"/>
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"/>
-  <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Oracle_DB-F80000?style=for-the-badge&logo=oracle&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white"/>
-</p>
 
 ## 👀 Preview
 ### 🔹 실시간 채팅
@@ -51,6 +40,17 @@
 ### 🔹 글 작성
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a8e30647-e58f-46d6-9777-daf12d66a7e9" width="80%"/>
+</p>
+
+## 🛠 Tech Stack
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Oracle_DB-F80000?style=for-the-badge&logo=oracle&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white"/>
 </p>
 
 ## 📄 License
