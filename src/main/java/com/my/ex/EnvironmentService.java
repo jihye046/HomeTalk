@@ -209,7 +209,14 @@ public class EnvironmentService {
 	}
 
 	// 프로필 이미지 저장소
-	public String getProfileUploadPath() {
+	public String getProfileUploadPath(String filename) {
+		// 기본 이미지인 경우, 현재 구동 환경(dev/prod)에 맞는 '서버 로컬' 경로 반환
+		if(filename.equals("profile_default.png")) {
+			return "prod".equals(activeProfile) ? 
+					prodProfileUploadPath : 
+					devProfileUploadPath;
+		}
+		
 		switch(storageType) {
 			case "local":
 				return devProfileUploadPath;

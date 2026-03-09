@@ -310,7 +310,7 @@ public class UserController {
 		}
 		
 		// [로컬 or VM] 파일 서빙
-		String uploadDir = environmentService.getProfileUploadPath();
+		String uploadDir = environmentService.getProfileUploadPath(filename);
 		File file = new File(uploadDir, filename);
 		
 		if (file.exists()) {
