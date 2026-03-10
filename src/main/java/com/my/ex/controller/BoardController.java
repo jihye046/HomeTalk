@@ -109,11 +109,12 @@ public class BoardController {
 	@RequestMapping(value = "/createBoard", method = RequestMethod.POST )
 	public String createBoard(BoardDto dto, Model model, RedirectAttributes rttr) throws JsonParseException, JsonMappingException, IOException {
 		String bContent = dto.getbContent();
-		if(bContent.getBytes().length > 4000) {
+		String bTitle = dto.getbTitle();
+		if(bContent.getBytes().length > 4000 || bTitle.getBytes().length > 4000) {
 			System.out.println("4000바이트 초과");
 			
 			// 에러 메시지
-			model.addAttribute("error", "입력하신 내용이 너무 깁니다. 4000바이트를 초과했습니다.");
+			model.addAttribute("error", "제목 또는 내용은 최대 4000바이트까지 입력할 수 있습니다.");
 			
 			/* 게시글 등록 페이지로 이동 */
 			// 사용자가 작성했던 내용 다시 전달
@@ -134,8 +135,8 @@ public class BoardController {
 			model.addAttribute("initRequestUrl", environmentService.getInitRequest());
 			
 			return "/board/createPage";
-		} 
-		
+		}
+
 		// 게시글 생성
 		boolean create = service.createBoard(dto);
 		rttr.addFlashAttribute("createResult", create ? "true" : "false");
