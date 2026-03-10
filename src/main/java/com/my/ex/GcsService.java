@@ -84,7 +84,7 @@ public class GcsService {
 									.build();
 		// GCS에 파일 업로드
 		storage.create(blobInfo, profileImage.getBytes());
-		storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER)); // Acl.User.ofAllUsers() - 모든 사용자, Acl.Role.READER → 읽기 권한
+//		storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER)); // Acl.User.ofAllUsers() - 모든 사용자, Acl.Role.READER → 읽기 권한
 		
 		// GCS에 저장된 파일의 공개 url 반환
 		return String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
