@@ -13,6 +13,9 @@
 
 <!-- 주소 검색 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!-- axios -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
@@ -43,6 +46,7 @@
         </div>
     </main>
 </body>
+<div class="hidden-data" id="userId" data-userId="${sessionScope.userId}"></div>
 <div class="hidden-data" id="tagJsonList" data-tagJsonList="${fn:escapeXml(tagJsonList)}"></div>
 <div class="hidden-data" id="allTagJsonList" data-allTagJsonList="${fn:escapeXml(allTagJsonList)}"></div>
 <div class="hidden-data" id="initRequestUrl" data-initRequestUrl="${initRequestUrl}"></div>
