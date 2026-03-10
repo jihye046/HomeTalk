@@ -206,7 +206,7 @@ function getThumbnailUrl() {
     tmpTag.innerHTML = bContent
     
 	// 게시글에 이미지가 없는 경우 설정할 기본 이미지
-	const defaultImageUrl = 'https://buly.kr/611YAUp'
+	const defaultImageUrl = 'https://storage.googleapis.com/hometalk-bucket/contentImages/no_image.png'
 	
 	// 첫 번째 img 요소의 src를 가져오고, 없을 경우 기본 이미지 URL 반환
 	const imgElement = tmpTag.querySelector('img')

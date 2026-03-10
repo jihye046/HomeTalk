@@ -462,7 +462,7 @@ const updateBoardCards = () => {
 			card.innerHTML = `<img src="${imageSrc}" loading="lazy" alt="image"/>`
 		} else {
 			// 기본 이미지
-			card.innerHTML = '<img src="https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&dpr=1&w=1000" loading="lazy" alt="image">' // 기본 설정 이미지 없음 
+			card.innerHTML = '<img src="https://storage.googleapis.com/hometalk-bucket/contentImages/no_image.png" loading="lazy" alt="image">' // 기본 설정 이미지 없음 
 		}
 	})
 }
