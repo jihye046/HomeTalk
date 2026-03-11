@@ -99,17 +99,24 @@
     width: 100%;
 }
 
-	/* 테이블 */
+/* 테이블 기본 설정 */
 .my-posts-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0;
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
+    table-layout: fixed;
 }
 
-	/* 테이블 제목 */
+/* 열 너비 관리 (한곳에서 관리) */
+.my-posts-table th:nth-child(1) { width: 60px; }   /* No. */
+.my-posts-table th:nth-child(2) { width: 140px; }  /* 작성자 */
+.my-posts-table th:nth-child(3) { width: auto; }   /* 제목(댓글) - 남는 공간 전부 */
+.my-posts-table th:nth-child(4) { width: 120px; }  /* 작성일 */
+.my-posts-table th:nth-child(5) { width: 120px; }   /* 조회수 */
+
+/* 테이블 헤더(th) */
 .my-posts-table thead th {
     background-color: #f8f8f8;
     color: #666;
@@ -120,101 +127,80 @@
     border-bottom: 1px solid #eee;
 }
 
-	/* 테이블 행 */
-.my-posts-table tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-	/* 테이블 행 hover 시 */
-.my-posts-table tbody tr:hover {
-    background-color: #fdfdfd;
-}
-
-	/* 테이블 열 */
+/* 테이블 셀(td) 공통 설정 */
 .my-posts-table tbody td {
     padding: 14px 20px;
     border-bottom: 1px solid #eee;
     font-size: 14px;
     color: #444;
     text-align: center;
+    vertical-align: middle;
+    
+    /* 말줄임표(...) 설정 */
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 넘치는 내용을 '...'으로 표시 */
+    text-overflow: ellipsis;
 }
 
-	/* 'No.' 열 */
+/* 테이블 행(tr) 효과 */
+.my-posts-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.my-posts-table tbody tr:hover {
+    background-color: #fdfdfd;
+}
+
+/* 개별 열 스타일 커스텀
+================================================== */
+
+/* 1번 열 (No.) */
 .my-posts-table tbody td:nth-child(1) {
-    width: 7rem;
     font-weight: 500;
     color: #777;
 }
 
-	/* '작성자' 열 */
-.my-posts-table tbody td:nth-child(2) {
-    width: 10rem;
-/*     text-align: left; */
-}
-
-	/* '제목' 열 */
+/* 3번 열 (제목/댓글) */
 .my-posts-table tbody td:nth-child(3) {
-    width: auto; /* 남은 모든 공간을 차지하도록 설정 */
     text-align: left;
     font-weight: 500;
-    display: flex; /* 제목과 댓글 수를 한 줄에 배치 */
-    align-items: center;
-    gap: 8px;
 }
 
-	/* '제목' 링크 */
+/* 제목 내 링크 스타일 */
 .my-posts-table tbody td:nth-child(3) a {
-    flex-grow: 1; /* 링크가 가능한 많은 공간을 차지하도록 */
     color: #333;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s ease;
+    
+    /* 링크 자체에도 말줄임 적용 (아이콘 공간 확보) */
+    display: inline-block;
+    vertical-align: middle;
+    max-width: calc(100% - 35px);
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0; /* flex 아이템이 content보다 작아질 수 있도록 */
-    max-width: calc(100% - 40px); /* 댓글 아이콘+수 공간을 대략적으로 제외. 이 값을 조절하여 제목 길이 미세 조정 가능 */
+    white-space: nowrap;
 }
 
-	/* '제목' 링크 hover 시 */
 .my-posts-table tbody td:nth-child(3) a:hover {
     color: #4a90e2;
     text-decoration: underline;
 }
-	
-	/* '작성일' 열 */
-.my-posts-table tbody td:nth-child(4) {
-    width: 5rem;
-    color: #777;
-    font-size: 13px;
-    white-space: nowrap; /* 한 줄로 */
-}
 
-	/* '조회수' 열 */
+/* 4, 5번 열 (작성일, 조회수) */
+.my-posts-table tbody td:nth-child(4),
 .my-posts-table tbody td:nth-child(5) {
-    width: 7rem;
     color: #777;
     font-size: 13px;
-    white-space: nowrap; /* 한 줄로 */
 }
 
-	/* 댓글 아이콘 */
-.comment-icon {
+/* 댓글 아이콘 및 숫자 */
+.comment-icon, .commentCount {
+    display: inline-block;
+    vertical-align: middle;
     font-size: 12px;
     color: #888;
-    margin-left: 0; /* gap으로 간격 조절하므로 제거 */
-    flex-shrink: 0; /* 공간이 부족해도 줄어들지 않도록 */
-}
-
-	/* 댓글 수 */
-.commentCount {
-    font-size: 12px;
-    color: #888;
-    margin-left: 0; /* gap으로 간격 조절하므로 제거 */
     font-weight: 500;
-    flex-shrink: 0;
 }
 
 /* 모바일 반응형
