@@ -14,21 +14,27 @@
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include/loginInfo.jsp" %>
-	<main class="container" style="padding:  30px 0px 100px 0px;">
+	<main class="container" style="padding: 30px 0px 100px 0px;">
 		<div class="row">
 			<div class="col-md-2"></div>
-			<div class="col-md-8 detailPage-main" >
+			<div class="col-md-8 detailPage-main">
+
 				<div class="currentLocation">
-					<i id="currentLocationBtn" class="fa-solid fa-location-crosshairs">
-						
-					</i><span id="city"></span><br>
+					<i id="currentLocationBtn" class="fa-solid fa-location-crosshairs"></i>
+					<span id="city">위치 확인 중...</span>
 				</div>
+
 				<div class="currentWeather-container">
-					<div class="currentLocationWeather"></div>
-					<div class="currentHourWeather"></div>
+					<div class="currentLocationWeather">
+					</div>
+					<div class="currentHourWeather">
+					</div>
 				</div>
-				<h3>주간예보</h3>
-				<div class="currentLocationWeeklyWeather"></div>
+
+				<h3>주간 예보</h3>
+				<div class="currentLocationWeeklyWeather">
+				</div>
+
 			</div>
 			<div class="col-md-2"></div>
 		</div>
