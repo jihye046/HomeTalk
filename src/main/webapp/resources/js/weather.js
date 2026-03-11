@@ -155,7 +155,10 @@ const updateCurrentWeatherInfo = (currentWeatherDto) => {
 // 일주일 날씨 정보 화면에 업데이트
 const updateWeeklyWeatherInfo = (weeklyWeatherDto) => {
   const otherdayDto = weeklyWeatherDto.list.filter((item) => parseDateTime(item.dt_txt).day != today)
+  
   let output = ''
+  let lastDate = ''
+
   otherdayDto.forEach((item) => {
     const main = item.weather[0].main // weeklyWeatherDto.list[0].weather[0].main
     const feels_like = (item.main.feels_like - KELVIN_OFFSET).toFixed(1) 
@@ -163,12 +166,22 @@ const updateWeeklyWeatherInfo = (weeklyWeatherDto) => {
     const temp_max = (item.main.temp_max - KELVIN_OFFSET).toFixed(1)
     const temp_min = (item.main.temp_min - KELVIN_OFFSET).toFixed(1)
     const dt_txt = (item.dt_txt)
+
     let dateTime = parseDateTime(dt_txt)
+    const currentDate = `${dateTime.month}${dateTime.day}`
     const {icon, weather}= getWeatherIconAndText(main)
+
+    // 날짜가 이전과 다르다면 divider 클래스 추가
+    let dividerClass = ''
+    if (lastDate != '' && lastDate != currentDate) {
+      dividerClass = 'date-divider'
+    }
+    lastDate = currentDate
+
     output +=
       `
-        <div class="weekly-weather-row">
-          <span>${dateTime.month} / ${dateTime.day}</span>
+        <div class="weekly-weather-row ${dividerClass}">
+          <span class="date-text">${dateTime.month} / ${dateTime.day}</span>
           <span>${icon}</span>
           <span id="hour">${dateTime.hour}시</span>
           <span>${temp}°</span>
@@ -176,7 +189,7 @@ const updateWeeklyWeatherInfo = (weeklyWeatherDto) => {
           <span>체감 ${feels_like}°</span>
           <span>
             <span id="temp_min">${temp_min}°</span> / <span id="temp_max">${temp_max}°</span>
-          </span><br>
+          </span>
         </div>
       `
     })
