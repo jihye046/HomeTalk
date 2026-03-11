@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				notificationText = 
 				`
-					<strong>${notificationDto.senderId}</strong>님이 새로운 댓글을 달았습니다:
+					<strong>${notificationDto.senderId}</strong>님이 새로운 댓글을 달았습니다.
 					<span class="comment-preview-text">"${commentSnippet}"</span>
 				`
 			} else if(notificationDto.type == 'CHILD_COMMENT'){
