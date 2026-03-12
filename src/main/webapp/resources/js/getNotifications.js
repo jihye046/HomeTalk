@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 commentSnippet = data.commentSnippet 
                 notificationText = 
                 `
-                    <strong class="sender-name">${notificationDto.senderId}</strong>님이 댓글을 달았습니다:<br/>
+                    <strong class="sender-name">${notificationDto.senderId}</strong>님이 댓글을 달았습니다.<br/>
                     <span class="comment-preview-text">${commentSnippet}</span>
                 `
             } else if(notificationDto.type == 'CHILD_COMMENT'){
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 commentSnippet = data.childcommentSnippet
                 notificationText =
                 `
-                    <strong class="sender-name">${notificationDto.senderId}</strong>님이 답글을 달았습니다:<br/>
+                    <strong class="sender-name">${notificationDto.senderId}</strong>님이 답글을 달았습니다.<br/>
                     <span class="comment-preview-text">${commentSnippet}</span>
                 `
             }
