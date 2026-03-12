@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				notificationText = 
 				`
-					<strong>${notificationDto.senderId}</strong>님이 새로운 답글을 달았습니다:
+					<strong>${notificationDto.senderId}</strong>님이 새로운 답글을 달았습니다.
 					<span class="comment-preview-text">"${commentSnippet}"</span>
 				`
 			}
