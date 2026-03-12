@@ -7,13 +7,16 @@
 	<main>
 		<div class="login-background">
 			<div class="login-form">
+				<!-- Demo Mode(나중에 false로 바꾸면 일반 로그인 폼 됨) -->
+				<c:set var="isDemo" value="true"/>
 				<form action="<c:url value="/user/login"/>" method="post">
 					<a href="/">
 						<img class="logo-image" alt="logo-image" src="<c:url value="/resources/images/logo2.png"/>">
 					</a>
+					<!-- value="${empty userId ? '' : userId}" -->
 					<input 
 						type="text" 
-						value="${empty userId ? '' : userId}" 
+						value="${isDemo ? 'my_home' : userId}"
 						name="userId" 
 						placeholder="아이디" 
 						autocomplete="username"
@@ -23,6 +26,7 @@
 						name="userPw" 
 						placeholder="비밀번호" 
 						autocomplete="off"
+						value="${isDemo ? 'Test1234!' : ''}"
 					><br>
 					<button class="btn btn-block btn-outline-secondary" type="submit">로그인</button>
 					<div class="login-form-links">
