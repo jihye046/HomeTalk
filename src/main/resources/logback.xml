@@ -3,26 +3,30 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     
     <!-- log4jdbc-log4j2 -->
-	<logger name="jdbc.sqlonly"        level="INFO"/>
+	    <!-- 운영환경 -->
+	<logger name="jdbc.sqlonly"        level="ERROR"/>
     <logger name="jdbc.sqltiming"      level="WARN"/>
     <logger name="jdbc.audit"          level="ERROR"/>
     <logger name="jdbc.resultset"      level="WARN"/>
-    <logger name="jdbc.resultsettable" level="INFO"/>
+    <logger name="jdbc.resultsettable" level="ERROR"/>
     <logger name="jdbc.connection"     level="ERROR"/>
-<!-- 	 <logger name="jdbc.sqlonly"        level="DEBUG"/> -->
+
+    <!-- 개발환경 -->
+<!-- 	<logger name="jdbc.sqlonly"        level="INFO"/> -->
+<!--     <logger name="jdbc.sqltiming"      level="WARN"/> -->
+<!--     <logger name="jdbc.audit"          level="ERROR"/> -->
+<!--     <logger name="jdbc.resultset"      level="WARN"/> -->
+<!--     <logger name="jdbc.resultsettable" level="INFO"/> -->
+<!--     <logger name="jdbc.connection"     level="ERROR"/>     -->
+
+    <!-- 원본 -->
+<!-- 	<logger name="jdbc.sqlonly"        level="DEBUG"/> -->
 <!--     <logger name="jdbc.sqltiming"      level="INFO"/> -->
 <!--     <logger name="jdbc.audit"          level="WARN"/> -->
 <!--     <logger name="jdbc.resultset"      level="ERROR"/> -->
 <!--     <logger name="jdbc.resultsettable" level="ERROR"/> -->
 <!--     <logger name="jdbc.connection"     level="INFO"/> -->
     
-    <!-- sql 콘솔 출력 -->
-    <logger name="org.apache.ibatis" level="INFO">
-        <appender-ref ref="console"/>
-    </logger>
-    <logger name="jdbc.sqlonly" level="DEBUG">
-        <appender-ref ref="console"/>
-    </logger>
     
 <!--     <appender name="console" class="ch.qos.logback.core.ConsoleAppender"> -->
 <!--         <encoder> -->
